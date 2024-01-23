@@ -25,12 +25,15 @@ create table comments
 (
     comment_id int auto_increment primary key,
     content    varchar(8192) not null,
+    user_id    int           not null,
     constraint comments_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
 
 create table post_comments
 (
+    post_id    int not null,
+    comment_id int not null,
     constraint user_posts_post_comments_post_id_fk
         foreign key (post_id) references user_posts (post_id),
     constraint comments_post_comments_comment_id_fk
