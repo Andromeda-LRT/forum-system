@@ -1,4 +1,3 @@
-
 create table users
 (
     user_id      int auto_increment primary key,
@@ -11,7 +10,7 @@ create table users
     phone_number int
 );
 
-create table user_posts
+create table posts
 (
     post_id    int auto_increment primary key,
     created_by int           not null,
@@ -19,6 +18,8 @@ create table user_posts
     content    varchar(8192) not null,
     likes      int           not null DEFAULT 0,
     dislikes   int           not null DEFAULT 0,
+    constraint posts_users_user_id_fk
+        foreign key (created_by) references users (user_id)
 );
 
 create table comments
@@ -34,8 +35,8 @@ create table post_comments
 (
     post_id    int not null,
     comment_id int not null,
-    constraint user_posts_post_comments_post_id_fk
-        foreign key (post_id) references user_posts (post_id),
+    constraint posts_post_comments_post_id_fk
+        foreign key (post_id) references posts (post_id),
     constraint comments_post_comments_comment_id_fk
-        foreign key (comment_id) references comments (comment_id),
+        foreign key (comment_id) references comments (comment_id)
 );
