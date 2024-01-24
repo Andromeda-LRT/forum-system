@@ -16,6 +16,7 @@ public class PostRepositoryImpl implements PostRepository{
     public PostRepositoryImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
+
     @Override
     public List<Post> getAll() {
         return null;
@@ -32,7 +33,12 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Post update(int id) {
+    public Post update(Post post) {
+        return null;
+    }
+
+    @Override
+    public Post delete(int id) {
         return null;
     }
 }

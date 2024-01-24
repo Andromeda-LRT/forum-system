@@ -11,5 +11,7 @@ public interface PostRepository {
 
     Post create(Post post);
 
-    Post update(int id);
+    Post update(Post post);
+
+    Post delete(int id);
 }
