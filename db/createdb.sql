@@ -50,8 +50,6 @@ create table user_likes
 
 create table admins
 (
-    admin_id     int auto_increment
-        primary key,
     user_id      int not null,
     phone_number int null,
     constraint admins_users_user_id_fk
