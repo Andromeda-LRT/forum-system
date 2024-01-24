@@ -1,12 +1,9 @@
 package com.forumsystem.controllers;
 
-import com.forumsystem.dtomappers.UserMapper;;
+import com.forumsystem.modelmappers.UserMapper;;
 import com.forumsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")

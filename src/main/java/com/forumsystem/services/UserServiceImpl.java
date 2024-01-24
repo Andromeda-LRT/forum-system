@@ -1,6 +1,7 @@
 package com.forumsystem.services;
 
 import com.forumsystem.models.User;
+import com.forumsystem.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
