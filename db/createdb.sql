@@ -1,15 +1,13 @@
 create table users
 (
-    user_id      int auto_increment
+    user_id    int auto_increment
         primary key,
-    username     varchar(50) not null,
-    password     varchar(50) not null,
-    first_name   varchar(50) not null,
-    last_name    varchar(50) not null,
-    email        varchar(50) not null,
-    is_admin     tinyint(1)  not null,
-    phone_number int         null,
-    is_blocked   tinyint(1)  not null
+    username   varchar(50) not null,
+    password   varchar(50) not null,
+    first_name varchar(50) not null,
+    last_name  varchar(50) not null,
+    email      varchar(50) not null,
+    is_blocked tinyint(1) not null
 );
 
 create table posts
@@ -40,13 +38,23 @@ create table comments
 
 create table user_likes
 (
-    user_id     int        not null,
-    post_id     int        not null,
+    user_id     int not null,
+    post_id     int not null,
     is_liked    tinyint(1) not null,
-    is_disliked int        not null,
+    is_disliked tinyint(1) not null,
     constraint user_likes_posts_post_id_fk
         foreign key (post_id) references posts (post_id),
     constraint user_likes_users_user_id_fk
+        foreign key (user_id) references users (user_id)
+);
+
+create table admins
+(
+    admin_id     int auto_increment
+        primary key,
+    user_id      int not null,
+    phone_number int null,
+    constraint admins_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
 

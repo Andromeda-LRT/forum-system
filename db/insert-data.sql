@@ -1,11 +1,11 @@
 -- Inserting 5 rows into the 'users' table
-INSERT INTO users (username, password, first_name, last_name, email, is_admin, phone_number, is_blocked)
+INSERT INTO users (username, password, first_name, last_name, email, is_blocked)
 VALUES
-    ('john_doe', 'pass123', 'John', 'Doe', 'john.doe@example.com', false, null, false),
-    ('jane_smith', 'pass456', 'Jane', 'Smith', 'jane.smith@example.com', false, null, false),
-    ('admin_user', 'adminpass', 'Charlie', 'Sheen', 'admin@example.com', true, 0897633489, false),
-    ('traveler_123', 'travel123', 'Oliver', 'Williams', 'oliverw@example.com', false, null, false),
-    ('adventure_seeker', 'adventurepass', 'James', 'Wilson', 'james@example.com', false, null, false);
+    ('john_doe', 'pass123', 'John', 'Doe', 'john.doe@example.com', false),
+    ('jane_smith', 'pass456', 'Jane', 'Smith', 'jane.smith@example.com', false),
+    ('admin_user', 'adminpass', 'Charlie', 'Sheen', 'admin@example.com', false),
+    ('traveler_123', 'travel123', 'Oliver', 'Williams', 'oliverw@example.com', false),
+    ('adventure_seeker', 'adventurepass', 'James', 'Wilson', 'james@example.com', false);
 
 INSERT INTO posts (created_by, title, content, total_likes, total_dislikes)
 VALUES
@@ -32,3 +32,7 @@ values
     (3, 3, true, false),
     (4, 4, true, false),
     (5, 5, false, true);
+
+INSERT INTO admins (admin_id, user_id, phone_number)
+VALUES
+    (1, 1, 0886644258)
