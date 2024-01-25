@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
     public User create(User user) {
         return null;
     }
