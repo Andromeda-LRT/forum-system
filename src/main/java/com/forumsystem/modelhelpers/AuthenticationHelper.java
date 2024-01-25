@@ -17,7 +17,6 @@ public class AuthenticationHelper {
 
     private final UserService service;
 
-
     @Autowired
     public AuthenticationHelper(UserService service) {
         this.service = service;

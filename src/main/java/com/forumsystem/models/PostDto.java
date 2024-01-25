@@ -14,6 +14,7 @@ public class PostDto {
     @Size(min = 32, max = 8192, message = INVALID_CONTENT_LENGTH_ERROR_MESSAGE)
     private String content;
 
+    //todo to add tag field
     public PostDto() {
 
     }
