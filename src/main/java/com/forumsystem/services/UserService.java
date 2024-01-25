@@ -10,6 +10,8 @@ public interface UserService {
 
     User get(int id);
 
+    User getUserByUsername(String username);
+
     User create(User user);
 
     User update(User user);
