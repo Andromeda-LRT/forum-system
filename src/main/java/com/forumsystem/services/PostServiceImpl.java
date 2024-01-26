@@ -1,6 +1,9 @@
 package com.forumsystem.services;
 
+import com.forumsystem.modelhelpers.PostModelFilterOptions;
+import com.forumsystem.models.Comment;
 import com.forumsystem.repositories.PostRepository;
+import com.forumsystem.repositories.UserRepository;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
@@ -9,72 +12,106 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED_DELETION_ERROR_MESSAGE;
-import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED_EDIT_ERROR_MESSAGE;
+import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-    @Autowired
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CommentService commentService;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    @Autowired
+    public PostServiceImpl(PostRepository postRepository,
+                           UserRepository userRepository,
+                           CommentService commentService) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.commentService = commentService;
     }
 
+//    @Override
+//    public List<Post> getAllPosts(User user, PostModelFilterOptions postFilter) {
+//
+//
+//        return postRepository.getAllPosts(user, postFilter);
+//    }
+
     @Override
-    public List<Post> getAllPosts(User user) {
-        //todo since this feature is available for admins only,
-        // to discuss if necessary to have validation for admin
-//        if (!user.isAdmin()){
-//            throw new UnauthorizedOperationException()
-//        }
+    public List<Post> getAll(User user, PostModelFilterOptions postFilter) {
+
+        // todo to use checkIfAdmin
         return postRepository.getAll();
     }
 
     @Override
-    public List<Post> getAllPostsCreatedByOtherUsers(User user) {
-        //todo to return List for all users BUT current user from repository
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<Post> getPostsForUser(User user) {
-        //todo to return List for current user from repository
-
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Post getById(User user, int id) {
-        //todo to consider applying a validation
+        // todo to add JSONIgnore to post's id field
         return postRepository.getById(id);
     }
 
     @Override
-    public Post create(User user, Post post) {
-        //todo to discuss if post's createdBy will be set in service layer or repository
+    public void create(User user, Post post) {
+        if (user.isBlocked()) {
+            throw new UnauthorizedOperationException(
+                    String.format(BLOCKED_USER_ERROR_MESSAGE, POST, CREATION));
+        }
 
-        return postRepository.create(post);
+        return postRepository.create(user, post);
     }
 
     @Override
-    public Post update(User user, Post postToBeUpdated) {
+    public void createComment(User user, Comment comment, int postId) {
+        if (user.isBlocked()) {
+            throw new UnauthorizedOperationException(
+                    String.format(BLOCKED_USER_ERROR_MESSAGE, COMMENT, CREATION));
+        }
+
+        commentService.create(user.getUserId(), comment, postId);
+    }
+
+    @Override
+    public Post updatePost(User user, Post postToBeUpdated) {
+
+        if (user.isBlocked()) {
+            throw new UnauthorizedOperationException(
+                    String.format(BLOCKED_USER_ERROR_MESSAGE, POST, EDITING));
+        }
+
         if (!isUserOwnerOfCurrentPost(postToBeUpdated, user)) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_EDIT_ERROR_MESSAGE);
+            throw new UnauthorizedOperationException(
+                    String.format(UNAUTHORIZED_EDIT_ERROR_MESSAGE, POSTS));
         }
         return postRepository.update(postToBeUpdated);
     }
 
     @Override
+    public Comment updateComment(User user, Comment comment, int post_id) {
+        if (user.isBlocked()) {
+            throw new UnauthorizedOperationException(
+                    String.format(BLOCKED_USER_ERROR_MESSAGE, COMMENT, EDITING));
+        }
+
+        return commentService.update(user, comment, post_id);
+    }
+
+
+    @Override
     public void delete(User user, int id) {
-        Post postToBeDelete = postRepository.getById(id);
-        if (!isUserOwnerOfCurrentPost(postToBeDelete, user)) {
+        // todo to use primary if statement to check whether user is admin or not
+        // todo to use checkIfAdmin
+        Post postToBeDeleted = postRepository.getById(id);
+        if (!isUserOwnerOfCurrentPost(postToBeDeleted, user)) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_DELETION_ERROR_MESSAGE);
         }
-        //todo to discuss if Post obj will be taken in service layer or repository layer prior to deletion
-        //postRepository.delete(postToBeDelete);
-        postRepository.delete(id);
+        postRepository.delete(postToBeDeleted);
+    }
+
+    //todo to consider removing post id
+    @Override
+    public void deleteComment(User user, int postId, int commentId) {
+
+        commentService.delete(user, commentId);
     }
 
     private boolean isUserOwnerOfCurrentPost(Post post, User user) {
@@ -83,4 +120,11 @@ public class PostServiceImpl implements PostService {
         }
         return true;
     }
+
+//    private boolean isUserOwnerOfCurrentComment(User user, Comment comment) {
+//        if (user != comment.getUser()) {
+//            return false;
+//        }
+//        return true;
+//    }
 }

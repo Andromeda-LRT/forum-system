@@ -21,10 +21,11 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "likes")
+
+    @Column(name = "total_likes")
     private int likes;
 
-    @Column(name = "dislikes")
+    @Column(name = "total_dislikes")
     private int dislikes;
 
     public Post() {

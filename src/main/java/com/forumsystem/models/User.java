@@ -2,6 +2,8 @@ package com.forumsystem.models;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,12 +22,11 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "is_admin")
-    private boolean isAdmin;
-    @Column(name = "phone_number")
-    private String telephoneNumber;
     @Column(name = "is_blocked")
     private boolean isBlocked;
+    //todo map the below field with its respective field in DB.
+   // @Column(name = "is_archived")
+    private boolean isArchived;
 
     public User() {
 
@@ -79,27 +80,31 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return this.isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.isAdmin = admin;
-    }
-
-    public String getTelephoneNumber() {
-        return this.telephoneNumber;
-    }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
-
     public boolean isBlocked() {
         return this.isBlocked;
     }
 
     public void setBlocked(boolean blocked) {
         this.isBlocked = blocked;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(email, user.email) && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, username);
     }
 }

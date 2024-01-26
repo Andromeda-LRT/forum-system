@@ -16,11 +16,18 @@ public class PostMapper {
         this.postRepository = postRepository;
     }
 
+    public Post fromDto(PostDto postDto, int id){
+        Post post = postRepository.getById(id);
+        dtoToObj(post, postDto);
+        return post;
+    }
     public Post fromDto(PostDto postDto) {
         Post post = new Post();
         dtoToObj(post, postDto);
         return post;
     }
+
+
 
     private void dtoToObj(Post post, PostDto postDto) {
         post.setTitle(postDto.getTitle());
