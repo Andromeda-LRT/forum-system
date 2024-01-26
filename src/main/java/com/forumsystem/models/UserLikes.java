@@ -17,15 +17,15 @@ import jakarta.persistence.*;
         private Post post;
 
         @Column(name = "is_liked")
-        private int isLiked;
+        private boolean isLiked;
 
         @Column(name = "is_disliked")
-        private int isDisliked;
+        private boolean isDisliked;
 
         public UserLikes() {
         }
 
-        public UserLikes(User user, Post post, int isLiked, int isDisliked) {
+        public UserLikes(User user, Post post, boolean isLiked, boolean isDisliked) {
             this.id = new UserLikesId(user.getUserId(), post.getPostId());
             this.user = user;
             this.post = post;
@@ -57,19 +57,19 @@ import jakarta.persistence.*;
             this.post = post;
         }
 
-        public int getIsLiked() {
+        public boolean isLiked() {
             return isLiked;
         }
 
-        public void setIsLiked(int isLiked) {
-            this.isLiked = isLiked;
+        public void setLiked(boolean liked) {
+            isLiked = liked;
         }
 
-        public int getIsDisliked() {
+        public boolean isDisliked() {
             return isDisliked;
         }
 
-        public void setIsDisliked(int isDisliked) {
-            this.isDisliked = isDisliked;
+        public void setDisliked(boolean disliked) {
+            isDisliked = disliked;
         }
     }

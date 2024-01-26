@@ -83,12 +83,12 @@ public class PostRepositoryImpl implements PostRepository {
             UserLikes userLikes = session.get(UserLikes.class, userLikesId);
 
             if (userLikes == null) {
-                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), 1, 0);
+                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), true, false);
                 session.persist(userLikes);
             }
             else {
-                userLikes.setIsLiked(1);
-                userLikes.setIsDisliked(0);
+                userLikes.setLiked(true);
+                userLikes.setDisliked(false);
                 session.merge(userLikes);
             }
             session.getTransaction().commit();
@@ -103,12 +103,12 @@ public class PostRepositoryImpl implements PostRepository {
             UserLikes userLikes = session.get(UserLikes.class, userLikesId);
 
             if (userLikes == null) {
-                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), 0, 1);
+                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), false, true);
                 session.persist(userLikes);
             }
             else {
-                userLikes.setIsLiked(0);
-                userLikes.setIsDisliked(1);
+                userLikes.setLiked(false);
+                userLikes.setDisliked(true);
                 session.merge(userLikes);
             }
             session.getTransaction().commit();
