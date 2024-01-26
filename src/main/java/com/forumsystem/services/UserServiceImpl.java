@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User get(int id) {
-        return repository.getById(id);
+        return repository.get(id);
     }
 
     @Override
@@ -76,13 +76,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public void blockUser(int id, User user) {
         checkIfAdmin(user);
-        repository.blockUser(id);
+        repository.blockUser(id, user);
     }
 
     @Override
     public void unblockUser(int id, User user) {
         checkIfAdmin(user);
-        repository.unblockUser(id);
+        repository.unblockUser(id, user);
     }
 
 
