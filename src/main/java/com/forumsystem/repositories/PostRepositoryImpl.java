@@ -76,17 +76,17 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    public void likePost(int postId, int userId){
+    @Override
+    public void likePost(int postId, int userId) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             UserLikesId userLikesId = new UserLikesId(userId, postId);
             UserLikes userLikes = session.get(UserLikes.class, userLikesId);
 
             if (userLikes == null) {
-                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), true, false);
+                userLikes = new UserLikes(userRepository.get(userId), getById(postId), true, false);
                 session.persist(userLikes);
-            }
-            else {
+            } else {
                 userLikes.setLiked(true);
                 userLikes.setDisliked(false);
                 session.merge(userLikes);
@@ -95,18 +95,17 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-
-    public void dislikePost(int postId, int userId){
+    @Override
+    public void dislikePost(int postId, int userId) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             UserLikesId userLikesId = new UserLikesId(userId, postId);
             UserLikes userLikes = session.get(UserLikes.class, userLikesId);
 
             if (userLikes == null) {
-                userLikes = new UserLikes(userRepository.getById(userId),getById(postId), false, true);
+                userLikes = new UserLikes(userRepository.get(userId), getById(postId), false, true);
                 session.persist(userLikes);
-            }
-            else {
+            } else {
                 userLikes.setLiked(false);
                 userLikes.setDisliked(true);
                 session.merge(userLikes);

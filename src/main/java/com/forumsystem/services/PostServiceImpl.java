@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
                     String.format(BLOCKED_USER_ERROR_MESSAGE, POST, CREATION));
         }
 
-        return postRepository.create(user, post);
+        postRepository.create(user, post);
     }
 
     @Override
@@ -86,13 +86,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Comment updateComment(User user, Comment comment, int post_id) {
+    public void updateComment(User user, Comment comment, int post_id) {
         if (user.isBlocked()) {
             throw new UnauthorizedOperationException(
                     String.format(BLOCKED_USER_ERROR_MESSAGE, COMMENT, EDITING));
         }
 
-        return commentService.update(user, comment, post_id);
+        commentService.update(user, comment);
+    }
+
+    @Override
+    public void likePost(Post post, User user) {
+       postRepository.likePost(post.getPostId(), user.getUserId());
+    }
+
+    @Override
+    public void dislikePost(Post post, User user) {
+        postRepository.dislikePost(post.getPostId(), user.getUserId());
     }
 
 
@@ -110,8 +120,8 @@ public class PostServiceImpl implements PostService {
     //todo to consider removing post id
     @Override
     public void deleteComment(User user, int postId, int commentId) {
-
-        commentService.delete(user, commentId);
+        Comment comment = commentService.getById(commentId);
+        commentService.delete(user, comment);
     }
 
     private boolean isUserOwnerOfCurrentPost(Post post, User user) {

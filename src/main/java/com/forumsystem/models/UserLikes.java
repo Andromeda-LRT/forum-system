@@ -9,11 +9,11 @@ import jakarta.persistence.*;
         private UserLikesId id;
 
         @ManyToOne
-        @JoinColumn(name = "user_id", updatable = false)
+        @JoinColumn(name = "user_id", updatable = false, insertable = false)
         private User user;
 
         @ManyToOne
-        @JoinColumn(name = "post_id", updatable = false)
+        @JoinColumn(name = "post_id", updatable = false, insertable = false)
         private Post post;
 
         @Column(name = "is_liked")

@@ -26,7 +26,7 @@ public class UserDto {
     @Pattern(regexp = "^[a-zA-Z0-9]{6,16}$",
             message = USERNAME_ERROR_MESSAGE)
     String username;
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,12}$",
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
             message = PASSWORD_ERROR_MESSAGE)
     String password;
 

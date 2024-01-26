@@ -20,8 +20,13 @@ public interface PostService {
 
     Post updatePost(User user, Post post);
 
-    Comment updateComment(User user, Comment comment, int postId);
+    void updateComment(User user, Comment comment, int postId);
+
+    void likePost(Post post, User user);
+
+    void dislikePost(Post post, User user);
 
     void delete(User user, int id);
+
     void deleteComment(User user, int postId, int commentId);
 }

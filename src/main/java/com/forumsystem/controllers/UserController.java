@@ -53,10 +53,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/count")
-    public int countUsers() {
-        return userService.getCountUsers();
-    }
+//    @GetMapping("/count")
+//    public int countUsers() {
+//        return userService.getCountUsers();
+//    }
 
 
     @GetMapping("/{id}")
