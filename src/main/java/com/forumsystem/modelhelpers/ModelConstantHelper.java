@@ -25,4 +25,6 @@ public class ModelConstantHelper {
     public static final String THE_REQUEST_RESOURCE_REQUIRES_AUTHENTICATION =
             "The requested resource requires authentication.";
     public static final String INVALID_AUTHENTICATION = "Invalid authentication";
+    public static final String PERMISSIONS_ERROR =
+            "You don't have the permissions to update this user information.";
 }

@@ -1,6 +1,7 @@
 package com.forumsystem.repositories;
 
 import com.forumsystem.models.Post;
+import com.forumsystem.models.User;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ public interface PostRepository {
 
     Post getById(int id);
 
-    Post create(Post post);
+    void create(User user, Post post);
 
     Post update(Post post);
 
-    Post delete(int id);
+    void delete(Post post);
 }

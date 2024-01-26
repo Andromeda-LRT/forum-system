@@ -1,5 +1,6 @@
 package com.forumsystem.services;
 
+import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 
 import java.util.List;
@@ -12,9 +13,15 @@ public interface UserService {
 
     User getUserByUsername(String username);
 
-    User create(User user);
+    void create(User user);
 
-    User update(User user);
+    User update(User userToUpdate, User loggedUser);
 
     void delete(int id, User user);
+
+    List<Post> getUserPosts(String username);
+
+    void blockUser(int id, User user);
+
+    void unblockUser(int id, User user);
 }

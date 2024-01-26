@@ -45,7 +45,8 @@ create table user_likes
     constraint user_likes_posts_post_id_fk
         foreign key (post_id) references posts (post_id),
     constraint user_likes_users_user_id_fk
-        foreign key (user_id) references users (user_id)
+        foreign key (user_id) references users (user_id),
+    PRIMARY KEY (user_id, post_id)
 );
 
 create table admins
