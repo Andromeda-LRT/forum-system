@@ -114,6 +114,7 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PutMapping("{post_id}/comments/{comment_id}")
     public Comment updateComment(@RequestHeader HttpHeaders headers,
                                  @RequestBody @Valid CommentDto commentDto,
@@ -122,12 +123,29 @@ public class PostController {
         try {
             User user = authHelper.tryGetUser(headers);
             Comment comment = commentMapper.fromDto(commentDto, comment_id);
-            return postService.updateComment(user, comment, post_id);
+            postService.updateComment(user, comment, post_id);
+            return comment;
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
+
+    @PutMapping("{post_id}/like")
+    public void likePost(@RequestHeader HttpHeaders headers,
+                         @PathVariable int post_id) {
+        User user = authHelper.tryGetUser(headers);
+        Post post = postService.getById(user, post_id);
+        postService.likePost(post, user);
+    }
+
+    @PutMapping("{post_id}/dislike")
+    public void dislikePost(@RequestHeader HttpHeaders headers,
+                            @PathVariable int post_id) {
+        User user = authHelper.tryGetUser(headers);
+        Post post = postService.getById(user, post_id);
+        postService.dislikePost(post, user);
     }
 
     @PutMapping("/post/{post_id}")

@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<Post> getUserPosts(String username) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "select p from Post p join p.createdBy u where u.username = :username and p.isArchived = 0";
+            String hql = "select p from Post p join p.createdBy u where u.username = :username and p.isArchived = false ";
             Query<Post> query = session.createQuery(hql, Post.class);
             query.setParameter("username", username);
             List<Post> userPosts = query.list();

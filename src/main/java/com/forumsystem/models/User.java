@@ -24,8 +24,7 @@ public class User {
     private String password;
     @Column(name = "is_blocked")
     private boolean isBlocked;
-    //todo map the below field with its respective field in DB.
-   // @Column(name = "is_archived")
+    @Column(name = "is_archived")
     private boolean isArchived;
 
     public User() {

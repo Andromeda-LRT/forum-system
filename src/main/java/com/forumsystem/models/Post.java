@@ -1,16 +1,18 @@
 package com.forumsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "posts")
 public class Post {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private int postId;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User createdBy;
@@ -27,9 +29,13 @@ public class Post {
 
     @Column(name = "total_dislikes")
     private int dislikes;
+    @JsonIgnore
+    @Column(name = "is_archived")
+    private boolean isArchived;
 
     public Post() {
     }
+
 
     public Post(int postId, User createdBy, String title, String content) {
         this.postId = postId;
@@ -84,6 +90,14 @@ public class Post {
 
     public void setDislikes(int dislikes) {
         this.dislikes = dislikes;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 }
 
