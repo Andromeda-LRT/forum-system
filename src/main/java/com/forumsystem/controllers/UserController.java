@@ -115,7 +115,7 @@ public class UserController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/delete/{id}")
     public void delete(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -126,4 +126,35 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+    @PutMapping("/{id}/block")
+    public void block(@PathVariable int id,
+                       @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.blockUser(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/unblock")
+    public void unblock(@PathVariable int id,
+                       @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.unblockUser(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
 }

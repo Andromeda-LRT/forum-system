@@ -31,6 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         try (Session session = sessionFactory.openSession()) {
+            //TODO check if user is archived
             User user = session.get(User.class, id);
             if (user == null) {
                 throw new EntityNotFoundException("User", id);
@@ -76,10 +77,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void delete(int id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            User user = session.get(User.class, id);
-            if (user != null) {
-                session.remove(user);
-            }
+            User user = get(id);
+            user.setArchived(true);
+            session.merge(user);
             session.getTransaction().commit();
         }
     }
@@ -128,10 +128,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean checkIfAdmin(int id) {
+        //TODO Implement logic - Reni
         try (Session session = sessionFactory.openSession()) {
 //            String hql = "select u.userId from User u, Admin a where u.user_id = a.user_id";
 //            Query query = session.createQuery(hql);
             return true;
         }
     }
+
+    //TODO Add method for counting users - LYUBIMA
 }
