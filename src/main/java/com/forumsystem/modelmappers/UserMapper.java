@@ -15,7 +15,7 @@ public class UserMapper {
         this.userService = userService;
     }
 
-    public User createUserFromDto(UserDto userDto){
+    public User fromDto(UserDto userDto){
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());

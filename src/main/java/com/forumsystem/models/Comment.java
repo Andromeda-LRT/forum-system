@@ -12,6 +12,7 @@ public class Comment {
 
     @Column(name = "content")
     private String content;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -20,6 +21,9 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+
+    @Column(name = "is_archived")
+    private boolean isArchived;
     public Comment() {
     }
 
@@ -53,5 +57,13 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 }
