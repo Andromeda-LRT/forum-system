@@ -23,12 +23,14 @@ public class UserServiceImpl implements UserService{
         this.repository = repository;
     }
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(User user) {
+        checkIfAdmin(user);
         return repository.getAll();
     }
 
     @Override
-    public User get(int id) {
+    public User get(int id, User user) {
+        checkPermissions(repository.get(id), user);
         return repository.get(id);
     }
 
@@ -61,12 +63,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(int id, User user) {
-        checkPermissions(get(id), user);
+        checkPermissions(repository.get(id), user);
         repository.delete(id);
 
     }
-
-    //----TODO add blocked user logic
 
     @Override
     public List<Post> getUserPosts(String username) {
@@ -85,6 +85,10 @@ public class UserServiceImpl implements UserService{
         repository.unblockUser(id, user);
     }
 
+    @Override
+    public void getCountUsers(){
+        repository.getCountUsers();
+    }
 
     private void checkPermissions(User userToUpdate, User loggedUser) {
         if (!repository.checkIfAdmin(loggedUser.getUserId()) && userToUpdate.getUserId() != loggedUser.getUserId()) {

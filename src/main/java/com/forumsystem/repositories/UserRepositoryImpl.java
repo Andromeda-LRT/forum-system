@@ -127,12 +127,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean checkIfAdmin(int id) {
-        //TODO Implement logic - Reni
+    public boolean checkIfAdmin(int userId) {
         try (Session session = sessionFactory.openSession()) {
-//            String hql = "select u.userId from User u, Admin a where u.user_id = a.user_id";
-//            Query query = session.createQuery(hql);
-            return true;
+            String sql = "SELECT COUNT(*) FROM admins WHERE user_id = :userId";
+            int count = ((Integer) session.createNativeQuery(sql)
+                    .setParameter("userId", userId)
+                    .uniqueResult()).intValue();
+
+            return count > 0;
         }
     }
 
