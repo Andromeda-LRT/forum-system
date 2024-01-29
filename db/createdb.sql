@@ -60,6 +60,8 @@ create table admins
         foreign key (user_id) references users (user_id)
 );
 
+-------------------------------------------------------
+
 CREATE TRIGGER update_total_likes_on_insert
     AFTER INSERT ON user_likes
     FOR EACH ROW

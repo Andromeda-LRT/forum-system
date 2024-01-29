@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+    List<User> getAll(User user);
 
-    User get(int id);
+    User get(int id, User user);
 
     User getUserByUsername(String username);
 
@@ -24,4 +24,6 @@ public interface UserService {
     void blockUser(int id, User user);
 
     void unblockUser(int id, User user);
+
+    void getCountUsers();
 }

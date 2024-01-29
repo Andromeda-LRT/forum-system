@@ -36,12 +36,12 @@ public class Post {
     public Post() {
     }
 
-
-    public Post(int postId, User createdBy, String title, String content) {
+    public Post(int postId, User createdBy, String title, String content, boolean isArchived) {
         this.postId = postId;
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;
+        this.isArchived = isArchived;
     }
 
     public int getPostId() {

@@ -46,7 +46,7 @@ public class UserController {
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return userService.getAll();
+            return userService.getAll(user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     AUTHORIZED_TO_BROWSE_USER_INFORMATION);
@@ -62,8 +62,8 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
-            authenticationHelper.tryGetUser(headers);
-            return userService.get(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            return userService.get(id, user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     AUTHORIZED_TO_BROWSE_USER_INFORMATION);
