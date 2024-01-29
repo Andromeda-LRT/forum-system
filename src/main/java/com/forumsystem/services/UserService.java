@@ -25,5 +25,5 @@ public interface UserService {
 
     void unblockUser(int id, User user);
 
-    void getCountUsers();
+    long getCountUsers();
 }

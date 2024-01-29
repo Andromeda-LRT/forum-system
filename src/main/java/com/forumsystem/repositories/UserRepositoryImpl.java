@@ -138,5 +138,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    //TODO Add method for counting users - LYUBIMA
+    @Override
+    public long getCountUsers() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "select count(u) from User u";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            return query.uniqueResult();
+        }
+    }
 }

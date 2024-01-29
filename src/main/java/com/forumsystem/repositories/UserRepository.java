@@ -25,4 +25,6 @@ public interface UserRepository {
     void unblockUser(int id, User user);
 
     boolean checkIfAdmin(int id);
+
+    long getCountUsers();
 }
