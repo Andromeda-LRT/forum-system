@@ -1,12 +1,14 @@
 package com.forumsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
 public class Post {
-
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +34,9 @@ public class Post {
     @JsonIgnore
     @Column(name = "is_archived")
     private boolean isArchived;
+
+    @Column(name = "date_time")
+    private LocalDateTime createdAt;
 
     public Post() {
     }
@@ -98,6 +103,14 @@ public class Post {
 
     public void setArchived(boolean archived) {
         isArchived = archived;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime dateTime) {
+        this.createdAt = dateTime;
     }
 }
 

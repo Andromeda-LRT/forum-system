@@ -6,6 +6,8 @@ import com.forumsystem.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class PostMapper {
 
@@ -27,10 +29,9 @@ public class PostMapper {
         return post;
     }
 
-
-
     private void dtoToObj(Post post, PostDto postDto) {
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
+        post.setCreatedAt(LocalDateTime.now());
     }
 }
