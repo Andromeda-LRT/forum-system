@@ -31,9 +31,8 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         try (Session session = sessionFactory.openSession()) {
-            //TODO check if user is archived
             User user = session.get(User.class, id);
-            if (user == null) {
+            if (user == null || user.isArchived()) {
                 throw new EntityNotFoundException("User", id);
             }
             return user;
@@ -138,5 +137,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    //TODO Add method for counting users - LYUBIMA
+    @Override
+    public long getCountUsers() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "select count(u) from User u";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            return query.uniqueResult();
+        }
+    }
 }

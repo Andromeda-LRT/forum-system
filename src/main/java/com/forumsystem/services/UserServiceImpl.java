@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void getCountUsers(){
-        repository.getCountUsers();
+    public long getCountUsers(){
+        return repository.getCountUsers();
     }
 
     private void checkPermissions(User userToUpdate, User loggedUser) {

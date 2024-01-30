@@ -3,6 +3,7 @@ package com.forumsystem.controllers;
 import com.forumsystem.modelhelpers.AuthenticationHelper;
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.modelmappers.CommentMapper;
+import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.*;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
@@ -25,29 +26,38 @@ public class PostController {
     private final CommentMapper commentMapper;
     private final AuthenticationHelper authHelper;
 
+    private final PostResponseMapper postResponseMapper;
+
     @Autowired
     public PostController(PostService postService,
                           PostMapper postMapper,
                           CommentMapper commentMapper,
-                          AuthenticationHelper authHelper) {
+                          AuthenticationHelper authHelper, PostResponseMapper postResponseMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.commentMapper = commentMapper;
         this.authHelper = authHelper;
+        this.postResponseMapper = postResponseMapper;
     }
 
+//    @GetMapping()
+//    public List<Post> getAllPosts(
+//            @RequestHeader HttpHeaders headers,
+//            @RequestParam(required = false) String title,
+//            @RequestParam(required = false) Integer likes,
+//            @RequestParam(required = false) Integer dislikes,
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(required = false) String sortOrder) {
+//        PostModelFilterOptions postFilter = new PostModelFilterOptions(
+//                title, likes, dislikes, sortBy, sortOrder);
+//        User user = authHelper.tryGetUser(headers);
+//        return postService.getAll(user, postFilter);
+//    }
+
     @GetMapping()
-    public List<Post> getAllPosts(
-            @RequestHeader HttpHeaders headers,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) Integer likes,
-            @RequestParam(required = false) Integer dislikes,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder) {
-        PostModelFilterOptions postFilter = new PostModelFilterOptions(
-                title, likes, dislikes, sortBy, sortOrder);
+    public List<PostResponseDto> getAllPosts(@RequestHeader HttpHeaders headers) {
         User user = authHelper.tryGetUser(headers);
-        return postService.getAll(user, postFilter);
+        return postService.getAll(user);
     }
 
 //    @GetMapping("/browse")
@@ -65,10 +75,11 @@ public class PostController {
 //    }
 
     @GetMapping("/{id}")
-    public Post getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public PostResponseDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authHelper.tryGetUser(headers);
         try {
-            return postService.getById(user, id);
+            Post post = postService.getById(user, id);
+            return postResponseMapper.convertToDTO(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -85,6 +96,7 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
 
     @PostMapping("/{post_id}/comments")
     public Comment createComment(@RequestHeader HttpHeaders headers,

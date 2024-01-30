@@ -1,7 +1,9 @@
 package com.forumsystem.services;
 
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
+import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.Comment;
+import com.forumsystem.models.PostResponseDto;
 import com.forumsystem.repositories.PostRepository;
 import com.forumsystem.repositories.UserRepository;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
@@ -10,7 +12,9 @@ import com.forumsystem.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 
@@ -21,13 +25,16 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final CommentService commentService;
 
+    private final PostResponseMapper postResponseMapper;
+
     @Autowired
     public PostServiceImpl(PostRepository postRepository,
                            UserRepository userRepository,
-                           CommentService commentService) {
+                           CommentService commentService, PostResponseMapper postResponseMapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentService = commentService;
+        this.postResponseMapper = postResponseMapper;
     }
 
 //    @Override
@@ -42,6 +49,17 @@ public class PostServiceImpl implements PostService {
 
         // todo to use checkIfAdmin
         return postRepository.getAll();
+    }
+
+    public List<PostResponseDto> getAll(User user) {
+        List<Post> posts = postRepository.getAll();
+
+        List<PostResponseDto> dtoList = new ArrayList<>();
+        for (Post post : posts) {
+            dtoList.add(postResponseMapper.convertToDTO(post));
+        }
+        return dtoList;
+
     }
 
     @Override
