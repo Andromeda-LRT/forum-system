@@ -21,7 +21,6 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-
     @Column(name = "is_archived")
     private boolean isArchived;
     public Comment() {

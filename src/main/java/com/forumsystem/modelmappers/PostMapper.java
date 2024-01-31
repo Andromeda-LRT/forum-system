@@ -1,8 +1,10 @@
 package com.forumsystem.modelmappers;
 
 import com.forumsystem.models.Post;
-import com.forumsystem.models.PostDto;
-import com.forumsystem.repositories.PostRepository;
+import com.forumsystem.models.Tag;
+import com.forumsystem.models.modeldto.PostDto;
+import com.forumsystem.models.modeldto.TagDto;
+import com.forumsystem.repositories.contracts.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +14,13 @@ import java.time.LocalDateTime;
 public class PostMapper {
 
     private final PostRepository postRepository;
+    private final TagMapper tagMapper;
 
     @Autowired
-    public PostMapper(PostRepository postRepository) {
+    public PostMapper(PostRepository postRepository,
+                      TagMapper tagMapper) {
         this.postRepository = postRepository;
+        this.tagMapper = tagMapper;
     }
 
     public Post fromDto(PostDto postDto, int id){
@@ -29,9 +34,13 @@ public class PostMapper {
         return post;
     }
 
+
     private void dtoToObj(Post post, PostDto postDto) {
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
+//        if (!post.getPostTags().isEmpty()){
+    //}
+        post.setPostTags(tagMapper.fromDto(postDto.getTagList()));
         post.setCreatedAt(LocalDateTime.now());
     }
 }

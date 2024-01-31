@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -25,12 +27,12 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-
     @Column(name = "total_likes")
     private int likes;
 
     @Column(name = "total_dislikes")
     private int dislikes;
+
     @JsonIgnore
     @Column(name = "is_archived")
     private boolean isArchived;
@@ -38,15 +40,25 @@ public class Post {
     @Column(name = "date_time")
     private LocalDateTime createdAt;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "posts_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> postTags;
+
     public Post() {
     }
 
-    public Post(int postId, User createdBy, String title, String content, boolean isArchived) {
+    public Post(int postId, User createdBy, String title,
+                String content, boolean isArchived, Set<Tag> postTags) {
         this.postId = postId;
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;
         this.isArchived = isArchived;
+        this.postTags = postTags;
     }
 
     public int getPostId() {
@@ -101,7 +113,7 @@ public class Post {
         return isArchived;
     }
 
-    public void setArchived(boolean archived) {
+    public void setIsArchived(boolean archived) {
         isArchived = archived;
     }
 
@@ -111,6 +123,14 @@ public class Post {
 
     public void setCreatedAt(LocalDateTime dateTime) {
         this.createdAt = dateTime;
+    }
+
+    public Set<Tag> getPostTags() {
+        return postTags;
+    }
+
+    public void setPostTags(Set<Tag> postTags) {
+        this.postTags = postTags;
     }
 }
 

@@ -3,9 +3,10 @@ package com.forumsystem.services;
 import com.forumsystem.models.Comment;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
-import com.forumsystem.repositories.CommentRepository;
-import com.forumsystem.repositories.PostRepository;
-import com.forumsystem.repositories.UserRepository;
+import com.forumsystem.repositories.contracts.CommentRepository;
+import com.forumsystem.repositories.contracts.PostRepository;
+import com.forumsystem.repositories.contracts.UserRepository;
+import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,9 @@ import static com.forumsystem.modelhelpers.ModelConstantHelper.COMMENTS;
 import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED_EDIT_ERROR_MESSAGE;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-
     private final PostRepository postRepository;
 
 
@@ -29,7 +29,7 @@ public class CommentServiceImpl implements CommentService{
         this.userRepository = userRepository;
         this.postRepository = postRepository;
     }
-
+    //todo need to add implementation
     @Override
     public List<Comment> getAll() {
         return null;
@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment getById(int id) {
-        return null;
+        return commentRepository.getById(id);
     }
 
     @Override

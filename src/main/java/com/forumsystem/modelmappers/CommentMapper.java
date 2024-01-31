@@ -1,8 +1,8 @@
 package com.forumsystem.modelmappers;
 
 import com.forumsystem.models.Comment;
-import com.forumsystem.models.CommentDto;
-import com.forumsystem.repositories.CommentRepository;
+import com.forumsystem.models.modeldto.CommentDto;
+import com.forumsystem.repositories.contracts.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
