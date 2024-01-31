@@ -1,8 +1,10 @@
 package com.forumsystem.services;
 
+import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
-import com.forumsystem.repositories.UserRepository;
+import com.forumsystem.repositories.contracts.UserRepository;
+import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.DuplicateEntityException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
@@ -14,7 +16,7 @@ import java.util.List;
 import static com.forumsystem.modelhelpers.ModelConstantHelper.PERMISSIONS_ERROR;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
@@ -23,9 +25,9 @@ public class UserServiceImpl implements UserService{
         this.repository = repository;
     }
     @Override
-    public List<User> getAll(User user) {
+    public List<User> getAll(User user, UserModelFilterOptions userFilter) {
         checkIfAdmin(user);
-        return repository.getAll();
+        return repository.getAll(userFilter);
     }
 
     @Override

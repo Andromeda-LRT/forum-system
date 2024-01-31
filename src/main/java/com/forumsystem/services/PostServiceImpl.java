@@ -91,8 +91,6 @@ public class PostServiceImpl implements PostService {
         commentService.create(user.getUserId(), comment, postId);
     }
 
-    //todo to consider how tags are going to be received
-    //todo to attach tags to post using a separate method
     @Override
     public Post updatePost(User user, Post postToBeUpdated) {
 
