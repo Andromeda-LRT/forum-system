@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
@@ -21,12 +22,13 @@ public class PostDto {
     List<TagDto> tagList;
 
     public PostDto() {
-
+         this.tagList = new ArrayList<>();
     }
 
     public PostDto(String title, String content) {
         this.title = title;
         this.content = content;
+        this.tagList = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -46,11 +48,13 @@ public class PostDto {
     }
 
     public List<TagDto> getTagList() {
-        return tagList;
+        return new ArrayList<>(tagList);
     }
 
     public void setTagList(List<TagDto> tagList) {
-        this.tagList = tagList;
+        if(tagList != null){
+            this.tagList = tagList;
+        }
     }
 
 

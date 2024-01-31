@@ -5,9 +5,7 @@ import com.forumsystem.models.Comment;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class PostResponseDto {
     private String createdBy;
@@ -23,11 +21,14 @@ public class PostResponseDto {
 
     private List<CommentResponseDto> comments;
 
+    private Set<TagDto> tags;
+
     public PostResponseDto() {
         this.comments = new ArrayList<>();
+        this.tags = new HashSet<>();
     }
 
-    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments) {
+    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments, Set<TagDto> tags) {
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;
@@ -35,6 +36,7 @@ public class PostResponseDto {
         this.dislikes = dislikes;
         this.createdAt = createdAt;
         this.comments = comments;
+        this.tags = tags;
     }
 
     public String getCreatedBy() {
@@ -121,6 +123,16 @@ public class PostResponseDto {
     public void setComments(List<CommentResponseDto> comments) {
         if(comments!=null){
             this.comments = comments;
+        }
+    }
+
+    public Set<TagDto> getTags() {
+        return new HashSet<>(tags);
+    }
+
+    public void setTags(Set<TagDto> tags) {
+        if(tags!=null){
+            this.tags = tags;
         }
     }
 }
