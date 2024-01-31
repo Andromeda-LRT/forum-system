@@ -2,12 +2,13 @@ package com.forumsystem.services.contracts;
 
 import com.forumsystem.models.Comment;
 import com.forumsystem.models.User;
+import com.forumsystem.models.modeldto.CommentResponseDto;
 
 import java.util.List;
 
 public interface CommentService {
 
-    List<Comment> getAll();
+    List<CommentResponseDto> getAll(int post_id);
 
     Comment getById(int id);
 

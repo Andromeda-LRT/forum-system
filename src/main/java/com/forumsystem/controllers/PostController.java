@@ -7,6 +7,7 @@ import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.*;
 import com.forumsystem.models.modeldto.CommentDto;
 import com.forumsystem.models.modeldto.PostDto;
+import com.forumsystem.models.modeldto.PostResponseDto;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.modelmappers.PostMapper;

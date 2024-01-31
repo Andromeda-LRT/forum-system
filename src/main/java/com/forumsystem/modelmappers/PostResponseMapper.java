@@ -1,7 +1,9 @@
 package com.forumsystem.modelmappers;
 
 import com.forumsystem.models.Post;
-import com.forumsystem.models.PostResponseDto;
+import com.forumsystem.models.modeldto.PostResponseDto;
+import com.forumsystem.services.contracts.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,6 +11,14 @@ import java.util.List;
 
 @Component
 public class PostResponseMapper {
+
+    private final CommentService commentService;
+
+    @Autowired
+    public PostResponseMapper(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
 
     public List<PostResponseDto> convertToDTO(List<Post> postList) {
         List<PostResponseDto> result = new ArrayList<>();
@@ -27,6 +37,7 @@ public class PostResponseMapper {
         dto.setLikes(post.getLikes());
         dto.setDislikes(post.getDislikes());
         dto.setCreatedAt(post.getCreatedAt());
+        dto.setComments(commentService.getAll(post.getPostId()));
 
         return dto;
     }
