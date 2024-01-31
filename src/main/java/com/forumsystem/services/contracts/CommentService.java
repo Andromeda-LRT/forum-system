@@ -1,4 +1,4 @@
-package com.forumsystem.services;
+package com.forumsystem.services.contracts;
 
 import com.forumsystem.models.Comment;
 import com.forumsystem.models.User;

@@ -1,12 +1,13 @@
-package com.forumsystem.repositories;
+package com.forumsystem.repositories.contracts;
 
+import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 
 import java.util.List;
 
 public interface UserRepository {
-    List<User> getAll();
+    List<User> getAll(UserModelFilterOptions userFilter);
 
     User get(int id);
 

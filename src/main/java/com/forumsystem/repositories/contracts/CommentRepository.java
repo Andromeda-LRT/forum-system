@@ -1,4 +1,4 @@
-package com.forumsystem.repositories;
+package com.forumsystem.repositories.contracts;
 
 import com.forumsystem.models.Comment;
 import com.forumsystem.models.Post;

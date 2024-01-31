@@ -1,4 +1,4 @@
-package com.forumsystem.services;
+package com.forumsystem.services.contracts;
 
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.models.Comment;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PostService {
     //List<Post> getAllPosts(User user, PostModelFilterOptions postFilter);
-    List<PostResponseDto> getAll(User user);
+   // List<PostResponseDto> getAll(User user);
     List<Post> getAll(User user, PostModelFilterOptions postFilter);
 
     Post getById(User user, int id);

@@ -1,5 +1,6 @@
-package com.forumsystem.services;
+package com.forumsystem.services.contracts;
 
+import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll(User user);
+    List<User> getAll(User user, UserModelFilterOptions userFilter);
 
     User get(int id, User user);
 
