@@ -43,15 +43,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
-        boolean duplicateExists = true;
+        boolean duplicateUserNameExists = true;
+        boolean duplicateEmailNameExists = true;
+
         try{
             repository.getUserByUsername(user.getUsername());
         }catch (EntityNotFoundException e){
-            duplicateExists = false;
+            duplicateUserNameExists = false;
+        }
+        if (duplicateUserNameExists){
+            throw new DuplicateEntityException("User", "username", user.getUsername());
         }
 
-        if (duplicateExists){
-            throw new DuplicateEntityException("User", "username", user.getUsername());
+        try{
+            repository.getUserByEmail(user.getEmail());
+        }catch (EntityNotFoundException e){
+            duplicateEmailNameExists = false;
+        }
+        if (duplicateEmailNameExists){
+            throw new DuplicateEntityException("User", "email", user.getEmail());
         }
         repository.create(user);
     }
