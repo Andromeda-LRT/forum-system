@@ -1,8 +1,8 @@
 package com.forumsystem.modelmappers;
 
 import com.forumsystem.models.User;
-import com.forumsystem.models.UserDto;
-import com.forumsystem.services.UserService;
+import com.forumsystem.models.modeldto.UserDto;
+import com.forumsystem.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

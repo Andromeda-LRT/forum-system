@@ -5,10 +5,12 @@ import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.modelmappers.CommentMapper;
 import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.*;
+import com.forumsystem.models.modeldto.CommentDto;
+import com.forumsystem.models.modeldto.PostDto;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.modelmappers.PostMapper;
-import com.forumsystem.services.PostService;
+import com.forumsystem.services.contracts.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,14 +27,14 @@ public class PostController {
     private final PostMapper postMapper;
     private final CommentMapper commentMapper;
     private final AuthenticationHelper authHelper;
-
     private final PostResponseMapper postResponseMapper;
 
     @Autowired
     public PostController(PostService postService,
                           PostMapper postMapper,
                           CommentMapper commentMapper,
-                          AuthenticationHelper authHelper, PostResponseMapper postResponseMapper) {
+                          AuthenticationHelper authHelper,
+                          PostResponseMapper postResponseMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.commentMapper = commentMapper;
@@ -40,25 +42,30 @@ public class PostController {
         this.postResponseMapper = postResponseMapper;
     }
 
-//    @GetMapping()
-//    public List<Post> getAllPosts(
-//            @RequestHeader HttpHeaders headers,
-//            @RequestParam(required = false) String title,
-//            @RequestParam(required = false) Integer likes,
-//            @RequestParam(required = false) Integer dislikes,
-//            @RequestParam(required = false) String sortBy,
-//            @RequestParam(required = false) String sortOrder) {
-//        PostModelFilterOptions postFilter = new PostModelFilterOptions(
-//                title, likes, dislikes, sortBy, sortOrder);
-//        User user = authHelper.tryGetUser(headers);
-//        return postService.getAll(user, postFilter);
-//    }
-
     @GetMapping()
-    public List<PostResponseDto> getAllPosts(@RequestHeader HttpHeaders headers) {
-        User user = authHelper.tryGetUser(headers);
-        return postService.getAll(user);
+    public List<PostResponseDto> getAllPosts(
+            @RequestHeader HttpHeaders headers,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Integer likes,
+            @RequestParam(required = false) Integer dislikes,
+            @RequestParam(required = false) String tagName,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder) {
+        PostModelFilterOptions postFilter = new PostModelFilterOptions(
+                title, likes, dislikes, tagName, sortBy, sortOrder);
+        try {
+            User user = authHelper.tryGetUser(headers);
+            List<Post> postList = postService.getAll(user, postFilter);
+            return postResponseMapper.convertToDTO(postList);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
+
+//    public List<PostResponseDto> getAllPosts(@RequestHeader HttpHeaders headers) {
+//        User user = authHelper.tryGetUser(headers);
+//        return postService.getAll(user);
+//    }
 
 //    @GetMapping("/browse")
 //    public List<Post> getAll(
@@ -86,17 +93,16 @@ public class PostController {
     }
 
     @PostMapping()
-    public Post create(@RequestHeader HttpHeaders headers, @RequestBody @Valid PostDto postDto) {
+    public PostResponseDto create(@RequestHeader HttpHeaders headers, @RequestBody @Valid PostDto postDto) {
         try {
             Post post = postMapper.fromDto(postDto);
             User user = authHelper.tryGetUser(headers);
             postService.create(user, post);
-            return post;
+            return postResponseMapper.convertToDTO(post);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
 
     @PostMapping("/{post_id}/comments")
     public Comment createComment(@RequestHeader HttpHeaders headers,
@@ -113,13 +119,14 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public Post update(@RequestHeader HttpHeaders headers,
-                       @RequestBody @Valid PostDto postDto,
-                       @PathVariable int id) {
+    public PostResponseDto update(@RequestHeader HttpHeaders headers,
+                                  @RequestBody @Valid PostDto postDto,
+                                  @PathVariable int id) {
         try {
             Post post = postMapper.fromDto(postDto, id);
             User user = authHelper.tryGetUser(headers);
-            return postService.updatePost(user, post);
+            postService.updatePost(user, post);
+            return postResponseMapper.convertToDTO(post);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

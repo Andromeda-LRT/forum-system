@@ -1,11 +1,12 @@
 package com.forumsystem.controllers;
 
 import com.forumsystem.modelhelpers.AuthenticationHelper;
+import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.modelmappers.UserMapper;;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
-import com.forumsystem.models.UserDto;
-import com.forumsystem.services.UserService;
+import com.forumsystem.models.modeldto.UserDto;
+import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.DuplicateEntityException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
@@ -18,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static com.forumsystem.modelhelpers.ModelConstantHelper.AUTHORIZED_TO_BROWSE_USER_INFORMATION;
+import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED_TO_BROWSE_USER_INFORMATION;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,18 +39,25 @@ public class UserController {
         User user = authenticationHelper.tryGetUser(headers);
         if (user.getUserId() != id) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    AUTHORIZED_TO_BROWSE_USER_INFORMATION);
+                    UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
         }
     }
 
     @GetMapping()
-    public List<User> getAll(@RequestHeader HttpHeaders headers) {
+    public List<User> getAll(@RequestHeader HttpHeaders headers,
+                             @RequestParam(required = false) String username,
+                             @RequestParam(required = false) String email,
+                             @RequestParam(required = false) String firstName,
+                             @RequestParam(required = false) String sortBy,
+                             @RequestParam(required = false) String sortOrder) {
+        UserModelFilterOptions userFilter = new UserModelFilterOptions(
+                username, email, firstName, sortBy, sortOrder);
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return userService.getAll(user);
+            return userService.getAll(user, userFilter);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    AUTHORIZED_TO_BROWSE_USER_INFORMATION);
+                    UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
         }
     }
 
@@ -66,7 +74,7 @@ public class UserController {
             return userService.get(id, user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    AUTHORIZED_TO_BROWSE_USER_INFORMATION);
+                    UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     e.getMessage());
@@ -80,7 +88,7 @@ public class UserController {
             return userService.getUserPosts(username);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    AUTHORIZED_TO_BROWSE_USER_INFORMATION);
+                    UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     e.getMessage());

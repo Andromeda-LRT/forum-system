@@ -7,17 +7,19 @@ public class PostModelFilterOptions {
     private Optional<String> title;
     private Optional<Integer> likes;
     private Optional<Integer> dislikes;
-    //todo potentially to add tags
+    private Optional<String> tagName;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
     public PostModelFilterOptions(String title,
                                   Integer likes,
                                   Integer dislikes,
+                                  String tagName,
                                   String sortBy,
                                   String sortOrder) {
         this.title = Optional.ofNullable(title);
         this.likes = Optional.ofNullable(likes);
+        this.tagName = Optional.ofNullable(tagName);
         this.dislikes = Optional.ofNullable(dislikes);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
@@ -62,5 +64,12 @@ public class PostModelFilterOptions {
 
     public void setDislikes(Optional<Integer> dislikes) {
         this.dislikes = dislikes;
+    }
+    public Optional<String> getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(Optional<String> tagName) {
+        this.tagName = tagName;
     }
 }

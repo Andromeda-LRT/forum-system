@@ -1,7 +1,9 @@
 package com.forumsystem.repositories;
 
+import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
+import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,7 +11,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -21,11 +26,41 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(UserModelFilterOptions userFilter) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User", User.class)
-                    .list();
+
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            userFilter.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            userFilter.getEmail().ifPresent(value -> {
+                filters.add("email like :email");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            userFilter.getFirstName().ifPresent(value -> {
+                filters.add("firstName like :firstName");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            StringBuilder queryString = new StringBuilder("from User");
+
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(userFilter));
+
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
+            return query.list();
         }
+
     }
 
     @Override
@@ -125,11 +160,14 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    // todo  class java.lang.Long cannot be cast to class java.lang.Integer
+    //  (java.lang.Long and java.lang.Integer are in module java.base of loader 'bootstrap')
+    // there seems to be an issue with this method
     @Override
     public boolean checkIfAdmin(int userId) {
         try (Session session = sessionFactory.openSession()) {
             String sql = "SELECT COUNT(*) FROM admins WHERE user_id = :userId";
-            int count = ((Integer) session.createNativeQuery(sql)
+            int count = ((Long) session.createNativeQuery(sql)
                     .setParameter("userId", userId)
                     .uniqueResult()).intValue();
 
@@ -145,4 +183,33 @@ public class UserRepositoryImpl implements UserRepository {
             return query.uniqueResult();
         }
     }
+
+    private String generateOrderBy(UserModelFilterOptions userFilter) {
+
+        if (userFilter.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+        switch (userFilter.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "email":
+                orderBy = "email";
+                break;
+            case "firstName":
+                orderBy = "firstName";
+                break;
+        }
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (userFilter.getSortOrder().isPresent() &&
+                userFilter.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
+    }
+
 }

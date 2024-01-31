@@ -1,20 +1,19 @@
 package com.forumsystem.services;
 
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
-import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.Comment;
-import com.forumsystem.models.PostResponseDto;
-import com.forumsystem.repositories.PostRepository;
-import com.forumsystem.repositories.UserRepository;
+import com.forumsystem.repositories.contracts.PostRepository;
+import com.forumsystem.repositories.contracts.UserRepository;
+import com.forumsystem.services.contracts.CommentService;
+import com.forumsystem.services.contracts.PostService;
+import com.forumsystem.services.contracts.TagService;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 
@@ -24,17 +23,18 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentService commentService;
-
-    private final PostResponseMapper postResponseMapper;
+    private final TagService tagService;
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository,
                            UserRepository userRepository,
-                           CommentService commentService, PostResponseMapper postResponseMapper) {
+                           CommentService commentService,
+                           TagService tagService
+    ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentService = commentService;
-        this.postResponseMapper = postResponseMapper;
+        this.tagService = tagService;
     }
 
 //    @Override
@@ -47,24 +47,27 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAll(User user, PostModelFilterOptions postFilter) {
 
-        // todo to use checkIfAdmin
-        return postRepository.getAll();
-    }
-
-    public List<PostResponseDto> getAll(User user) {
-        List<Post> posts = postRepository.getAll();
-
-        List<PostResponseDto> dtoList = new ArrayList<>();
-        for (Post post : posts) {
-            dtoList.add(postResponseMapper.convertToDTO(post));
+        if (!userRepository.checkIfAdmin(user.getUserId())) {
+            throw new UnauthorizedOperationException(INSUFFICIENT_PERMISSIONS_ERROR_MESSAGE);
         }
-        return dtoList;
-
+        return postRepository.getAll(postFilter);
     }
+
+//    public List<PostResponseDto> getAll(User user) {
+////        List<Post> posts = postRepository.getAll();
+////
+////        List<PostResponseDto> dtoList = new ArrayList<>();
+////        for (Post post : posts) {
+////            dtoList.add(postResponseMapper.convertToDTO(post));
+////        }
+////        return dtoList;
+//        throw new UnsupportedOperationException();
+//
+//    }
 
     @Override
     public Post getById(User user, int id) {
-        // todo to add JSONIgnore to post's id field
+
         return postRepository.getById(id);
     }
 
@@ -96,10 +99,13 @@ public class PostServiceImpl implements PostService {
                     String.format(BLOCKED_USER_ERROR_MESSAGE, POST, EDITING));
         }
 
-        if (!isUserOwnerOfCurrentPost(postToBeUpdated, user)) {
+        if (!postToBeUpdated.getCreatedBy().equals(user) &&
+                !userRepository.checkIfAdmin(user.getUserId())) {
             throw new UnauthorizedOperationException(
                     String.format(UNAUTHORIZED_EDIT_ERROR_MESSAGE, POSTS));
         }
+
+        tagService.create(postToBeUpdated.getPostTags());
         return postRepository.update(postToBeUpdated);
     }
 
@@ -115,7 +121,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void likePost(Post post, User user) {
-       postRepository.likePost(post.getPostId(), user.getUserId());
+        postRepository.likePost(post.getPostId(), user.getUserId());
     }
 
     @Override
@@ -123,15 +129,18 @@ public class PostServiceImpl implements PostService {
         postRepository.dislikePost(post.getPostId(), user.getUserId());
     }
 
-
     @Override
     public void delete(User user, int id) {
-        // todo to use primary if statement to check whether user is admin or not
-        // todo to use checkIfAdmin
+
         Post postToBeDeleted = postRepository.getById(id);
-        if (!isUserOwnerOfCurrentPost(postToBeDeleted, user)) {
+
+        if (!postToBeDeleted.getCreatedBy().equals(user) &&
+                !userRepository.checkIfAdmin(user.getUserId())) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_DELETION_ERROR_MESSAGE);
         }
+
+        postToBeDeleted.setIsArchived(true);
+
         postRepository.delete(postToBeDeleted);
     }
 
@@ -142,17 +151,4 @@ public class PostServiceImpl implements PostService {
         commentService.delete(user, comment);
     }
 
-    private boolean isUserOwnerOfCurrentPost(Post post, User user) {
-        if (user != post.getCreatedBy()) {
-            return false;
-        }
-        return true;
-    }
-
-//    private boolean isUserOwnerOfCurrentComment(User user, Comment comment) {
-//        if (user != comment.getUser()) {
-//            return false;
-//        }
-//        return true;
-//    }
 }

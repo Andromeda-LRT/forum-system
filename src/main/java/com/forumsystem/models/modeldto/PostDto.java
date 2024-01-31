@@ -1,7 +1,11 @@
-package com.forumsystem.models;
+package com.forumsystem.models.modeldto;
 
+import com.forumsystem.models.Tag;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 
@@ -14,7 +18,8 @@ public class PostDto {
     @Size(min = 32, max = 8192, message = INVALID_CONTENT_LENGTH_ERROR_MESSAGE)
     private String content;
 
-    //todo to add tag field
+    List<TagDto> tagList;
+
     public PostDto() {
 
     }
@@ -38,6 +43,14 @@ public class PostDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<TagDto> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<TagDto> tagList) {
+        this.tagList = tagList;
     }
 
 

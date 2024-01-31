@@ -30,8 +30,11 @@ public class ModelConstantHelper {
     public static final String INVALID_AUTHENTICATION =
             "Invalid authentication";
 
-    public static final String AUTHORIZED_TO_BROWSE_USER_INFORMATION =
+    public static final String UNAUTHORIZED_TO_BROWSE_USER_INFORMATION =
             "You are not authorized to browse user information";
     public static final String PERMISSIONS_ERROR =
             "You don't have the permissions to update this user information.";
+    public static final String INSUFFICIENT_PERMISSIONS_ERROR_MESSAGE =
+            "You do not have the required permissions to review the requested resource";
+    public static final String HASHTAG = "#";
 }

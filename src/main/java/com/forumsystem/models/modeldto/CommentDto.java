@@ -1,4 +1,4 @@
-package com.forumsystem.models;
+package com.forumsystem.models.modeldto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
