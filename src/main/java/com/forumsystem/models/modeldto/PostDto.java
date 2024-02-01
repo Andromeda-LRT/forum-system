@@ -52,7 +52,7 @@ public class PostDto {
     }
 
     public void setTagList(List<TagDto> tagList) {
-        if(tagList != null){
+        if(tagList != null && tagList.isEmpty()){
             this.tagList = tagList;
         }
     }

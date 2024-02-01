@@ -21,14 +21,14 @@ public class PostResponseDto {
 
     private List<CommentResponseDto> comments;
 
-    private Set<TagDto> tags;
+    private List<TagDto> tags;
 
     public PostResponseDto() {
         this.comments = new ArrayList<>();
-        this.tags = new HashSet<>();
+        this.tags = new ArrayList<>();
     }
 
-    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments, Set<TagDto> tags) {
+    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments, List<TagDto> tags) {
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;
@@ -126,11 +126,11 @@ public class PostResponseDto {
         }
     }
 
-    public Set<TagDto> getTags() {
-        return new HashSet<>(tags);
+    public List<TagDto> getTags() {
+        return new ArrayList<>(tags);
     }
 
-    public void setTags(Set<TagDto> tags) {
+    public void setTags(List<TagDto> tags) {
         if(tags!=null){
             this.tags = tags;
         }

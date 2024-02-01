@@ -48,9 +48,9 @@ public class PostResponseMapper {
 
         return dto;
     }
-    private Set<TagDto> convertTagList(Set<Tag> tags){
-        Set<TagDto> result = new HashSet<>();
-        if(tags!=null) {
+    private  List<TagDto> convertTagList(Set<Tag> tags){
+        List<TagDto> result = new ArrayList<>();
+        if(tags!=null && !tags.isEmpty()) {
             for (Tag tag : tags) {
                 TagDto dto = new TagDto();
                 dto.setName(tag.getName());
