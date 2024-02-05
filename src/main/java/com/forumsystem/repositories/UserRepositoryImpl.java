@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +83,20 @@ public class UserRepositoryImpl implements UserRepository {
             List<User> result = query.list();
             if (result.isEmpty()) {
                 throw new EntityNotFoundException("User", "username", username);
+            }
+
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where email= :email", User.class);
+            query.setParameter("email", email);
+            List<User> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("User", "email", email);
             }
 
             return result.get(0);
@@ -160,18 +175,16 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    // todo  class java.lang.Long cannot be cast to class java.lang.Integer
-    //  (java.lang.Long and java.lang.Integer are in module java.base of loader 'bootstrap')
-    // there seems to be an issue with this method
+
     @Override
     public boolean checkIfAdmin(int userId) {
         try (Session session = sessionFactory.openSession()) {
             String sql = "SELECT COUNT(*) FROM admins WHERE user_id = :userId";
-            int count = ((Long) session.createNativeQuery(sql)
+            Number result = (Number) session.createNativeQuery(sql)
                     .setParameter("userId", userId)
-                    .uniqueResult()).intValue();
+                    .uniqueResult();
 
-            return count > 0;
+            return result != null && result.longValue() > 0;
         }
     }
 
