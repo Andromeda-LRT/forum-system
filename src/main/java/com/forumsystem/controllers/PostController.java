@@ -11,6 +11,8 @@ import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.modelmappers.PostMapper;
 import com.forumsystem.services.contracts.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static com.forumsystem.modelhelpers.SwaggerConstantHelper.*;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -42,6 +46,8 @@ public class PostController {
         this.postResponseMapper = postResponseMapper;
     }
 
+    @Operation(summary = GET_POSTS_SUMMARY, description = GET_POSTS_DESCRIPTION)
+    @SecurityRequirement(name = AUTHORIZATION)
     @GetMapping()
     public List<PostResponseDto> getAllPosts(
             @RequestHeader HttpHeaders headers,
@@ -81,6 +87,9 @@ public class PostController {
 //        return postService.getAll(user, postFilter);
 //    }
 
+    @Operation(summary = GET_POST_BY_ID_SUMMARY, description = GET_POST_BY_ID_DESCRIPTION +
+            ONLY_BY_LOGGED_USERS)
+    @SecurityRequirement(name = AUTHORIZATION)
     @GetMapping("/{id}")
     public PostResponseDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authHelper.tryGetUser(headers);
@@ -92,6 +101,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = CREATE_POST_SUMMARY, description = CREATE_POST_DESCRIPTION +
+            ONLY_BY_LOGGED_USERS)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PostMapping()
     public PostResponseDto create(@RequestHeader HttpHeaders headers, @RequestBody @Valid PostDto postDto) {
         try {
@@ -104,6 +116,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = CREATE_COMMENT_SUMMARY, description = CREATE_COMMENT_DESCRIPTION +
+            ONLY_BY_LOGGED_USERS)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PostMapping("/{post_id}/comments")
     public Comment createComment(@RequestHeader HttpHeaders headers,
                                  @RequestBody @Valid CommentDto commentDto,
@@ -118,6 +133,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = UPDATE_POST_SUMMARY, description = UPDATE_POST_DESCRIPTION +
+            ONLY_BY_ADMINS_AND_CREATOR + POST)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("/{id}")
     public PostResponseDto update(@RequestHeader HttpHeaders headers,
                                   @RequestBody @Valid PostDto postDto,
@@ -134,6 +152,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = UPDATE_COMMENT_SUMMARY, description = UPDATE_COMMENT_DESCRIPTION +
+            ONLY_BY_ADMINS_AND_CREATOR + COMMENT)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("{post_id}/comments/{comment_id}")
     public Comment updateComment(@RequestHeader HttpHeaders headers,
                                  @RequestBody @Valid CommentDto commentDto,
@@ -151,6 +172,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = LIKE_POST_SUMMARY, description = LIKE_POST_DESCRIPTION +
+            ONLY_BY_LOGGED_USERS)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("{post_id}/like")
     public void likePost(@RequestHeader HttpHeaders headers,
                          @PathVariable int post_id) {
@@ -159,6 +183,9 @@ public class PostController {
         postService.likePost(post, user);
     }
 
+    @Operation(summary = DISLIKE_POST_SUMMARY, description = DISLIKE_POST_DESCRIPTION +
+            ONLY_BY_LOGGED_USERS)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("{post_id}/dislike")
     public void dislikePost(@RequestHeader HttpHeaders headers,
                             @PathVariable int post_id) {
@@ -167,6 +194,9 @@ public class PostController {
         postService.dislikePost(post, user);
     }
 
+    @Operation(summary = DELETE_POST_SUMMARY, description = DELETE_POST_DESCRIPTION +
+            ONLY_BY_ADMINS_AND_CREATOR + POST)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("/post/{post_id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int post_id) {
         try {
@@ -179,6 +209,9 @@ public class PostController {
         }
     }
 
+    @Operation(summary = DELETE_COMMENT_SUMMARY, description = DELETE_COMMENT_DESCRIPTION +
+            ONLY_BY_ADMINS_AND_CREATOR + POST)
+    @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("/{post_id}/comment/{comment_id}")
     public void deleteComment(@RequestHeader HttpHeaders headers,
                               @PathVariable int post_id,
