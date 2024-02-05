@@ -1,10 +1,12 @@
 package com.forumsystem.repositories;
 
 import com.forumsystem.models.Comment;
+import com.forumsystem.models.Tag;
 import com.forumsystem.repositories.contracts.CommentRepository;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,10 +23,13 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAll() {
+    public List<Comment> getAll(int postId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Comment", Comment.class)
-                    .list();
+            String hql = "SELECT c FROM Comment c JOIN c.post p WHERE p.id = :postId";
+            Query query = session.createQuery(hql);
+            query.setParameter("postId", postId);
+            List<Comment> comments = query.list();
+            return comments;
         }
     }
 

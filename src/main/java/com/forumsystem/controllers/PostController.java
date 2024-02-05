@@ -3,10 +3,13 @@ package com.forumsystem.controllers;
 import com.forumsystem.modelhelpers.AuthenticationHelper;
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.modelmappers.CommentMapper;
+import com.forumsystem.modelmappers.CommentResponseMapper;
 import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.*;
 import com.forumsystem.models.modeldto.CommentDto;
+import com.forumsystem.models.modeldto.CommentResponseDto;
 import com.forumsystem.models.modeldto.PostDto;
+import com.forumsystem.models.modeldto.PostResponseDto;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.modelmappers.PostMapper;
@@ -33,17 +36,20 @@ public class PostController {
     private final AuthenticationHelper authHelper;
     private final PostResponseMapper postResponseMapper;
 
+    private final CommentResponseMapper commentResponseMapper;
+
     @Autowired
     public PostController(PostService postService,
                           PostMapper postMapper,
                           CommentMapper commentMapper,
                           AuthenticationHelper authHelper,
-                          PostResponseMapper postResponseMapper) {
+                          PostResponseMapper postResponseMapper, CommentResponseMapper commentResponseMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.commentMapper = commentMapper;
         this.authHelper = authHelper;
         this.postResponseMapper = postResponseMapper;
+        this.commentResponseMapper = commentResponseMapper;
     }
 
     @Operation(summary = GET_POSTS_SUMMARY, description = GET_POSTS_DESCRIPTION)
@@ -120,14 +126,14 @@ public class PostController {
             ONLY_BY_LOGGED_USERS)
     @SecurityRequirement(name = AUTHORIZATION)
     @PostMapping("/{post_id}/comments")
-    public Comment createComment(@RequestHeader HttpHeaders headers,
-                                 @RequestBody @Valid CommentDto commentDto,
-                                 @PathVariable int post_id) {
+    public CommentResponseDto createComment(@RequestHeader HttpHeaders headers,
+                                            @RequestBody @Valid CommentDto commentDto,
+                                            @PathVariable int post_id) {
         try {
             User user = authHelper.tryGetUser(headers);
             Comment comment = commentMapper.fromDto(commentDto);
             postService.createComment(user, comment, post_id);
-            return comment;
+            return commentResponseMapper.convertToDTO(comment);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -156,7 +162,7 @@ public class PostController {
             ONLY_BY_ADMINS_AND_CREATOR + COMMENT)
     @SecurityRequirement(name = AUTHORIZATION)
     @PutMapping("{post_id}/comments/{comment_id}")
-    public Comment updateComment(@RequestHeader HttpHeaders headers,
+    public CommentResponseDto updateComment(@RequestHeader HttpHeaders headers,
                                  @RequestBody @Valid CommentDto commentDto,
                                  @PathVariable int post_id,
                                  @PathVariable int comment_id) {
@@ -164,7 +170,7 @@ public class PostController {
             User user = authHelper.tryGetUser(headers);
             Comment comment = commentMapper.fromDto(commentDto, comment_id);
             postService.updateComment(user, comment, post_id);
-            return comment;
+            return commentResponseMapper.convertToDTO(comment);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {

@@ -1,9 +1,11 @@
-package com.forumsystem.models;
+package com.forumsystem.models.modeldto;
+
+import com.forumsystem.models.Comment;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
+import java.util.*;
 
 public class PostResponseDto {
     private String createdBy;
@@ -17,15 +19,24 @@ public class PostResponseDto {
 
     private String createdAt;
 
-    public PostResponseDto() {}
+    private List<CommentResponseDto> comments;
 
-    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt) {
+    private List<TagDto> tags;
+
+    public PostResponseDto() {
+        this.comments = new ArrayList<>();
+        this.tags = new ArrayList<>();
+    }
+
+    public PostResponseDto(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments, List<TagDto> tags) {
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;
         this.likes = likes;
         this.dislikes = dislikes;
         this.createdAt = createdAt;
+        this.comments = comments;
+        this.tags = tags;
     }
 
     public String getCreatedBy() {
@@ -98,6 +109,30 @@ public class PostResponseDto {
             return daysDiff + " days ago";
         } else {
             return dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH));
+        }
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<CommentResponseDto> getComments() {
+        return new ArrayList<>(comments);
+    }
+
+    public void setComments(List<CommentResponseDto> comments) {
+        if(comments!=null){
+            this.comments = comments;
+        }
+    }
+
+    public List<TagDto> getTags() {
+        return new ArrayList<>(tags);
+    }
+
+    public void setTags(List<TagDto> tags) {
+        if(tags!=null){
+            this.tags = tags;
         }
     }
 }

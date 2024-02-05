@@ -6,7 +6,7 @@ import com.forumsystem.models.Post;
 import java.util.List;
 
 public interface CommentRepository {
-    List<Comment> getAll();
+    List<Comment> getAll(int postId);
 
     Comment getById(int id);
 
