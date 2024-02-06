@@ -148,13 +148,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void blockUser(int id, User user) {
+    public void blockUser(String username) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
             String hql = "update User set isBlocked = true where username = :username";
             Query query = session.createQuery(hql);
-            query.setParameter("username", user.getUsername());
+            query.setParameter("username", username);
             query.executeUpdate();
 
             session.getTransaction().commit();
@@ -162,13 +162,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void unblockUser(int id, User user) {
+    public void unblockUser(String username) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
             String hql = "update User set isBlocked = false where username = :username";
             Query query = session.createQuery(hql);
-            query.setParameter("username", user.getUsername());
+            query.setParameter("username", username);
             query.executeUpdate();
 
             session.getTransaction().commit();
@@ -194,6 +194,32 @@ public class UserRepositoryImpl implements UserRepository {
             String hql = "select count(u) from User u";
             Query<Long> query = session.createQuery(hql, Long.class);
             return query.uniqueResult();
+        }
+    }
+
+    @Override
+    public boolean isEmailExists(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM User u WHERE u.email = :email";
+            List<User> results = session.createQuery(hql)
+                    .setParameter("email", email)
+                    .list();
+            return !results.isEmpty();
+        }
+    }
+
+    @Override
+    public void giveUserAdminRights(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            String sql = "INSERT INTO admins (user_id, phone_number) VALUES (:userId, :phoneNumber)";
+            int result = session.createNativeQuery(sql)
+                    .setParameter("userId", user.getUserId())
+                    .setParameter("phoneNumber", 0)
+                    .executeUpdate();
+
+            session.getTransaction().commit();
         }
     }
 
