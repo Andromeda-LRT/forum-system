@@ -22,11 +22,13 @@ public interface UserService {
 
     List<Post> getUserPosts(String username);
 
-    void blockUser(User user);
+    void blockUser(int id, User user);
 
-    void unblockUser(User user);
+    void unblockUser(int id, User user);
 
     long getCountUsers();
 
     void giveUserAdminRights(User user, User loggedUser);
+
+    public void checkPermissions(User userToUpdate, User loggedUser);
 }

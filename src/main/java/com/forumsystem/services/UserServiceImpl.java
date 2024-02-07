@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         repository.giveUserAdminRights(user);
     }
 
-    private void checkPermissions(User userToUpdate, User loggedUser) {
+    public void checkPermissions(User userToUpdate, User loggedUser) {
         if (!repository.checkIfAdmin(loggedUser.getUserId()) && userToUpdate.getUserId() != loggedUser.getUserId()) {
             throw new UnauthorizedOperationException(PERMISSIONS_ERROR);
         }

@@ -1,6 +1,7 @@
 package com.forumsystem.modelmappers;
 
 import com.forumsystem.models.User;
+import com.forumsystem.models.modeldto.RegisterDto;
 import com.forumsystem.models.modeldto.UserDto;
 import com.forumsystem.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,17 @@ public class UserMapper {
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         return user;
+    }
+
+    public User fromDto(RegisterDto dto){
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setPassword(dto.getPassword());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        return user;
+
     }
 
     public UserDto toDto(User user){
