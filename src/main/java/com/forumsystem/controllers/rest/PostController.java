@@ -1,4 +1,4 @@
-package com.forumsystem.controllers;
+package com.forumsystem.controllers.rest;
 
 import com.forumsystem.modelhelpers.AuthenticationHelper;
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
