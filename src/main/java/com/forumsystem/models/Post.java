@@ -26,6 +26,8 @@ public class Post {
 
     @Column(name = "content")
     private String content;
+    @Column(name = "total_comments")
+    private int comments;
 
     @Column(name = "total_likes")
     private int likes;
@@ -71,6 +73,14 @@ public class Post {
 
     public User getCreatedBy() {
         return createdBy;
+    }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
     }
 
     public void setCreatedBy(User createdBy) {

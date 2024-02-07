@@ -53,6 +53,21 @@ public class PostServiceImpl implements PostService {
         return postRepository.getAll(postFilter);
     }
 
+    @Override
+    public List<Post> getTopTenCommentedPosts() {
+        return postRepository.getTopTenCommentedPosts();
+    }
+
+    @Override
+    public List<Post> getTenNewestPosts() {
+        return postRepository.getTenNewestPosts();
+    }
+
+    @Override
+    public Long getPostCount() {
+        return postRepository.getPostCount();
+    }
+
 //    public List<PostResponseDto> getAll(User user) {
 ////        List<Post> posts = postRepository.getAll();
 ////
