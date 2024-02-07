@@ -121,7 +121,6 @@ public class UserControllerMvc {
 
     @PostMapping("/{id}/admin-rights")
     public String giveUserAdminRights(@PathVariable int id,
-                                      BindingResult bindingResult,
                                       HttpSession session,
                                       Model model) {
         User loggedUser;
@@ -139,7 +138,7 @@ public class UserControllerMvc {
         try {
             User user = userService.get(id, loggedUser);
             userService.giveUserAdminRights(user, loggedUser);
-            return "AllAdminsView"; // TODO To be discussed
+            return "AllAdminsView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -163,9 +162,8 @@ public class UserControllerMvc {
     public String showUserPosts(@PathVariable String username,
                                 HttpSession session,
                                 Model model) {
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
@@ -183,15 +181,16 @@ public class UserControllerMvc {
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
-        User user;
+        User loggedUser;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            loggedUser = authenticationHelper.tryGetUser(session);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
         try {
-            userService.delete(id, user);
-            return "AllUsersView"; //TODO Discuss about successfully delete page - LYUBIMA
+            userService.delete(id, loggedUser);
+            return "AllUsersView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -207,16 +206,17 @@ public class UserControllerMvc {
     public String block(@PathVariable int id,
                         HttpSession session,
                         Model model) {
-        User user;
+        User loggedUser;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            loggedUser = authenticationHelper.tryGetUser(session);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            userService.blockUser(id, user);
-            return "AllUsersView"; //TODO Discuss about successfully blocked page - LYUBIMA
+            userService.blockUser(id, loggedUser);
+            return "AllUsersView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -236,16 +236,17 @@ public class UserControllerMvc {
     public String unblock(@PathVariable int id,
                         HttpSession session,
                         Model model) {
-        User user;
+        User loggedUser;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            loggedUser = authenticationHelper.tryGetUser(session);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            userService.unblockUser(id, user);
-            return "AllUsersView"; //TODO Discuss about successfully blocked page - LYUBIMA
+            userService.unblockUser(id, loggedUser);
+            return "AllUsersView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
