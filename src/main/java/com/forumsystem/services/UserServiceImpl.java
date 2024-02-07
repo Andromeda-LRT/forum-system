@@ -89,15 +89,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(User user) {
+    public void blockUser(int id,User user) {
+        User blockUser = repository.get(id);
         checkIfAdmin(user);
-        repository.blockUser(user.getUsername());
+        repository.blockUser(blockUser.getUsername());
     }
 
     @Override
-    public void unblockUser(User user) {
+    public void unblockUser(int id, User user) {
+        User unblockUser = repository.get(id);
         checkIfAdmin(user);
-        repository.unblockUser(user.getUsername());
+        repository.unblockUser(unblockUser.getUsername());
     }
 
     @Override

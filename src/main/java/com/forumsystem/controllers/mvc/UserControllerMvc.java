@@ -7,25 +7,19 @@ import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 import com.forumsystem.models.modeldto.UserDto;
 import com.forumsystem.services.contracts.UserService;
+import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.DuplicateEntityException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.naming.AuthenticationException;
 import java.util.List;
-
-import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED_TO_BROWSE_USER_INFORMATION;
 
 @Controller
 @RequestMapping("/users")
@@ -46,7 +40,6 @@ public class UserControllerMvc {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
-            //TODO Align with Reni for exception - LYUBIMA
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
@@ -92,7 +85,7 @@ public class UserControllerMvc {
         User loggedUser;
         try {
             loggedUser = authenticationHelper.tryGetUser(session);
-            verifyUserAccess(id, loggedUser);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (UnauthorizedOperationException e) {
@@ -134,7 +127,7 @@ public class UserControllerMvc {
         User loggedUser;
         try {
             loggedUser = authenticationHelper.tryGetUser(session);
-            verifyUserAccess(id, loggedUser);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (UnauthorizedOperationException e) {
@@ -163,7 +156,7 @@ public class UserControllerMvc {
     public String showCountUsers(Model model) {
         long count = userService.getCountUsers();
         model.addAttribute("userCount", count);
-        return "HomePageView"; //TODO discuss page naming - LYUBIMA
+        return "HomePageView";
     }
 
     @GetMapping("/{username}/posts")
@@ -222,7 +215,7 @@ public class UserControllerMvc {
         }
 
         try {
-            userService.blockUser(user);
+            userService.blockUser(id, user);
             return "AllUsersView"; //TODO Discuss about successfully blocked page - LYUBIMA
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -240,7 +233,7 @@ public class UserControllerMvc {
     }
 
     @PostMapping("/{id}/unblock")
-    public String block(@PathVariable int id,
+    public String unblock(@PathVariable int id,
                         HttpSession session,
                         Model model) {
         User user;
@@ -251,7 +244,7 @@ public class UserControllerMvc {
         }
 
         try {
-            userService.unblockUser(user);
+            userService.unblockUser(id, user);
             return "AllUsersView"; //TODO Discuss about successfully blocked page - LYUBIMA
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
