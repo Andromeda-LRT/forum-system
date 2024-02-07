@@ -37,4 +37,6 @@ public class ModelConstantHelper {
     public static final String INSUFFICIENT_PERMISSIONS_ERROR_MESSAGE =
             "You do not have the required permissions to review the requested resource";
     public static final String HASHTAG = "#";
+
+    public static final String WRONG_USERNAME_OR_PASSWORD = "Wrong username or password.";
 }

@@ -1,7 +1,9 @@
 package com.forumsystem.modelhelpers;
 
 import com.forumsystem.models.User;
+import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.services.contracts.UserService;
+import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,12 @@ import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 public class AuthenticationHelper {
 
     private final UserService service;
+    private final UserRepository repository;
 
     @Autowired
-    public AuthenticationHelper(UserService service) {
+    public AuthenticationHelper(UserService service, UserRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     public User tryGetUser(HttpHeaders headers) {
@@ -66,5 +70,21 @@ public class AuthenticationHelper {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION);
         }
         return authorizationHeader.substring(firstSpaceIndex + 1);
+    }
+
+    public User verifyAuthentication(String username, String password){
+        try {
+            User user = service.getUserByUsername(username);
+            if (!user.getPassword().equals(password)){
+                throw new AuthenticationFailureException(WRONG_USERNAME_OR_PASSWORD);
+            }
+            return user;
+        }catch (EntityNotFoundException e){
+            throw new AuthenticationFailureException(WRONG_USERNAME_OR_PASSWORD);
+        }
+    }
+
+    private void verifyUserAccess(int id, User loggedUser){
+        service.checkPermissions(repository.get(id), loggedUser);
     }
 }
