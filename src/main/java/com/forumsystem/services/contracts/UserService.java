@@ -27,4 +27,6 @@ public interface UserService {
     void unblockUser(int id, User user);
 
     long getCountUsers();
+
+    public void checkPermissions(User userToUpdate, User loggedUser);
 }
