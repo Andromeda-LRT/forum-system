@@ -26,6 +26,7 @@ create table posts
     created_by     int                  not null,
     title          varchar(64)          not null,
     content        varchar(8192)        not null,
+    total_comments int default 0 not null,
     total_likes    int        default 0 not null,
     total_dislikes int        default 0 not null,
     is_archived    tinyint(1) default 0 not null,
@@ -79,6 +80,30 @@ create table posts_tags
         foreign key (tag_id) references tags (tag_id)
     -- PRIMARY KEY (post_id, tag_id)
 );
+
+create trigger update_total_comments_on_insert
+    after insert
+    on comments
+    for each row
+    begin
+        update posts
+            set total_comments = (select count(post_id)
+                                  from comments
+                                  where post_id = new.post_id)
+        where post_id = new.post_id;
+    end;
+
+create trigger update_total_comments_on_update
+    after update
+    on comments
+    for each row
+    begin
+        update posts
+            set total_comments = (select count(post_id)
+                                  from comments
+                                  where post_id = new.post_id)
+        where post_id = new.post_id;
+    end;
 
 
 CREATE TRIGGER update_total_likes_on_insert

@@ -1,6 +1,7 @@
 package com.forumsystem.models.modeldto;
 
 import com.forumsystem.models.Tag;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.w3c.dom.stylesheets.LinkStyle;
@@ -12,10 +13,10 @@ import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
 
 public class PostDto {
 
-    @NotNull(message = EMPTY_TITLE_ERROR_MESSAGE)
+    @NotEmpty(message = EMPTY_TITLE_ERROR_MESSAGE)
     @Size(min = 16, max = 64, message = INVALID_TITLE_LENGTH_ERROR_MESSAGE)
     private String title;
-    @NotNull(message = EMPTY_CONTENT_ERROR_MESSAGE)
+    @NotEmpty(message = EMPTY_CONTENT_ERROR_MESSAGE)
     @Size(min = 32, max = 8192, message = INVALID_CONTENT_LENGTH_ERROR_MESSAGE)
     private String content;
 
