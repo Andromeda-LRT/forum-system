@@ -28,5 +28,7 @@ public interface UserService {
 
     long getCountUsers();
 
+    void giveUserAdminRights(User user, User loggedUser);
+
     public void checkPermissions(User userToUpdate, User loggedUser);
 }

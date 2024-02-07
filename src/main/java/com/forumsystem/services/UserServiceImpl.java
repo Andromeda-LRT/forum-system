@@ -70,6 +70,9 @@ public class UserServiceImpl implements UserService {
     public User update(User userToUpdate, User loggedUser) {
         checkUserIsBlocked(loggedUser);
         checkPermissions(userToUpdate, loggedUser);
+        if(repository.isEmailExists(loggedUser.getEmail())){
+            throw new DuplicateEntityException("User", "email", loggedUser.getEmail());
+        }
         return repository.update(userToUpdate);
     }
 
@@ -86,20 +89,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(int id, User user) {
+    public void blockUser(int id,User user) {
+        User blockUser = repository.get(id);
         checkIfAdmin(user);
-        repository.blockUser(id, user);
+        repository.blockUser(blockUser.getUsername());
     }
 
     @Override
     public void unblockUser(int id, User user) {
+        User unblockUser = repository.get(id);
         checkIfAdmin(user);
-        repository.unblockUser(id, user);
+        repository.unblockUser(unblockUser.getUsername());
     }
 
     @Override
     public long getCountUsers(){
         return repository.getCountUsers();
+    }
+
+    @Override
+    public void giveUserAdminRights(User user, User loggedUser) {
+        if(user.isBlocked()){
+            repository.unblockUser(user.getUsername());
+        }
+        repository.giveUserAdminRights(user);
     }
 
     public void checkPermissions(User userToUpdate, User loggedUser) {

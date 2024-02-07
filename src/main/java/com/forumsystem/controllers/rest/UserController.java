@@ -12,10 +12,13 @@ import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -83,6 +86,22 @@ public class UserController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return userService.get(id, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
+    }
+    @PostMapping("/{id}/admin-rights")
+    public User giveUserAdminRights(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User loggedUser;
+        try {
+            loggedUser = authenticationHelper.tryGetUser(headers);
+            User toBeAdmin = userService.get(id, loggedUser);
+            userService.giveUserAdminRights(toBeAdmin, loggedUser);
+            return toBeAdmin;
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     UNAUTHORIZED_TO_BROWSE_USER_INFORMATION);
@@ -164,7 +183,7 @@ public class UserController {
                        @RequestHeader HttpHeaders headers){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.blockUser(id, user);
+            userService.blockUser(user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
@@ -182,7 +201,7 @@ public class UserController {
                        @RequestHeader HttpHeaders headers){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.unblockUser(id, user);
+            userService.unblockUser(user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

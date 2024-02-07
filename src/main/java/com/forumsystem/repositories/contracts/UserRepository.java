@@ -23,11 +23,15 @@ public interface UserRepository {
 
     List<Post> getUserPosts(String username);
 
-    void blockUser(int id, User user);
+    void blockUser(String username);
 
-    void unblockUser(int id, User user);
+    void unblockUser(String username);
 
     boolean checkIfAdmin(int id);
 
     long getCountUsers();
+
+    boolean isEmailExists(String email);
+
+    void giveUserAdminRights(User user);
 }
