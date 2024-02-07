@@ -74,6 +74,39 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> getTopTenCommentedPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("from Post p order by p.comments desc limit 10", Post.class);
+            List<Post> result = query.list();
+            return result;
+        }
+    }
+
+    @Override
+    public List<Post> getTenNewestPosts() {
+
+        try (Session session = sessionFactory.openSession()){
+
+            Query<Post> query = session.createQuery("From Post p order by p.id desc limit 10", Post.class);
+            List <Post> result = query.list();
+            return result;
+        }
+    }
+
+    @Override
+    public Long getPostCount() {
+
+        try(Session session = sessionFactory.openSession()){
+            Query<Long> query = session.createQuery("select count(p.postId) From Post p", Long.class);
+            Long postCount = query.getSingleResultOrNull();
+            if (postCount == null){
+                postCount = 0L;
+            }
+            return postCount;
+        }
+    }
+
+    @Override
     public Post getById(int id) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, id);
@@ -170,6 +203,8 @@ public class PostRepositoryImpl implements PostRepository {
             case "dislikes":
                 orderBy = "dislikes";
                 break;
+            default:
+                return "";
         }
         orderBy = String.format(" order by %s", orderBy);
 

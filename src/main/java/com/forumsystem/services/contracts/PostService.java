@@ -12,6 +12,12 @@ public interface PostService {
    // List<PostResponseDto> getAll(User user);
     List<Post> getAll(User user, PostModelFilterOptions postFilter);
 
+    List<Post> getTopTenCommentedPosts();
+
+    List<Post> getTenNewestPosts();
+
+    Long getPostCount();
+
     Post getById(User user, int id);
 
     void create(User user, Post post);
