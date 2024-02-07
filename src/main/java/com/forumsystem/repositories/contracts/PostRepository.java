@@ -9,6 +9,12 @@ import java.util.List;
 public interface PostRepository {
     List<Post> getAll(PostModelFilterOptions filterOptions);
 
+    List<Post> getTopTenCommentedPosts();
+
+    List<Post> getTenNewestPosts();
+
+    Long getPostCount();
+
     Post getById(int id);
 
     void create(User user, Post post);
@@ -18,5 +24,7 @@ public interface PostRepository {
     void delete(Post post);
 
     void likePost(int postId, int userId);
+
     void dislikePost(int postId, int userId);
+
 }
