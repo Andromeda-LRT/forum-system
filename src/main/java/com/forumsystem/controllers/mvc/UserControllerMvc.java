@@ -151,13 +151,6 @@ public class UserControllerMvc {
     }
 
 
-    @GetMapping("/count")
-    public String showCountUsers(Model model) {
-        long count = userService.getCountUsers();
-        model.addAttribute("userCount", count);
-        return "HomePageView";
-    }
-
     @GetMapping("/{username}/posts")
     public String showUserPosts(@PathVariable String username,
                                 HttpSession session,
