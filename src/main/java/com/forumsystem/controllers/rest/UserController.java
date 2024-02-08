@@ -183,7 +183,7 @@ public class UserController {
                        @RequestHeader HttpHeaders headers){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.blockUser(user);
+            userService.blockUser(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
@@ -201,7 +201,7 @@ public class UserController {
                        @RequestHeader HttpHeaders headers){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.unblockUser(user);
+            userService.unblockUser(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

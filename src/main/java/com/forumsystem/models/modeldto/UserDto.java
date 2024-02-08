@@ -3,12 +3,9 @@ package com.forumsystem.models.modeldto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
+import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
+
 public class UserDto {
-    public static final String NAME_ERROR_MESSAGE = "Field should be between 4 and 32 symbols.";
-    public static final String EMPTY_ERROR_MESSAGE = "Field can't be empty";
-    public static final String USERNAME_ERROR_MESSAGE = "Username must be of 6 to 16 length with no special characters";
-    public static final String PASSWORD_ERROR_MESSAGE = "Password must be min 4 and max 12 length, " +
-            "containing at least 1 uppercase, 1 lowercase, 1 special character and 1 digit ";
 
     @Schema(name = "firstName", example = "Ivan", required = true)
     @NotNull(message = EMPTY_ERROR_MESSAGE)

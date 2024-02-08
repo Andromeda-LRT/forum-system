@@ -6,6 +6,7 @@ import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -84,7 +85,17 @@ public class AuthenticationHelper {
         }
     }
 
-    private void verifyUserAccess(int id, User loggedUser){
+    public void verifyUserAccess(int id, User loggedUser){
         service.checkPermissions(repository.get(id), loggedUser);
+    }
+
+    public User tryGetUser(HttpSession session) {
+        String currentUsername = (String) session.getAttribute("currentUser");
+
+        if (currentUsername == null) {
+            throw new AuthenticationFailureException("Invalid authentication.");
+        }
+
+        return service.getUserByUsername(currentUsername);
     }
 }
