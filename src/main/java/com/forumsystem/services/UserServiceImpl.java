@@ -120,10 +120,12 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedOperationException(PERMISSIONS_ERROR);
         }
     }
-
-    private void checkIfAdmin(User loggedUser) {
+    @Override
+    public boolean checkIfAdmin(User loggedUser) {
         if (!repository.checkIfAdmin(loggedUser.getUserId())) {
             throw new UnauthorizedOperationException(PERMISSIONS_ERROR);
+        } else {
+            return true;
         }
     }
 

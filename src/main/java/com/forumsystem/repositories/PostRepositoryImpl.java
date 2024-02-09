@@ -39,23 +39,27 @@ public class PostRepositoryImpl implements PostRepository {
             Map<String, Object> params = new HashMap<>();
 
             filterOptions.getTitle().ifPresent(value -> {
-                filters.add("title like :title");
-                params.put("title", String.format("%%%s%%", value));
+                if (value.isBlank()) {
+                    filters.add("title like :title");
+                    params.put("title", String.format("%%%s%%", value));
+                }
             });
 
             filterOptions.getLikes().ifPresent(value -> {
-                filters.add("likes = :likes");
+                filters.add("likes <= :likes");
                 params.put("likes", value);
             });
 
             filterOptions.getDislikes().ifPresent(value -> {
-                filters.add("dislikes = :dislikes");
+                filters.add("dislikes <= :dislikes");
                 params.put("dislikes", value);
             });
 
             filterOptions.getTagName().ifPresent(value -> {
-                filters.add("name = :tagName");
-                params.put("tagName", value);
+                if (!value.isBlank()) {
+                    filters.add("name = :tagName");
+                    params.put("tagName", value);
+                }
             });
 
             StringBuilder queryString = new StringBuilder("from Post p join p.postTags as pt");
@@ -65,6 +69,7 @@ public class PostRepositoryImpl implements PostRepository {
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
+            queryString.append(" p.isArchived = false");
             queryString.append(generateOrderBy(filterOptions));
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
@@ -76,7 +81,8 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> getTopTenCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("from Post p order by p.comments desc limit 10", Post.class);
+            Query<Post> query = session.createQuery("from Post p where p.isArchived = false " +
+                    "order by p.comments desc limit 10", Post.class);
             List<Post> result = query.list();
             return result;
         }
@@ -87,7 +93,8 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()){
 
-            Query<Post> query = session.createQuery("From Post p order by p.id desc limit 10", Post.class);
+            Query<Post> query = session.createQuery("From Post p where p.isArchived = false" +
+                    " order by p.id desc limit 10", Post.class);
             List <Post> result = query.list();
             return result;
         }
@@ -97,7 +104,8 @@ public class PostRepositoryImpl implements PostRepository {
     public Long getPostCount() {
 
         try(Session session = sessionFactory.openSession()){
-            Query<Long> query = session.createQuery("select count(p.postId) From Post p", Long.class);
+            Query<Long> query = session.createQuery("select count(p.postId) From Post p" +
+                    " where p.isArchived = false", Long.class);
             Long postCount = query.getSingleResultOrNull();
             if (postCount == null){
                 postCount = 0L;

@@ -34,18 +34,24 @@ public class UserRepositoryImpl implements UserRepository {
             Map<String, Object> params = new HashMap<>();
 
             userFilter.getUsername().ifPresent(value -> {
-                filters.add("username like :username");
-                params.put("username", String.format("%%%s%%", value));
+                if (!value.isBlank()) {
+                    filters.add("username like :username");
+                    params.put("username", String.format("%%%s%%", value));
+                }
             });
 
             userFilter.getEmail().ifPresent(value -> {
-                filters.add("email like :email");
-                params.put("email", String.format("%%%s%%", value));
+                if (!value.isBlank()) {
+                    filters.add("email like :email");
+                    params.put("email", String.format("%%%s%%", value));
+                }
             });
 
             userFilter.getFirstName().ifPresent(value -> {
-                filters.add("firstName like :firstName");
-                params.put("firstName", String.format("%%%s%%", value));
+                if (!value.isBlank()) {
+                    filters.add("firstName like :firstName");
+                    params.put("firstName", String.format("%%%s%%", value));
+                }
             });
 
             StringBuilder queryString = new StringBuilder("from User");
@@ -240,12 +246,14 @@ public class UserRepositoryImpl implements UserRepository {
             case "firstName":
                 orderBy = "firstName";
                 break;
+            default:
+                return "";
         }
         orderBy = String.format(" order by %s", orderBy);
 
         if (userFilter.getSortOrder().isPresent() &&
                 userFilter.getSortOrder().get().equalsIgnoreCase("desc")) {
-            orderBy = String.format("%s desc", orderBy);
+             orderBy = String.format("%s desc", orderBy);
         }
 
         return orderBy;

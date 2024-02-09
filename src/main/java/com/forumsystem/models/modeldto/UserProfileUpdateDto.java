@@ -1,40 +1,40 @@
 package com.forumsystem.models.modeldto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
-import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
+import static com.forumsystem.modelhelpers.ModelConstantHelper.EMPTY_ERROR_MESSAGE;
+import static com.forumsystem.modelhelpers.ModelConstantHelper.NAME_ERROR_MESSAGE;
 
-public class UserDto {
-
+public class UserProfileUpdateDto {
     @Schema(name = "firstName", example = "Ivan", required = true)
-    @NotNull(message = EMPTY_ERROR_MESSAGE)
+    @NotEmpty(message = EMPTY_ERROR_MESSAGE)
     @Size(min = 4, max = 32, message = NAME_ERROR_MESSAGE)
-    String firstName;
-
+    private String firstName;
     @Schema(name = "lastName", example = "Ivanov", required = true)
-    @NotNull(message = EMPTY_ERROR_MESSAGE)
+    @NotEmpty(message = EMPTY_ERROR_MESSAGE)
     @Size(min = 4, max = 32, message = NAME_ERROR_MESSAGE)
-    String lastName;
+    private String lastName;
     @Schema(name = "email", example = "email@email.com", required = true)
     @Email(
             message = EMPTY_ERROR_MESSAGE,
             regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
     )
     @NotEmpty(message = "Email cannot be empty")
-    String email;
-    @Schema(name = "username", example = "testUsername", required = true)
-    @Pattern(regexp = "^[a-zA-Z0-9]{6,16}$",
-            message = USERNAME_ERROR_MESSAGE)
-    String username;
-    @Schema(name = "password", example = "Pass1234!", required = true)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
-            message = PASSWORD_ERROR_MESSAGE)
-    String password;
+    private String email;
 
-    public UserDto() {
+    public UserProfileUpdateDto() {
     }
 
+    public UserProfileUpdateDto(String firstName,
+                                String lastName,
+                                String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -58,21 +58,5 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
