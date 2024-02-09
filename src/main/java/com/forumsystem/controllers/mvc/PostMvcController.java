@@ -14,6 +14,7 @@ import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.TagService;
 import com.forumsystem.services.contracts.UserService;
+import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,11 +39,6 @@ public class PostMvcController {
     private final PostResponseMapper postResponseMapper;
     private final CommentService commentService;
     private final TagService tagService;
-    /**
-     * temporary adding userService in order to hardcode several CRUD operations
-     * prior to refactoring with MVC authentication
-     */
-    private final UserService userService;
 
     @Autowired
     public PostMvcController(PostService postService,
@@ -60,7 +56,6 @@ public class PostMvcController {
         this.authHelper = authHelper;
         this.postResponseMapper = postResponseMapper;
         this.tagService = tagService;
-        this.userService = userService;
     }
 
 //
@@ -77,6 +72,7 @@ public class PostMvcController {
     @GetMapping()
     public String ShowAllPosts(
             Model model,
+            HttpSession session,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer likes,
             @RequestParam(required = false) Integer dislikes,
@@ -85,27 +81,38 @@ public class PostMvcController {
             @RequestParam(required = false) String sortOrder
     ) {
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         PostModelFilterOptions postFilter = new PostModelFilterOptions(
                 title, likes, dislikes, tagName, sortBy, sortOrder);
-        User loggedUser = userService.getUserByUsername("john_doe");
-        List<Post> posts = postService.getAll(loggedUser, postFilter);
-        List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
-        model.addAttribute("posts", outputPosts);
+
+        List<Post> posts = postService.getAll(user, postFilter);
+        //List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
+        model.addAttribute("posts", posts);
         return "PostsView";
     }
 
 
     @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable int id, Model model) {
+    public String showSinglePost(@PathVariable int id,
+                                 Model model,
+                                 HttpSession session) {
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
-        User loggedUser = userService.getUserByUsername("john_doe");
         try {
             PostResponseDto post = postResponseMapper
-                    .convertToDTO(postService.getById(loggedUser, id));
+                    .convertToDTO(postService.getById(user, id));
             List<CommentResponseDto> postComments = commentService.getAll(id);
 
             model.addAttribute("post", post);
@@ -119,9 +126,14 @@ public class PostMvcController {
     }
 
     @GetMapping("/new")
-    public String showCreatePostPage(Model model) {
+    public String showCreatePostPage(Model model, HttpSession session) {
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         model.addAttribute("post", new PostDto());
         return "post-new";
@@ -130,20 +142,24 @@ public class PostMvcController {
 
     @PostMapping("/new")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
+                             HttpSession session,
                              BindingResult errors,
                              Model model) {
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         if (errors.hasErrors()) {
-            return "post-new";
+            return "redirect:/posts/new";
         }
 
         try {
-            //todo to rework with MVC authentication
-            User creator = userService.getUserByUsername("john_doe");
             Post post = postMapper.fromDto(postDto);
-            postService.create(creator, post);
+            postService.create(user, post);
             return "redirect:/posts";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -153,11 +169,18 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}/update")
-    public String showEditPostPage(@PathVariable int id, Model model) {
+    public String showEditPostPage(@PathVariable int id,
+                                   Model model,
+                                   HttpSession session) {
 
-        //ToDo authenticate user prior to executing operation
-        User loggedUser = userService.getUserByUsername("john_doe");
-        Post post = postService.getById(loggedUser, id);
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        Post post = postService.getById(user, id);
         PostResponseDto outputPost = postResponseMapper.convertToDTO(post);
         model.addAttribute("post", outputPost);
         return "PostUpdateView";
@@ -166,18 +189,22 @@ public class PostMvcController {
     @PostMapping("/{id}/update")
     public String updatePost(@PathVariable int id,
                              @Valid @ModelAttribute("post") PostDto postDto,
+                             HttpSession session,
                              BindingResult errors,
                              Model model) {
-        //ToDo authenticate user prior to executing operation
-
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         if (errors.hasErrors()) {
-            return "post-update";
+            return "redicted:/posts/" + id + "update";
         }
         try {
-            User creator = userService.getUserByUsername("john_doe");
             Post newPost = postMapper.fromDto(postDto, id);
-            postService.updatePost(creator, newPost);
+            postService.updatePost(user, newPost);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -188,10 +215,14 @@ public class PostMvcController {
 
     @GetMapping("/{id}/delete")
     public String deletePost(@PathVariable int id, Model model, HttpSession session) {
-        //ToDo authenticate user prior to executing operation
 
+        User user;
         try {
-            User user = userService.getUserByUsername("john_doe");
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        try {
             postService.delete(user, id);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
@@ -207,10 +238,15 @@ public class PostMvcController {
 
     @GetMapping("/{id}/like")
      String likePost(@PathVariable int id, Model model, HttpSession session) {
-        //ToDo authenticate user prior to executing operation
+
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             Post post = postService.getById(user, id);
             postService.likePost(post, user);
             return "PostView";
@@ -223,13 +259,18 @@ public class PostMvcController {
 
     @GetMapping("/{id}/dislike")
     public String dislikePost(@PathVariable int id, Model model, HttpSession session) {
-        //ToDo authenticate user prior to executing operation
+
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             Post post = postService.getById(user, id);
             postService.dislikePost(post, user);
-            return "PostView";
+            return "redirect:/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -243,8 +284,14 @@ public class PostMvcController {
         //todo the below view to re-use everything from show a single post with the addition
         // of a field that will be used for the comment of the post.
 
+        User user;
         try {
-            User user = userService.getUserByUsername("john_doe");
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
             postService.getById(user, post_id);
             return "CreatePostCommentView";
         } catch (EntityNotFoundException e) {
@@ -261,18 +308,24 @@ public class PostMvcController {
                                     Model model,
                                     HttpSession session) {
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
         if (errors.hasErrors()) {
-            return "CreatePostCommentView";
+            return "redirect:/posts/" + post_id + "/newComment";
         }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             Comment comment = commentMapper.fromDto(commentDto);
             postService.createComment(user, comment, post_id);
             // after successful comment creation user to be returned on page where the post
             // for which he created a comment is.
-            return "PostView";
+            return "redirect:/posts" + post_id;
+            // todo// return redirect://{post_id}
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -289,10 +342,14 @@ public class PostMvcController {
                                           @PathVariable int comment_id,
                                           Model model,
                                           HttpSession session) {
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             postService.getById(user, post_id);
             Comment comment = commentService.getById(comment_id);
             CommentDto commentDto = commentMapper.toDto(comment);
@@ -314,14 +371,18 @@ public class PostMvcController {
                                     BindingResult errors,
                                     HttpSession session){
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         if (errors.hasErrors()){
-            return "EditPostCommentView";
+            return "redirect:/posts/" + post_id + "/comment/" + comment_id + "/update";
         }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             Comment newComment = commentMapper.fromDto(commentDto, comment_id);
             postService.updateComment(user, newComment, post_id);
             return "PostView";
@@ -341,12 +402,16 @@ public class PostMvcController {
                                     Model model,
                                     HttpSession session){
 
-        //ToDo authenticate user prior to executing operation
+        User user;
+        try {
+            user = authHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
         try {
-            User user = userService.getUserByUsername("john_doe");
             postService.deleteComment(user, post_id, comment_id);
-            return "PostView";
+            return "redirect:/posts/" + post_id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

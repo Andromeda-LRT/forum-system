@@ -39,6 +39,8 @@ public class ModelConstantHelper {
     public static final String HASHTAG = "#";
 
     public static final String WRONG_USERNAME_OR_PASSWORD = "Wrong username or password.";
+
+    public static final String UNAUTHORIZED = "Unauthorized";
     public static final String NAME_ERROR_MESSAGE = "Field should be between 4 and 32 symbols.";
     public static final String EMPTY_ERROR_MESSAGE = "Field can't be empty";
     public static final String USERNAME_ERROR_MESSAGE = "Username must be of 6 to 16 length with no special characters";

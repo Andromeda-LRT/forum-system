@@ -35,7 +35,6 @@ public class PostController {
     private final CommentMapper commentMapper;
     private final AuthenticationHelper authHelper;
     private final PostResponseMapper postResponseMapper;
-
     private final CommentResponseMapper commentResponseMapper;
 
     @Autowired
@@ -72,6 +71,12 @@ public class PostController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+
+    @GetMapping("/mostCommented")
+    public List<PostResponseDto> getTopTenCommentedPosts(@RequestHeader HttpHeaders headers){
+        List<Post> postList = postService.getTopTenCommentedPosts();
+        return postResponseMapper.convertToDTO(postList);
     }
 
 //    public List<PostResponseDto> getAllPosts(@RequestHeader HttpHeaders headers) {
