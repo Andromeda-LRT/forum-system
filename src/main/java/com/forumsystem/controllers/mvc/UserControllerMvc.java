@@ -11,6 +11,7 @@ import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.DuplicateEntityException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -34,6 +36,15 @@ public class UserControllerMvc {
         this.userMapper = userMapper;
         this.authenticationHelper = authenticationHelper;
     }
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
 
     @GetMapping
     public String showAllUsers(Model model, HttpSession session) {
@@ -47,7 +58,7 @@ public class UserControllerMvc {
         try {
             List<User> users = userService.getAll(user, new UserModelFilterOptions(null, null, null, null, null));
             model.addAttribute("users", users);
-            return "UsersView";
+            return "AdminUsersView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -95,13 +106,13 @@ public class UserControllerMvc {
         }
 
         if (bindingResult.hasErrors()) {
-            return "UserProfileView";
+            return "redirect:/users/" + id;
         }
 
         try {
             User userToUpdate = userMapper.fromDto(userDto);
             userService.update(userToUpdate, loggedUser);
-            return "UserProfileView";
+            return "redirect:/users/" + id;
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -111,7 +122,7 @@ public class UserControllerMvc {
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "UserProfileView";
+            return "redirect:/users/" + id;
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -138,7 +149,7 @@ public class UserControllerMvc {
         try {
             User user = userService.get(id, loggedUser);
             userService.giveUserAdminRights(user, loggedUser);
-            return "AllAdminsView";
+            return "redirect:/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -172,7 +183,7 @@ public class UserControllerMvc {
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         User loggedUser;
         try {
@@ -183,7 +194,7 @@ public class UserControllerMvc {
         }
         try {
             userService.delete(id, loggedUser);
-            return "AllUsersView";
+            return "redirect:/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -209,15 +220,11 @@ public class UserControllerMvc {
 
         try {
             userService.blockUser(id, loggedUser);
-            return "AllUsersView";
+            return "redirect:/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
-        } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "UserProfileView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -227,8 +234,8 @@ public class UserControllerMvc {
 
     @PostMapping("/{id}/unblock")
     public String unblock(@PathVariable int id,
-                        HttpSession session,
-                        Model model) {
+                          HttpSession session,
+                          Model model) {
         User loggedUser;
         try {
             loggedUser = authenticationHelper.tryGetUser(session);
@@ -239,15 +246,11 @@ public class UserControllerMvc {
 
         try {
             userService.unblockUser(id, loggedUser);
-            return "AllUsersView";
+            return "redirect:/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
-        } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "UserProfileView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
