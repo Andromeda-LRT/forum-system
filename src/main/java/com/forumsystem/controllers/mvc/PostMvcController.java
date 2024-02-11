@@ -23,13 +23,14 @@ import jakarta.validation.Valid;
 import org.hibernate.engine.jdbc.mutation.spi.BindingGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/posts")
 public class PostMvcController {
     private final PostService postService;
@@ -39,6 +40,8 @@ public class PostMvcController {
     private final PostResponseMapper postResponseMapper;
     private final CommentService commentService;
     private final TagService tagService;
+
+    private final UserService userService;
 
     @Autowired
     public PostMvcController(PostService postService,
@@ -56,6 +59,7 @@ public class PostMvcController {
         this.authHelper = authHelper;
         this.postResponseMapper = postResponseMapper;
         this.tagService = tagService;
+        this.userService = userService;
     }
 
 //
@@ -103,12 +107,14 @@ public class PostMvcController {
                                  Model model,
                                  HttpSession session) {
 
-        User user;
-        try {
-            user = authHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
+//        User user;
+//        try {
+//            user = authHelper.tryGetUser(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+// todo - remove comments
+        User user = userService.getUserByUsername("john_doe");
 
         try {
             PostResponseDto post = postResponseMapper
@@ -324,7 +330,7 @@ public class PostMvcController {
             postService.createComment(user, comment, post_id);
             // after successful comment creation user to be returned on page where the post
             // for which he created a comment is.
-            return "redirect:/posts" + post_id;
+            return "redirect:/posts/" + post_id;
             // todo// return redirect://{post_id}
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
