@@ -25,7 +25,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> getAll(int postId) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "SELECT c FROM Comment c JOIN c.post p WHERE p.id = :postId";
+            String hql = "SELECT c FROM Comment c JOIN c.post p WHERE p.id = :postId ORDER BY c.id DESC";
             Query query = session.createQuery(hql);
             query.setParameter("postId", postId);
             List<Comment> comments = query.list();

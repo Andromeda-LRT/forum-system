@@ -111,7 +111,12 @@ ul li {
   font-size: var(--p-font-size);
   font-weight: var(--font-weight-normal);
 }
-
+ul li p{
+  margin: auto;
+  color: var(--p-color);
+  font-size: var(--p-font-size);
+  font-weight: var(--font-weight-normal);
+}
 a, 
 button {
   touch-action: manipulation;
