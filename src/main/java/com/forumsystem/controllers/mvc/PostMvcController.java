@@ -129,6 +129,7 @@ public class PostMvcController {
             model.addAttribute("postToCompare", postService.getById(user, id));
             model.addAttribute("postComments", postComments);
             model.addAttribute("userPosts", userService.getUserPosts(user.getUsername()));
+            model.addAttribute("user", user);
 
             return "PostView";
         } catch (EntityNotFoundException e) {
@@ -138,7 +139,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";
+            return "UnauthorizedView";
         }
     }
 
@@ -181,7 +182,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -249,7 +250,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -266,7 +267,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(user, id);
             postService.likePost(post, user);
-            return "PostView";
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -287,7 +288,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(user, id);
             postService.dislikePost(post, user);
-            return "redirect:/" + id;
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -354,7 +355,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -413,7 +414,7 @@ public class PostMvcController {
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -439,7 +440,7 @@ public class PostMvcController {
             return "NotFoundView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 }

@@ -12,6 +12,7 @@ public class CommentResponseMapper {
     public CommentResponseDto convertToDTO(Comment comment) {
         CommentResponseDto dto = new CommentResponseDto();
 
+        dto.setId(comment.getId());
         dto.setContent(comment.getContent());
         dto.setCreatedBy(comment.getUser().getUsername());
 

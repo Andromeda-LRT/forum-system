@@ -46,17 +46,71 @@
             align-items: center;
         }
 
+        .btn-edit, .btn-delete {
+            margin-left: 8px;
+        }
+
         .btn-edit {
-            background-color: #13547a;
+            background-color: orange;
             color: white;
             border: none;
-            margin-right: 20px;
         }
 
         .btn-edit:hover {
-            color: #7fffd4;
-            background-color: #0e456d;
+            color: white;
+            background-color: darkorange;
         }
+
+        .btn-delete {
+            background-color: orangered;
+            color: white;
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: darkred;
+            color: white;
+        }
+
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-edit-delete {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .like-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .dislike-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .like-button:hover {
+            color: white;
+            background-color: #146c43;
+        }
+
+        .dislike-button:hover {
+            color: white;
+            background-color: darkred;
+        }
+
+        .btn-extra-sm {
+            padding: 0.125rem 0.25rem;
+            font-size: 0.675rem;
+            line-height: 1;
+            border-radius: 0.2rem;
+        }
+
 
     </style>
 </head>
@@ -73,13 +127,22 @@
 
                     <div class="content-header d-flex justify-content-between align-items-center">
                         <h1 class="h2" th:text="${post.getTitle()}">Post example title</h1>
-                        <form th:if="${userPosts.contains(postToCompare)}" action="#"
-                              th:action="@{/posts/{postId}/update(postId=${postId})}" method="get">
-                            <button class="btn btn-edit"
-                                    type="submit" href="#">
-                                Edit
-                            </button>
-                        </form>
+                        <div class="btn-edit-delete">
+                            <form th:if="${userPosts.contains(postToCompare)}" action="#"
+                                  th:action="@{/posts/{postId}/update(postId=${postId})}" method="get">
+                                <button class="btn btn-edit"
+                                        type="submit" href="#">
+                                    Edit
+                                </button>
+                            </form>
+                            <form th:if="${userPosts.contains(postToCompare)}" action="#"
+                                  th:action="@{/posts/{postId}/delete(postId=${postId})}" method="get">
+                                <button class="btn btn-delete"
+                                        type="submit" href="#">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <!-- Post info section Start-->
@@ -92,12 +155,20 @@
                             </a>
                         </li>
                         <li class="list-inline-item d-flex align-items-center">
+                            <i class="bi bi-clock"></i>
+                            <p th:text="${post.createdAt}"></p>
+                        </li>
+                        <li class="list-inline-item d-flex align-items-center">
                             <i class="bi bi-chat-dots"></i>
                             <p th:text="${postComments.size()}"></p>
                         </li>
                         <li class="list-inline-item d-flex align-items-center">
-                            <i class="bi bi-clock"></i>
-                            <p th:text="${post.createdAt}"></p>
+                            <i class="bi bi-hand-thumbs-up"></i>
+                            <p th:text="${post.likes}"></p>
+                        </li>
+                        <li class="list-inline-item d-flex align-items-center">
+                            <i class="bi bi-hand-thumbs-down"></i>
+                            <p th:text="${post.dislikes}"></p>
                         </li>
                         <li class="list-inline-item" th:each="tag : ${post.getTags()}">
                             <ul class="card-meta-tag list-inline">
@@ -119,7 +190,25 @@
                         </p>
                     </div>
                 </article>
+                <!-- Post Like section Start -->
+                <div class="like-dislike-buttons">
+                    <form th:if="${isAuthenticated}" action="#"
+                          th:action="@{/posts/{postId}/like(postId=${postId})}" method="get">
+                        <button class="btn like-button">
+                            <i class="bi bi-hand-thumbs-up"></i> Like
+                        </button>
+                    </form>
+                    <form th:if="${isAuthenticated}" action="#"
+                          th:action="@{/posts/{postId}/dislike(postId=${postId})}" method="get">
+                        <button class="btn dislike-button">
+                            <i class="bi bi-hand-thumbs-down"></i> Dislike
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Post Like section End -->
             </div>
+
             <!-- Post info section End-->
 
             <!-- Comment section Start-->
@@ -150,9 +239,32 @@
                         <div class="media-body">
                             <div id="commentsContainer">
                                 <div th:each="commentInfo : ${postComments}" class="comment" style="display: none;">
-                                    <a href="#!" class="h4 d-inline-block mb-3" th:text="${commentInfo.createdBy}">
-                                        Author of comment
-                                    </a>
+                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                        <a href="#!" class="h4 mb-0" th:text="${commentInfo.createdBy}">
+                                            Author of comment
+                                        </a>
+                                        <div th:if="${user.username.equals(commentInfo.createdBy)}"
+                                             class="d-flex align-items-center">
+                                            <form th:if="${isAuthenticated}" action="#"
+                                                  th:action="@{'/posts/' + ${postId} + '/comment/' + ${commentInfo.id} + '/update'}"
+                                                  method="get">
+                                                <button class="btn btn-link p-0"
+                                                        style="margin-right: 5px; color: orange; text-decoration: none; border: none">
+                                                    Edit
+                                                </button>
+                                            </form>
+
+                                            <form th:if="${isAuthenticated}" action="#"
+                                                  th:action="@{'/posts/' + ${postId} + '/comment/' + ${commentInfo.id} + '/delete'}"
+                                                  method="get">
+                                                <button class="btn btn-link p-0"
+                                                        style="color: red; text-decoration: none;border: none">Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
                                     <p th:text="${commentInfo.content}" style="text-align: justify;">
                                         Comment content here...
                                     </p>
