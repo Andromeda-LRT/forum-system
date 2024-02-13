@@ -30,7 +30,8 @@ public class AuthenticationController {
 
     @Autowired
     public AuthenticationController(UserService userService,
-                                    AuthenticationHelper authenticationHelper, UserMapper userMapper) {
+                                    AuthenticationHelper authenticationHelper,
+                                    UserMapper userMapper) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
@@ -83,7 +84,8 @@ public class AuthenticationController {
         }
 
         if (!register.getPassword().equals(register.getPasswordConfirm())) {
-            bindingResult.rejectValue("passwordConfirm", "password_error", "Password confirmation should match password.");
+            bindingResult.rejectValue("passwordConfirm",
+                    "password_error", "Passwords mismatch.");
             return "RegisterView";
         }
 

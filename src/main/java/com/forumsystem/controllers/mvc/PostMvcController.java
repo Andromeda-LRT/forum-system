@@ -40,9 +40,8 @@ public class PostMvcController {
     private final AuthenticationHelper authHelper;
     private final PostResponseMapper postResponseMapper;
     private final CommentService commentService;
-    private final TagService tagService;
-
     private final UserService userService;
+    private final TagService tagService;
 
     @Autowired
     public PostMvcController(PostService postService,
@@ -101,8 +100,8 @@ public class PostMvcController {
                 title, likes, dislikes, tagName, sortBy, sortOrder);
 
         List<Post> posts = postService.getAll(user, postFilter);
-        //List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
-        model.addAttribute("posts", posts);
+        List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
+        model.addAttribute("posts", outputPosts);
         return "PostsView";
     }
 
@@ -182,7 +181,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "UnauthorizedView";   
+            return "UnauthorizedView";
         }
     }
 
@@ -242,6 +241,9 @@ public class PostMvcController {
         }
         try {
             postService.delete(user, id);
+            if (userService.checkIfAdmin(user)) {
+                return "redirect:/admin/posts";
+            }
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -250,7 +252,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "UnauthorizedView";   
+            return "UnauthorizedView";
         }
     }
 
@@ -355,7 +357,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "UnauthorizedView";   
+            return "UnauthorizedView";
         }
     }
 
@@ -414,7 +416,7 @@ public class PostMvcController {
             return "ErrorView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "UnauthorizedView";   
+            return "UnauthorizedView";
         }
     }
 
@@ -440,7 +442,7 @@ public class PostMvcController {
             return "NotFoundView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "UnauthorizedView";   
+            return "UnauthorizedView";
         }
     }
 }

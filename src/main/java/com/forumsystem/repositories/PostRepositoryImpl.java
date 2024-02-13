@@ -39,37 +39,43 @@ public class PostRepositoryImpl implements PostRepository {
             Map<String, Object> params = new HashMap<>();
 
             filterOptions.getTitle().ifPresent(value -> {
-                if (value.isBlank()) {
+                if (!value.isBlank()) {
                     filters.add("title like :title");
                     params.put("title", String.format("%%%s%%", value));
                 }
             });
 
             filterOptions.getLikes().ifPresent(value -> {
-                filters.add("likes <= :likes");
+                filters.add("likes >= :likes");
                 params.put("likes", value);
             });
 
             filterOptions.getDislikes().ifPresent(value -> {
-                filters.add("dislikes <= :dislikes");
+                filters.add("dislikes >= :dislikes");
                 params.put("dislikes", value);
             });
 
             filterOptions.getTagName().ifPresent(value -> {
                 if (!value.isBlank()) {
-                    filters.add("name = :tagName");
-                    params.put("tagName", value);
+                    filters.add("name like :tagName");
+                    params.put("tagName",  String.format("%%%s%%", value));
                 }
             });
+
+
 
             StringBuilder queryString = new StringBuilder("from Post p join p.postTags as pt");
 
             if (!filters.isEmpty()) {
+
+                filters.add("p.isArchived = false");
+
                 queryString
                         .append(" where ")
                         .append(String.join(" and ", filters));
+            } else {
+                queryString.append(" where p.isArchived = false");
             }
-            queryString.append(" p.isArchived = false");
             queryString.append(generateOrderBy(filterOptions));
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
@@ -77,7 +83,8 @@ public class PostRepositoryImpl implements PostRepository {
             return query.list();
         }
     }
-
+    //todo to make another method for posts one for admin.
+    // main difference to be with is archived to be false for users and for admin to be both true and false.
     @Override
     public List<Post> getTopTenCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
