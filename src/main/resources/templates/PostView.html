@@ -29,7 +29,16 @@
     <link rel="stylesheet" href="https://getbootstrap.com/plugins/slick/slick.css">
 
     <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
+    <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
+          rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
+          rel="stylesheet">
+
+    <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
 
     <!--
 
@@ -287,6 +296,10 @@
         </div>
     </div>
 </section>
+
+<!-- Footer Start -->
+<div th:replace="~{fragments/ForumSystemForm :: footer}"></div>
+<!-- Footer End -->
 
 <script>
     const commentsPerPage = 10;
