@@ -53,6 +53,7 @@ public class AuthenticationController {
         try {
             authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
             session.setAttribute("currentUser", dto.getUsername());
+            session.setAttribute("isAdmin", userService.checkIfAdmin(userService.getUserByUsername(dto.getUsername())));
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());

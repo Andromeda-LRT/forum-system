@@ -21,8 +21,25 @@ VALUES (1, 'Favorite Destinations',
         0, 0, 0, 0, '2024-01-28 20:50:00'),
        (5, 'Extreme Sports Abroad',
         ('Calling all adrenaline junkies! If you''re passionate about extreme sports and seeking an adrenaline rush, this is the place to be. Share your experiences of conquering the world''s best spots for skydiving, bungee jumping, rock climbing, and other heart-pounding activities. Discuss safety tips, gear recommendations, and the unparalleled thrill of pushing your limits in exotic locations around the globe.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (3, 'Hidden Gems of Lisbon',
+        ('Discover Lisbon''s Untouched Corners: Venture beyond the tourist spots to explore Lisbon''s hidden gems. From the quaint alleys of Alfama to the secret viewpoints that offer stunning city vistas, experience the authentic charm of Portugal''s capital.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (2, 'A Foodie''s Guide to Tokyo',
+        ('Savor Tokyo''s Best Bites: Tokyo, a paradise for food lovers, offers an array of culinary delights. Dive into the heart of Japanese cuisine by exploring local izakayas, sushi bars, and ramen shops, and discover why Tokyo is a UNESCO-listed city of gastronomy.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (1, 'Adventure Awaits in Patagonia',
+        ('Embrace the Wild of Patagonia: Patagonia is a dream for adventurers. Hike through its breathtaking landscapes, from the rugged mountains of Torres del Paine to the icy expanses of the Perito Moreno Glacier, and witness nature''s wonders at their finest.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (1, 'Cultural Immersion in Marrakech',
+        ('Experience Marrakech''s Rich Heritage: Marrakech invites travelers to immerse themselves in a vibrant cultural tapestry. Explore the bustling souks, majestic palaces, and serene gardens, and get a taste of the city''s history and traditions.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (4, 'Island Hopping in the Philippines',
+        ('Explore the Pristine Beaches of the Philippines: The Philippines, with its 7,000+ islands, offers endless adventures for beach lovers. Discover the crystal-clear waters of Palawan, the white sands of Boracay, and the hidden lagoons of Cebu. Each island promises its own slice of paradise.'),
+        0, 0, 0, 0, '2024-01-28 20:50:00'),
+       (4, 'A Journey Through the Scottish Highlands',
+        ('Unveil the Mysteries of the Scottish Highlands: Embark on a journey through the Scottish Highlands, a land of breathtaking landscapes, rich history, and enduring legends. This rugged region offers more than just scenic beauty; it''s a haven for outdoor enthusiasts and history buffs alike. Hike the windswept valleys of Glencoe, sail the mysterious waters of Loch Ness in search of its legendary monster, and explore ancient castles that whisper tales of Scotland''s turbulent past. The Highlands are also a cultural tapestry, with vibrant Gaelic traditions, haunting bagpipe music, and the warm hospitality of its people. Whether you''re climbing Ben Nevis, Britain''s highest peak, or sampling whisky at a traditional distillery, the Highlands promise an unforgettable adventure steeped in mystery and majesty.'),
         0, 0, 0, 0, '2024-01-28 20:50:00');
-
 
 -- Inserting 5 rows into the 'comments' table
 INSERT INTO comments (content, user_id, post_id, is_archived)
