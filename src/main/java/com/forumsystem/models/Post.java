@@ -148,12 +148,7 @@ public class Post {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Post post)) return false;
-        return getPostId() == post.getPostId() &&
-                getComments() == post.getComments() &&
-                Objects.equals(getCreatedBy(), post.getCreatedBy()) &&
-                Objects.equals(getTitle(), post.getTitle()) &&
-                Objects.equals(getContent(), post.getContent()) &&
-                Objects.equals(getCreatedAt(), post.getCreatedAt());
+        return getPostId() == post.getPostId();
     }
 }
 
