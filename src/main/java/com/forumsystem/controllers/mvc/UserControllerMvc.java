@@ -1,7 +1,6 @@
 package com.forumsystem.controllers.mvc;
 
 import com.forumsystem.modelhelpers.AuthenticationHelper;
-import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.modelmappers.UserMapper;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
@@ -45,27 +44,6 @@ public class UserControllerMvc {
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();
     }
-        //todo to be removed --- Lyubima
-//    @GetMapping
-//    public String showAllUsers(Model model, HttpSession session) {
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetUser(session);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        try {
-//            List<User> users = userService.getAll(user, new UserModelFilterOptions(null, null, null, null, null));
-//            model.addAttribute("users", users);
-//            return "AdminUsersView";
-//        } catch (UnauthorizedOperationException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "NotFoundView";
-//        }
-//    }
-
 
     @GetMapping("/userProfile")
     public String showCurrentUserProfile(Model model, HttpSession session) {
@@ -230,14 +208,13 @@ public class UserControllerMvc {
     public String block(@PathVariable int id,
                         HttpSession session,
                         Model model) {
-//        User loggedUser;
-//        try {
-//            loggedUser = authenticationHelper.tryGetUser(session);
-//            authenticationHelper.verifyUserAccess(id, loggedUser);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/auth/login";
-//        }
-        User loggedUser = userService.getUserByUsername("john_doe");
+        User loggedUser;
+        try {
+            loggedUser = authenticationHelper.tryGetUser(session);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
         try {
             userService.blockUser(id, loggedUser);
             return "redirect:/admin/users";
@@ -256,14 +233,14 @@ public class UserControllerMvc {
     public String unblock(@PathVariable int id,
                           HttpSession session,
                           Model model) {
-//        User loggedUser;
-//        try {
-//            loggedUser = authenticationHelper.tryGetUser(session);
-//            authenticationHelper.verifyUserAccess(id, loggedUser);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/auth/login";
-//        }
-        User loggedUser = userService.getUserByUsername("john_doe");
+        User loggedUser;
+        try {
+            loggedUser = authenticationHelper.tryGetUser(session);
+            authenticationHelper.verifyUserAccess(id, loggedUser);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
         try {
             userService.unblockUser(id, loggedUser);
             return "redirect:/admin/users";
