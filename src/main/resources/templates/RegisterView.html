@@ -3,114 +3,121 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <title>WoOx Travel Bootstrap 5 Theme</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="/assets/css/templatemo-woox-travel.css">
-    <link rel="stylesheet" href="/assets/css/owl.css">
-    <link rel="stylesheet" href="/assets/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <!--
-
-    TemplateMo 580 Woox Travel
-
-    https://templatemo.com/tm-580-woox-travel
-
-    -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://unpkg.com/bs-brain@2.0.3/components/registrations/registration-10/assets/css/registration-10.css">
+    <link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>
+    <title>Register</title>
 
 </head>
 <body>
-<h2>Register</h2>
-<!--<header class="header-area header-sticky">-->
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-12">-->
-<!--                <nav class="main-nav">-->
-<!--                    &lt;!&ndash; ***** Logo Start ***** &ndash;&gt;-->
-<!--                    <a href="HomePageView.html" class="logo">-->
-<!--                        <img src="/assets/images/logo.png" alt="">-->
-<!--                    </a>-->
-<!--                    &lt;!&ndash; ***** Logo End ***** &ndash;&gt;-->
-<!--                    &lt;!&ndash; ***** Menu Start ***** &ndash;&gt;-->
-<!--                    <ul class="nav">-->
-<!--                        <li><a href="HomePageView.html" class="active">Home</a></li>-->
-<!--                        <li><a href="about.html">About</a></li>-->
-<!--                        <li><a href="deals.html">Deals</a></li>-->
-<!--                        <li><a href="reservation.html">Reservation</a></li>-->
-<!--                        <li><a href="reservation.html">Book Yours</a></li>-->
-<!--                    </ul>-->
-<!--                    <a class='menu-trigger'>-->
-<!--                        <span>Menu</span>-->
-<!--                    </a>-->
-<!--                    &lt;!&ndash; ***** Menu End ***** &ndash;&gt;-->
-<!--                </nav>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</header>-->
 
-<!--<form th:replace="~{ForumSystem.html :: header}"></form>-->
+<div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
 
+<!-- Registration Form Start -->
 <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+    <section class="bg-light py-3 py-md-5 py-xl-8">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="mb-5">
+                        <div class="text-center mb-4">
+                            <a href="#!">
+                                <img src="./assets/img/bsb-logo.svg" alt="BootstrapBrain Logo" width="175" height="57">
+                            </a>
+                        </div>
+                        <h4 class="text-center mb-4">Registration</h4>
 
-    <label th:text="#{user.label.username}">Username</label>
-    <br/>
-    <input type="text" th:field="*{username}" th:placeholder="username"/>
-    <label class="error" th:errors="*{username}">Username error placeholder</label>
-    <br/><br/>
+                    </div>
+                    <div class="card border border-light-subtle rounded-4">
+                        <div class="card-body p-3 p-md-4 p-xl-5">
+                            <form action="#!">
+                                <!--  <p class="text-center mb-4">Or sign up using email</p>-->
+                                <div class="row gy-3 overflow-hidden">
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" th:field="*{username}" class="form-control"
+                                                   name="username" id="username"
+                                                   placeholder="Username" required>
+                                            <!-- in case neither input works, place a closing tag for it-->
+                                            <label for="username" class="form-label">Username</label>
+                                        </div>
+                                        <label class="error" th:errors="*{username}">Username error
+                                            placeholder</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" th:field="*{firstName}" class="form-control"
+                                                   name="firstName" id="firstName"
+                                                   placeholder="First Name" required>
+                                            <label for="firstName" class="form-label">First Name</label>
+                                        </div>
+                                        <label class="error" th:errors="*{firstName}">First name error
+                                            placeholder</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" th:field="*{lastName}" class="form-control"
+                                                   name="lastName" id="lastName"
+                                                   placeholder="First Name" required>
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                        </div>
+                                        <label class="error" th:errors="*{lastName}">Last name error
+                                            placeholder</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="email" th:field="*{email}" class="form-control" name="email"
+                                                   id="email"
+                                                   placeholder="name@example.com" required>
+                                            <label for="email" class="form-label">Email</label>
+                                        </div>
+                                        <label class="error" th:errors="*{email}">Email error placeholder</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" th:field="*{password}" class="form-control"
+                                                   name="password" id="password"
+                                                   value="" placeholder="Password" required>
+                                            <label for="password" class="form-label">Password</label>
+                                        </div>
+                                        <label th:errors="*{password}">Password error placeholder</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" th:field="*{passwordConfirm}" class="form-control"
+                                                   name="confirm password" id="PasswordConfirm"
+                                                   placeholder="Confirm Password" required>
+                                            <label for="PasswordConfirm" class="form-label">Confirm Password</label>
+                                        </div>
+                                        <div>
+                                            <label class="error" th:errors="*{passwordConfirm}">Confirm Password error
+                                                placeholder</label>
+                                        </div>
+                                    </div>
 
-    <label th:text="#{user.label.password}">Password</label>
-    <br/>
-    <input type="password" th:field="*{password}"/>
-    <label class="error" th:errors="*{password}">Password error placeholder</label>
-    <br/><br/>
-
-    <label th:text="#{user.label.password-confirm}">Confirm password</label>
-    <br/>
-    <input type="password" th:field="*{passwordConfirm}"/>
-    <label class="error" th:errors="*{passwordConfirm}">Password confirm error placeholder</label>
-    <br/><br/>
-
-    <label th:text="#{user.label.first-name}">First Name</label>
-    <br/>
-    <input type="text" th:field="*{firstName}"/>
-    <label class="error" th:errors="*{firstName}">First name error placeholder</label>
-    <br/><br/>
-
-    <label th:text="#{user.label.last-name}">Last Name</label>
-    <br/>
-    <input type="text" th:field="*{lastName}"/>
-    <label class="error" th:errors="*{lastName}">Last name error placeholder</label>
-    <br/><br/>
-
-    <label th:text="#{user.label.email}">Email</label>
-    <br/>
-    <input type="text" th:field="*{email}"/>
-    <label class="error" th:errors="*{email}">Email error placeholder</label>
-    <br/><br/>
-
-    <input type="submit" value="Register"/>
-</form>
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <p>Copyright © <a href="#">Live Travel Relax.</a> All rights reserved.</p>
-                <p>Brought to you by Andromeda-LRT</p>
+                                    <div class="col-12">
+                                        <div class="d-grid">
+                                            <button class="btn btn-primary btn-lg" type="submit" value="Register">
+                                                Register
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-center mt-4">
+                        <p class="m-0 text-secondary text-center">Already have an account?
+                            <a href="#" th:href="@{/auth/login}">Sign in</a></p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
-<!--<form th:replace="~{ForumSystem.html :: footer}"></form>-->
+    </section>
+</form>
+
+
+<div th:replace="~{fragments/ForumSystemForm :: footer}"></div>
 </body>
 </html>

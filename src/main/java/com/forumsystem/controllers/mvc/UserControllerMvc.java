@@ -45,21 +45,41 @@ public class UserControllerMvc {
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();
     }
+        //todo to be removed --- Lyubima
+//    @GetMapping
+//    public String showAllUsers(Model model, HttpSession session) {
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetUser(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+//
+//        try {
+//            List<User> users = userService.getAll(user, new UserModelFilterOptions(null, null, null, null, null));
+//            model.addAttribute("users", users);
+//            return "AdminUsersView";
+//        } catch (UnauthorizedOperationException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "NotFoundView";
+//        }
+//    }
 
-    @GetMapping
-    public String showAllUsers(Model model, HttpSession session) {
-        User user;
+
+    @GetMapping("/userProfile")
+    public String showCurrentUserProfile(Model model, HttpSession session) {
         try {
-            user = authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
+            model.addAttribute("user", userService.get(user.getUserId(), user));
+            return "UserProfileView";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        }
-
-        try {
-            List<User> users = userService.getAll(user, new UserModelFilterOptions(null, null, null, null, null));
-            model.addAttribute("users", users);
-            return "AdminUsersView";
         } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
@@ -149,7 +169,7 @@ public class UserControllerMvc {
         try {
             User user = userService.get(id, loggedUser);
             userService.giveUserAdminRights(user, loggedUser);
-            return "redirect:/users";
+            return "redirect:/admin/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -194,7 +214,7 @@ public class UserControllerMvc {
         }
         try {
             userService.delete(id, loggedUser);
-            return "redirect:/users";
+            return "redirect:/admin/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -210,17 +230,17 @@ public class UserControllerMvc {
     public String block(@PathVariable int id,
                         HttpSession session,
                         Model model) {
-        User loggedUser;
-        try {
-            loggedUser = authenticationHelper.tryGetUser(session);
-            authenticationHelper.verifyUserAccess(id, loggedUser);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-
+//        User loggedUser;
+//        try {
+//            loggedUser = authenticationHelper.tryGetUser(session);
+//            authenticationHelper.verifyUserAccess(id, loggedUser);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+        User loggedUser = userService.getUserByUsername("john_doe");
         try {
             userService.blockUser(id, loggedUser);
-            return "redirect:/users";
+            return "redirect:/admin/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -236,17 +256,17 @@ public class UserControllerMvc {
     public String unblock(@PathVariable int id,
                           HttpSession session,
                           Model model) {
-        User loggedUser;
-        try {
-            loggedUser = authenticationHelper.tryGetUser(session);
-            authenticationHelper.verifyUserAccess(id, loggedUser);
-        } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
-        }
-
+//        User loggedUser;
+//        try {
+//            loggedUser = authenticationHelper.tryGetUser(session);
+//            authenticationHelper.verifyUserAccess(id, loggedUser);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/auth/login";
+//        }
+        User loggedUser = userService.getUserByUsername("john_doe");
         try {
             userService.unblockUser(id, loggedUser);
-            return "redirect:/users";
+            return "redirect:/admin/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
