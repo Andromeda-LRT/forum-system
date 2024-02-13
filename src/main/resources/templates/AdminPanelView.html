@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap"
+          rel="stylesheet">
+
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <link href="../static/css/bootstrap-icons.css" th:href="@{/css/bootstrap-icons.css}" rel="stylesheet">
+
+    <link href="../static/css/templatemo-topic-listing.css" th:href="@{/css/templatemo-topic-listing.css}"
+          rel="stylesheet">
+    <title>Admin Panel</title>
+</head>
+<body>
+
+<h2>Welcome to AdminPanel</h2>
+
+
+<!--adding a greet message for the logged admin user-->
+<h2 th:if="${isAuthenticated}" th:text="${session.currentUser}"></h2>
+<div class="col-12 text-center">
+    <h2 class="mb-4" th:if="${isAuthenticated}" th:text="${session.currentUser}"></h2>
+</div>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-12">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="design-tab-pane" role="tabpanel"
+                     aria-labelledby="design-tab" tabindex="0">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                            <div class="custom-block bg-white shadow-lg">
+                                <a href="#" th:href="@{/admin/users}">
+                                    <div class="d-flex">
+                                        <div>
+                                            <h5 class="mb-2">View All Users</h5>
+
+                                            <p class="mb-0">Search users by their username, email, first name.</p>
+                                            <p class="mb-0">Edit, Block, Unblock, Promote, Delete users</p>
+                                        </div>
+
+                                        <span class="badge bg-design rounded-pill ms-auto">14</span>
+                                    </div>
+
+                                    <img src="../images/manage_users.jpg"
+                                         class="custom-block-image img-fluid" alt="">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                            <div class="custom-block bg-white shadow-lg">
+                                <a href="#" th:href="@{/admin/posts}">
+                                    <div class="d-flex">
+                                        <div>
+                                            <h5 class="mb-2">View All Posts</h5>
+
+                                            <p class="mb-0">Search, filter or sort posts</p>
+                                            <p class="mb-0">View and delete posts</p>
+                                            <br/><br/>
+                                        </div>
+
+                                        <span class="badge bg-design rounded-pill ms-auto">75</span>
+                                    </div>
+
+                                    <img src="../images/post_manage_edit.jpg"
+                                         class="custom-block-image img-fluid" alt="">
+                                </a>
+                            </div>
+                        </div>
+
+<!--                        <div class="col-lg-4 col-md-6 col-12">-->
+<!--                            <div class="custom-block bg-white shadow-lg">-->
+<!--                                <a href="topics-detail.html">-->
+<!--                                    <div class="d-flex">-->
+<!--                                        <div>-->
+<!--                                            <h5 class="mb-2">Logo Design</h5>-->
+
+<!--                                            <p class="mb-0">Lorem Ipsum dolor sit amet consectetur</p>-->
+<!--                                        </div>-->
+
+<!--                                        <span class="badge bg-design rounded-pill ms-auto">100</span>-->
+<!--                                    </div>-->
+
+<!--                                    <img src="images/topics/colleagues-working-cozy-office-medium-shot.png"-->
+<!--                                         class="custom-block-image img-fluid" alt="">-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div th:text="header will be here" >-->
+        <!--</div>-->
+
+        <div>
+            <a href="#" th:href="@{/admin/users}">
+                <button type="button" class="button">
+                    <span class="button__text">View All Users</span>
+                </button>
+            </a>
+        </div>
+        <br/>
+        <a href="#" th:href="@{/admin/posts}">
+            <button type="button" class="button">
+                <span class="button__text">View All Posts</span>
+            </button>
+        </a>
+        <div>
+
+        </div>
+
+</body>
+</html>
