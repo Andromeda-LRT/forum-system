@@ -37,6 +37,7 @@ public class PostResponseMapper {
     public PostResponseDto convertToDTO(Post post) {
         PostResponseDto dto = new PostResponseDto();
 
+        dto.setPostId(post.getPostId());
         dto.setCreatedBy(post.getCreatedBy().getUsername());
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());

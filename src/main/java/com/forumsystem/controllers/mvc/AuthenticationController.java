@@ -55,7 +55,7 @@ public class AuthenticationController {
             authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
             session.setAttribute("currentUser", dto.getUsername());
             session.setAttribute("isAdmin", userService.checkIfAdmin(userService.getUserByUsername(dto.getUsername())));
-            return "redirect:/";
+            return "redirect:/home";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "LoginView";
@@ -66,7 +66,7 @@ public class AuthenticationController {
     @GetMapping("/logout")
     public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @GetMapping("/register")

@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class PostResponseDto {
+    private int postId;
     private String createdBy;
     private String title;
 
@@ -85,6 +86,14 @@ public class PostResponseDto {
 
     public void setCreatedAt(LocalDateTime dateTime) {
         this.createdAt = formatDateAndTime(dateTime);
+    }
+
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     private String formatDateAndTime(LocalDateTime dateTime) {
