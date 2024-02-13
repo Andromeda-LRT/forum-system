@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -141,6 +142,13 @@ public class Post {
 
     public void setPostTags(Set<Tag> postTags) {
         this.postTags = postTags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post post)) return false;
+        return getPostId() == post.getPostId();
     }
 }
 

@@ -101,6 +101,8 @@ public class PostResponseDto {
             return "Just now";
         } else if (minutesDiff < 60) {
             return minutesDiff + " minutes ago";
+        } else if (hoursDiff == 1) {
+            return hoursDiff + " hour ago";
         } else if (hoursDiff < 24) {
             return hoursDiff + " hours ago";
         } else if (daysDiff == 1) {
@@ -121,7 +123,7 @@ public class PostResponseDto {
     }
 
     public void setComments(List<CommentResponseDto> comments) {
-        if(comments!=null){
+        if (comments != null) {
             this.comments = comments;
         }
     }
@@ -131,7 +133,7 @@ public class PostResponseDto {
     }
 
     public void setTags(List<TagDto> tags) {
-        if(tags!=null){
+        if (tags != null) {
             this.tags = tags;
         }
     }

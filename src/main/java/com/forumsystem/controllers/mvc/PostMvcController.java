@@ -23,13 +23,15 @@ import jakarta.validation.Valid;
 import org.hibernate.engine.jdbc.mutation.spi.BindingGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/posts")
 public class PostMvcController {
     private final PostService postService;
@@ -39,6 +41,8 @@ public class PostMvcController {
     private final PostResponseMapper postResponseMapper;
     private final CommentService commentService;
     private final TagService tagService;
+
+    private final UserService userService;
 
     @Autowired
     public PostMvcController(PostService postService,
@@ -56,6 +60,7 @@ public class PostMvcController {
         this.authHelper = authHelper;
         this.postResponseMapper = postResponseMapper;
         this.tagService = tagService;
+        this.userService = userService;
     }
 
 //
@@ -69,6 +74,10 @@ public class PostMvcController {
         return request.getRequestURI();
     }
 
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
     @GetMapping()
     public String ShowAllPosts(
             Model model,
@@ -115,13 +124,22 @@ public class PostMvcController {
                     .convertToDTO(postService.getById(user, id));
             List<CommentResponseDto> postComments = commentService.getAll(id);
 
+            model.addAttribute("postId", id);
             model.addAttribute("post", post);
+            model.addAttribute("postToCompare", postService.getById(user, id));
             model.addAttribute("postComments", postComments);
+            model.addAttribute("userPosts", userService.getUserPosts(user.getUsername()));
+            model.addAttribute("user", user);
+
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "UnauthorizedView";
         }
     }
 
@@ -164,7 +182,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -232,12 +250,12 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
     @GetMapping("/{id}/like")
-     String likePost(@PathVariable int id, Model model, HttpSession session) {
+    String likePost(@PathVariable int id, Model model, HttpSession session) {
 
         User user;
         try {
@@ -249,7 +267,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(user, id);
             postService.likePost(post, user);
-            return "PostView";
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -270,7 +288,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(user, id);
             postService.dislikePost(post, user);
-            return "redirect:/" + id;
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -279,8 +297,10 @@ public class PostMvcController {
     }
 
     @GetMapping("/{post_id}/newComment")
-    public String showCreateCommentPage(@PathVariable int post_id, Model model, HttpSession session) {
-        model.addAttribute("comment", new CommentDto());
+    public String showCreateCommentPage(@PathVariable int post_id,
+                                        Model model,
+                                        HttpSession session) {
+//        model.addAttribute("comment", new CommentDto());
         //todo the below view to re-use everything from show a single post with the addition
         // of a field that will be used for the comment of the post.
 
@@ -292,7 +312,8 @@ public class PostMvcController {
         }
 
         try {
-            postService.getById(user, post_id);
+            model.addAttribute("comment", new CommentDto());
+            model.addAttribute("post", postService.getById(user, post_id));
             return "CreatePostCommentView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -302,8 +323,8 @@ public class PostMvcController {
     }
 
     @PostMapping("/{post_id}/newComment")
-    public String createPostComment(@Valid @ModelAttribute("comment") CommentDto commentDto,
-                                    @PathVariable int post_id,
+    public String createPostComment(@PathVariable int post_id,
+                                    @Valid @ModelAttribute("comment") CommentDto commentDto,
                                     BindingResult errors,
                                     Model model,
                                     HttpSession session) {
@@ -316,7 +337,8 @@ public class PostMvcController {
         }
 
         if (errors.hasErrors()) {
-            return "redirect:/posts/" + post_id + "/newComment";
+            model.addAttribute("post", postService.getById(user, post_id));
+            return "CreatePostCommentView";
         }
 
         try {
@@ -324,7 +346,7 @@ public class PostMvcController {
             postService.createComment(user, comment, post_id);
             // after successful comment creation user to be returned on page where the post
             // for which he created a comment is.
-            return "redirect:/posts" + post_id;
+            return "redirect:/posts/" + post_id;
             // todo// return redirect://{post_id}
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -333,7 +355,7 @@ public class PostMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -369,7 +391,7 @@ public class PostMvcController {
                                     @Valid @ModelAttribute("comment") CommentDto commentDto,
                                     Model model,
                                     BindingResult errors,
-                                    HttpSession session){
+                                    HttpSession session) {
 
         User user;
         try {
@@ -378,7 +400,7 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "redirect:/posts/" + post_id + "/comment/" + comment_id + "/update";
         }
 
@@ -390,9 +412,9 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 
@@ -400,7 +422,7 @@ public class PostMvcController {
     public String deletePostComment(@PathVariable int post_id,
                                     @PathVariable int comment_id,
                                     Model model,
-                                    HttpSession session){
+                                    HttpSession session) {
 
         User user;
         try {
@@ -416,9 +438,9 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
-        } catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "TBD";   // short for TO BE DECIDED
+            return "UnauthorizedView";   
         }
     }
 }
