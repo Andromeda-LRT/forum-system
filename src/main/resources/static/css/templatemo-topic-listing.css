@@ -33,7 +33,7 @@ https://templatemo.com/tm-590-topic-listing
   --p-font-size:                  20px;
   --menu-font-size:               14px;
   --btn-font-size:                18px;
-  --copyright-font-size:          16px;
+  --copyright-font-size:          8px;
 
   --border-radius-large:          100px;
   --border-radius-medium:         20px;
@@ -60,7 +60,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--dark-color);
+  color: var(--white-color);
 }
 
 h1,
@@ -138,7 +138,18 @@ strong {
   font-weight: var(--font-weight-bold);
 }
 
-
+/*---------------------------------------
+.count-info
+-----------------------------------------*/
+.count-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  top: 80px; /* Adjust this value based on your header height */
+  left: 0;
+  padding: 20px;
+}
 /*---------------------------------------
   SECTION               
 -----------------------------------------*/
@@ -200,6 +211,10 @@ strong {
 .nav-tabs .nav-link:hover {
   border-bottom-color: var(--primary-color);
   color: var(--primary-color);
+}
+
+.bi-luggage-fill {
+  transform: translateY(-10px); /* Adjust the pixel value as needed */
 }
 
 
@@ -278,9 +293,12 @@ strong {
 }
 
 
+
 /*---------------------------------------
   NAVIGATION              
 -----------------------------------------*/
+
+
 .sticky-wrapper {
   position: absolute;
   top: 0;
@@ -296,13 +314,16 @@ strong {
   background: transparent;
   border-bottom: 1px solid rgba(128, 208, 199, 0.35);
   z-index: 9;
+  margin-left: auto;
 }
 
 .navbar-brand,
 .navbar-brand:hover {
   font-size: var(--h3-font-size);
   font-weight: var(--font-weight-bold);
+  color: white;
   display: block;
+  margin-left: 20px;
 }
 
 .navbar-brand span {
@@ -315,20 +336,26 @@ strong {
   padding: 10px;
 }
 
+.navbar-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: calc(100% - 100px); /* Adjust the value as needed */
+}
+
 .navbar-nav .nav-link {
-  display: inline-block;
   color: var(--white-color);
-  font-family: var(--title-font-family); 
+  font-family: var(--title-font-family);
   font-size: var(--menu-font-size);
   font-weight: var(--font-weight-medium);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  position: relative;
   padding-top: 15px;
   padding-bottom: 15px;
+  /* margin-right: 50px; Remove this line to prevent extra spacing */
 }
 
-.navbar-nav .nav-link.active, 
+.navbar-nav .nav-link.active,
 .navbar-nav .nav-link:hover {
   color: var(--primary-color);
 }
@@ -340,12 +367,18 @@ strong {
   display: inherit;
   opacity: 0;
   min-width: 9rem;
-  margin-top: 20px;
+  margin-top: 50px;
   padding: 13px 0 10px 0;
   transition: all 0.3s;
   pointer-events: none;
+  left: auto; /* Reset any left positioning */
+  right: 0;
 }
 
+.navbar .dropdown-menu.left {
+  left: 0;     /* Position at the left edge */
+  right: auto; /* Reset any right positioning */
+}
 .navbar .dropdown-menu::before {
   content: "";
   width: 0;
@@ -355,7 +388,8 @@ strong {
   border-bottom: 15px solid var(--white-color);
   position: absolute;
   top: -10px;
-  left: 10px;
+  left: auto;
+  right: 10px;
 }
 
 .navbar .dropdown-item {
@@ -934,6 +968,19 @@ blockquote {
 .site-footer {
   border-bottom: 10px solid var(--secondary-color);
   position: relative;
+  height: 50%; /* Set the height to 50% of its original size */
+  padding: 20px;
+  font-size: 2px;
+  font-weight: var(--font-weight-normal);
+
+
+}
+
+.site-footer {
+  background-color: #57c1b7; /* Set your desired background color */
+  color: #fff; /* Set your desired text color */
+  padding: 20px;
+  text-align: center;
 }
 
 .site-footer::after {
@@ -950,98 +997,28 @@ blockquote {
 }
 
 .site-footer-title {
-  color: var(--primary-color); 
-}
-
-.site-footer .dropdown-menu {
-  padding: 0;
-}
-
-.site-footer .dropdown-item {
-  color: var(--p-color);
-  font-size: var(--menu-font-size);
-  font-weight: var(--font-weight-medium);
-  padding: 4px 18px;
-}
-
-.site-footer .dropdown-item:hover {
-  background-color: transparent;
   color: var(--primary-color);
 }
 
-.site-footer .dropdown-menu li:first-child .dropdown-item {
-  padding-top: 10px;
-}
-
-.site-footer .dropdown-menu li:last-child .dropdown-item {
-  padding-bottom: 12px;
-}
-
-.site-footer .dropdown-toggle {
-  background-color: var(--secondary-color);
-  border-color: var(--white-color);
-}
-
-.site-footer .dropdown-toggle:hover {
-  background-color: var(--primary-color);
-  border-color: transparent;
-}
-
-.site-footer-links {
-  padding-left: 0;
-}
-
-.site-footer-link-item {
-  display: block;
-  list-style: none;
-  line-height: normal;
-}
-
-.site-footer-link {
-  color: var(--secondary-color);
-  font-size: var(--copyright-font-size);
-  font-weight: var(--font-weight-medium);
-  line-height: normal;
-}
 
 .copyright-text {
   font-size: var(--copyright-font-size);
 }
 
+/*////////////////////////////////////////////// #60c4bb   #80d0c9 */
 
-/*---------------------------------------
-  SOCIAL ICON               
------------------------------------------*/
-.social-icon {
-  margin: 0;
-  padding: 0;
+
+.site-footer a {
+  color: #fff; /* Set the link color */
 }
 
-.social-icon-item {
-  list-style: none;
-  display: inline-block;
-  vertical-align: top;
+.site-footer a:hover {
+  text-decoration: underline; /* Add underline on hover for links */
 }
 
-.social-icon-link {
-  background: var(--secondary-color);
-  border-radius: var(--border-radius-large);
-  color: var(--white-color);
-  font-size: var(--copyright-font-size);
-  display: block;
-  margin-right: 10px;
-  text-align: center;
-  width: 35px;
-  height: 35px;
-  line-height: 36px;
-  transition: background 0.2s, color 0.2s;
+.site-footer p {
+  margin: 5px 0; /* Adjust the spacing between paragraphs */
 }
-
-.social-icon-link:hover {
-  background: var(--primary-color);
-  color: var(--white-color);
-}
-
 
 /*---------------------------------------
   RESPONSIVE STYLES               
@@ -1134,6 +1111,7 @@ blockquote {
     padding-top: 30px;
     padding-bottom: 0;
   }
+
 }
 
 @media screen and (max-width: 480px) {
