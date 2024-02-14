@@ -30,6 +30,9 @@
     <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
           rel="stylesheet">
 
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
     <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
     <!--
 
@@ -77,6 +80,32 @@
             color: #ffffff;
             border-color: #80d0c7;
         }
+
+        .post-filter {
+            max-width: 100%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .form-label {
+            margin-right: 10px;
+        }
+
+        .d-flex > * {
+            margin: 0 5px;
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
+        }
+        .form-control, .form-select {
+            max-width: 160px;
+        }
+
+        .search:hover{
+            background-color: #57c1b7;
+        }
+
     </style>
 </head>
 
@@ -90,100 +119,130 @@
                     <h2 class="mb-4">All Posts</h2>
                 </div>
 
+                <div class="post-filter">
+                    <div style="margin-left: 10px;"><label th:text="#{posts.filter.label}" class="form-label">Filter Options:</label></div>
+                    <form action="#" th:action="@{/posts}" method="get" th:object="${postFilterOptions}" class="d-flex flex-row align-items-center gap-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Post title" th:field="*{title}">
+                        </div>
+                        <input type="number" class="form-control" min="0" max="1000" placeholder="Likes" th:field="*{likes}">
+                        <input type="number" class="form-control" min="0" max="1000" placeholder="Dislikes" th:field="*{dislikes}">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                            <input type="text" class="form-control" placeholder="Post Tag" th:field="*{tagName}">
+                        </div>
+                        <select class="form-select" th:field="*{sortBy}">
+                            <option value="">Sort By</option>
+                            <option value="title">Name</option>
+                            <option value="likes">Likes</option>
+                            <option value="dislikes">Dislikes</option>
+                        </select>
+                        <select class="form-select" th:field="*{sortOrder}">
+                            <option value="">Sort Order</option>
+                            <option value="desc">Newest</option>
+                            <option value="asc">Oldest</option>
+                        </select>
+                        <button type="submit" value="Search" style="background-color: #80d0c7; border-color: #80d0c7;" class="btn btn-primary search">Search</button>
+                    </form>
+                </div>
+
+
+
                 <div class="col-lg-8 col-12 mt-3 mx-auto">
                     <div id="postsContainer">
-                    <div class="post" th:each="post : ${posts}">
-                    <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
-                        <div class="d-flex">
-                            <!--                            <img src="../static/images/topics/undraw_Remote_design_team_re_urdx.png"-->
-                            <!--                                 class="custom-block-image img-fluid" alt="">-->
-                            <div class="col-12">
-                                <h3 class="h4 mb-3">
-                                    <a class="post-title" href="#" th:href="@{/posts/__${post.postId}__}"
-                                       th:text="${post.title}">
-                                        Post Title
-                                    </a>
-                                </h3>
-                                <ul class="card-meta my-3 list-inline d-inline-flex align-items-center">
-                                    <li class="list-inline-item">
-                                        <!--                                                TODO ADD USER POSTS HERE WITH TH HREF -->
-                                        <a href="author-single.html" class="card-meta-author">
-                                            <span th:text="${post.createdBy}">Author Name</span>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item" th:text="${post.createdAt}">
-                                        <div class="tags-container">
-                                            <i class="bi bi-clock"></i>
-                                            <p>Date and time</p>
-                                        </div>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <div class="tags-container">
-                                            <i class="bi bi-chat-dots"></i>
-                                            <p th:text="${post.comments.size()}">Cnt comments</p>
-                                        </div>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <div class="tags-container">
-                                            <i class="bi bi-tags"></i>
-                                            <p th:each="tag, iterStat : ${post.getTags()}"
-                                               th:if="${iterStat.count <= 3}" th:text="${tag.name}">
-                                                Tag
-                                            </p>
-                                            <p th:if="${post.getTags().size() > 3}">...</p>
-                                        </div>
-                                    </li>
-                                </ul>
+                        <div class="post" th:each="post : ${posts}">
+                            <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
+                                <div class="d-flex">
+                                    <!--                            <img src="../static/images/topics/undraw_Remote_design_team_re_urdx.png"-->
+                                    <!--                                 class="custom-block-image img-fluid" alt="">-->
+                                    <div class="col-12">
+                                        <h3 class="h4 mb-3">
+                                            <a class="post-title" href="#" th:href="@{/posts/__${post.postId}__}"
+                                               th:text="${post.title}">
+                                                Post Title
+                                            </a>
+                                        </h3>
+                                        <ul class="card-meta my-3 list-inline d-inline-flex align-items-center">
+                                            <li class="list-inline-item">
+                                                <!--      TODO ADD USER POSTS HERE WITH TH HREF -->
+                                                <a href="author-single.html" class="card-meta-author">
+                                                    <span th:text="${post.createdBy}">Author Name</span>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item" th:text="${post.createdAt}">
+                                                <div class="tags-container">
+                                                    <i class="bi bi-clock"></i>
+                                                    <p>Date and time</p>
+                                                </div>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <div class="tags-container">
+                                                    <i class="bi bi-chat-dots"></i>
+                                                    <p th:text="${post.comments.size()}">Cnt comments</p>
+                                                </div>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <div class="tags-container">
+                                                    <i class="bi bi-tags"></i>
+                                                    <p th:each="tag, iterStat : ${post.getTags()}"
+                                                       th:if="${iterStat.count <= 3}" th:text="${tag.name}">
+                                                        Tag
+                                                    </p>
+                                                    <p th:if="${post.getTags().size() > 3}">...</p>
+                                                </div>
+                                            </li>
+                                        </ul>
 
-                                <p class="post-content"
-                                   th:text="${post.getContent()}">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa non officiis
-                                    sed
-                                    tempora tempore. Alias consequuntur eveniet fugiat laudantium molestias
-                                    nihil
-                                    officiis sequi similique suscipit voluptatibus! Accusamus accusantium
-                                    aliquid
-                                    animi,
-                                    dignissimos doloremque dolorum enim esse facilis ipsum magnam modi neque
-                                    nesciunt
-                                    odio quas sapiente similique voluptates voluptatibus. Ab adipisci architecto
-                                    assumenda cumque doloribus et eum facilis fuga, hic impedit inventore nam
-                                    necessitatibus nihil nostrum officia officiis omnis perferendis perspiciatis
-                                    porro
-                                    possimus quae qui quibusdam quisquam reiciendis saepe soluta totam velit
-                                    vitae
-                                    voluptate voluptatum. Dignissimos dolorem laborum voluptatem? Eos fugit
-                                    officia
-                                    omnis sit voluptatibus. Blanditiis commodi dolorum esse laboriosam, maxime
-                                    molestiae
-                                    molestias necessitatibus neque nostrum numquam quae repellat reprehenderit
-                                    rerum,
-                                    similique soluta ut veritatis vero voluptatum. Animi cumque dolore dolorum
-                                    earum
-                                    explicabo fugiat laudantium optio pariatur quis quo. A ab accusantium alias
-                                    asperiores aspernatur assumenda distinctio dolor dolorem doloremque ea error
-                                    expedita, facere facilis iste, laudantium maxime nam nobis nostrum nulla
-                                    quasi
-                                    quod
-                                    quos rem voluptas. Ad, alias aliquam at beatae commodi dolor doloremque
-                                    ducimus
-                                    eaque ex excepturi exercitationem facilis hic libero magnam molestiae nisi
-                                    numquam
-                                    obcaecati officiis perspiciatis provident quibusdam ratione repellendus sint
-                                    soluta
-                                    veniam. Assumenda consectetur debitis enim eveniet, fugiat perspiciatis
-                                    quisquam?
-                                </p>
-                                <a href="#"
-                                   th:href="@{/posts/__${post.postId}__}"
-                                   class="btn custom-btn mt-3 mt-lg-4">
-                                    Read More
-                                </a>
+                                        <p class="post-content"
+                                           th:text="${post.getContent()}">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa non officiis
+                                            sed
+                                            tempora tempore. Alias consequuntur eveniet fugiat laudantium molestias
+                                            nihil
+                                            officiis sequi similique suscipit voluptatibus! Accusamus accusantium
+                                            aliquid
+                                            animi,
+                                            dignissimos doloremque dolorum enim esse facilis ipsum magnam modi neque
+                                            nesciunt
+                                            odio quas sapiente similique voluptates voluptatibus. Ab adipisci architecto
+                                            assumenda cumque doloribus et eum facilis fuga, hic impedit inventore nam
+                                            necessitatibus nihil nostrum officia officiis omnis perferendis perspiciatis
+                                            porro
+                                            possimus quae qui quibusdam quisquam reiciendis saepe soluta totam velit
+                                            vitae
+                                            voluptate voluptatum. Dignissimos dolorem laborum voluptatem? Eos fugit
+                                            officia
+                                            omnis sit voluptatibus. Blanditiis commodi dolorum esse laboriosam, maxime
+                                            molestiae
+                                            molestias necessitatibus neque nostrum numquam quae repellat reprehenderit
+                                            rerum,
+                                            similique soluta ut veritatis vero voluptatum. Animi cumque dolore dolorum
+                                            earum
+                                            explicabo fugiat laudantium optio pariatur quis quo. A ab accusantium alias
+                                            asperiores aspernatur assumenda distinctio dolor dolorem doloremque ea error
+                                            expedita, facere facilis iste, laudantium maxime nam nobis nostrum nulla
+                                            quasi
+                                            quod
+                                            quos rem voluptas. Ad, alias aliquam at beatae commodi dolor doloremque
+                                            ducimus
+                                            eaque ex excepturi exercitationem facilis hic libero magnam molestiae nisi
+                                            numquam
+                                            obcaecati officiis perspiciatis provident quibusdam ratione repellendus sint
+                                            soluta
+                                            veniam. Assumenda consectetur debitis enim eveniet, fugiat perspiciatis
+                                            quisquam?
+                                        </p>
+                                        <a href="#"
+                                           th:href="@{/posts/__${post.postId}__}"
+                                           class="btn custom-btn mt-3 mt-lg-4">
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                                            </div>
-                                        </div>
                     <div id="pagination"></div>
                 </div>
             </div>

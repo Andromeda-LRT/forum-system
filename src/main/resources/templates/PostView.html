@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Topic Listing Contact Page</title>
+    <title>Post</title>
 
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,22 +24,14 @@
     <link href="../static/css/templatemo-topic-listing.css" th:href="@{/css/templatemo-topic-listing.css}"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/themify-icons/themify-icons.css">
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/slick/slick.css">
-
-    <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
-    <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
-          rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
 
     <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
           rel="stylesheet">
 
     <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
-
     <!--
 
     TemplateMo 590 topic listing
@@ -48,11 +40,6 @@
 
     -->
     <style>
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
         .btn-edit, .btn-delete {
             margin-left: 8px;
@@ -111,18 +98,11 @@
             color: white;
             background-color: darkred;
         }
-
-        .btn-extra-sm {
-            padding: 0.125rem 0.25rem;
-            font-size: 0.675rem;
-            line-height: 1;
-            border-radius: 0.2rem;
-        }
-
-
     </style>
 </head>
 <body>
+
+
 <div class="py-4"></div>
 <section class="section">
     <div class="container">
