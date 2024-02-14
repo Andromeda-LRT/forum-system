@@ -219,9 +219,9 @@ public class PostRepositoryImpl implements PostRepository {
                 orderBy = "dislikes";
                 break;
             default:
-                return "";
+                orderBy = "p.id";
         }
-        orderBy = String.format(" order by %s", orderBy);
+            orderBy = String.format(" order by %s", orderBy);
 
         if (filterOptions.getSortOrder().isPresent() &&
                 filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
