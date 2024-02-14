@@ -219,7 +219,9 @@ strong {
 .bi-luggage-fill {
   transform: translateY(-10px); /* Adjust the pixel value as needed */
 }
-
+.error {
+  color: red;
+}
 
 /*---------------------------------------
   CUSTOM ICON COLOR               

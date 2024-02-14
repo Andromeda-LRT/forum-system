@@ -37,6 +37,11 @@ public class AuthenticationController {
         this.userMapper = userMapper;
     }
 
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
@@ -52,9 +57,9 @@ public class AuthenticationController {
         }
 
         try {
-            authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
+            User user = authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
             session.setAttribute("currentUser", dto.getUsername());
-            session.setAttribute("isAdmin", userService.checkIfAdmin(userService.getUserByUsername(dto.getUsername())));
+            session.setAttribute("isAdmin", userService.checkIfAdminBoolean(user));
             return "redirect:/home";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
