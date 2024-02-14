@@ -6,10 +6,7 @@ import com.forumsystem.modelmappers.CommentMapper;
 import com.forumsystem.modelmappers.PostMapper;
 import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.*;
-import com.forumsystem.models.modeldto.CommentDto;
-import com.forumsystem.models.modeldto.CommentResponseDto;
-import com.forumsystem.models.modeldto.PostDto;
-import com.forumsystem.models.modeldto.PostResponseDto;
+import com.forumsystem.models.modeldto.*;
 import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.TagService;
@@ -80,14 +77,8 @@ public class PostMvcController {
     @GetMapping()
     public String ShowAllPosts(
             Model model,
-            HttpSession session,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) Integer likes,
-            @RequestParam(required = false) Integer dislikes,
-            @RequestParam(required = false) String tagName,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder
-    ) {
+            @ModelAttribute("postFilterOptions") PostModelFilterDto postFilterDto,
+            HttpSession session) {
 
         User user;
         try {
@@ -97,11 +88,17 @@ public class PostMvcController {
         }
 
         PostModelFilterOptions postFilter = new PostModelFilterOptions(
-                title, likes, dislikes, tagName, sortBy, sortOrder);
+                postFilterDto.getTitle(),
+                postFilterDto.getLikes(),
+                postFilterDto.getDislikes(),
+                postFilterDto.getTagName(),
+                postFilterDto.getSortBy(),
+                postFilterDto.getSortOrder());
 
         List<Post> posts = postService.getAll(user, postFilter);
         List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
         model.addAttribute("posts", outputPosts);
+        model.addAttribute("postFilterOptions", postFilterDto);
         return "PostsView";
     }
 
@@ -379,6 +376,7 @@ public class PostMvcController {
             CommentDto commentDto = commentMapper.toDto(comment);
             model.addAttribute("commentId", comment_id);
             model.addAttribute("comment", commentDto);
+            model.addAttribute("post", postService.getById(user, post_id));
             return "EditPostCommentView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -391,8 +389,8 @@ public class PostMvcController {
     public String updatePostComment(@PathVariable int post_id,
                                     @PathVariable int comment_id,
                                     @Valid @ModelAttribute("comment") CommentDto commentDto,
-                                    Model model,
                                     BindingResult errors,
+                                    Model model,
                                     HttpSession session) {
 
         User user;
@@ -403,13 +401,14 @@ public class PostMvcController {
         }
 
         if (errors.hasErrors()) {
-            return "redirect:/posts/" + post_id + "/comment/" + comment_id + "/update";
+            model.addAttribute("post", postService.getById(user, post_id));
+            return "EditPostCommentView";
         }
 
         try {
             Comment newComment = commentMapper.fromDto(commentDto, comment_id);
             postService.updateComment(user, newComment, post_id);
-            return "PostView";
+            return "redirect:/posts/" + post_id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
