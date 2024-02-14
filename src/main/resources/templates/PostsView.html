@@ -30,9 +30,6 @@
     <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
           rel="stylesheet">
 
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-
     <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
     <!--
 
@@ -165,8 +162,7 @@
                                         </h3>
                                         <ul class="card-meta my-3 list-inline d-inline-flex align-items-center">
                                             <li class="list-inline-item">
-                                                <!--      TODO ADD USER POSTS HERE WITH TH HREF -->
-                                                <a href="author-single.html" class="card-meta-author">
+                                                <a href="#" th:href="@{/users/{username}/posts(username=${post.createdBy})}" class="card-meta-author">
                                                     <span th:text="${post.createdBy}">Author Name</span>
                                                 </a>
                                             </li>

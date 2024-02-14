@@ -1,4 +1,4 @@
-/*!------------------------------------------------------------------
+/*/------------------------------------------------------------------
 [MAIN STYLESHEET]
 
 PROJECT:	Project Name
@@ -163,7 +163,7 @@ hr {
     margin: 40px 0;
 }
 
-.shadow, .navbar .dropdown-menu, .card, .widget, .logo-list li, .promotion {
+.shadow, .card, .widget, .logo-list li, .promotion {
     box-shadow: 0px 25px 65px rgba(0, 0, 0, 0.05) !important;
 }
 
@@ -315,115 +315,6 @@ mark {
     }
 }
 
-.navigation {
-    border-bottom: 1px solid #EBEBEB;
-    transition: .2s ease;
-    padding: 10px 0;
-}
-
-.navigation.nav-bg {
-    background-color: #fff;
-}
-
-@media (max-width: 991px) {
-    .navigation {
-        background-color: #fff;
-    }
-}
-
-.nav-item {
-    margin: 0;
-}
-
-.nav-item .nav-link {
-    text-transform: capitalize;
-    font-family: "Nunito Sans", sans-serif;
-    font-weight: 600;
-}
-
-.navbar-white .navbar-nav .nav-link {
-    color: #333;
-}
-
-.navbar-white .navbar-nav .nav-link:hover {
-    color: #80d0c7;
-}
-
-.navbar-expand-lg .navbar-nav .nav-link {
-    padding: 20px;
-}
-
-@media (max-width: 991px) {
-    .navbar-expand-lg .navbar-nav .nav-link {
-        padding: 10px;
-    }
-}
-
-.navbar {
-    padding: 0;
-}
-
-.navbar .dropdown:hover .dropdown-menu {
-    visibility: visible;
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-}
-
-.navbar .dropdown i {
-    font-size: 12px;
-}
-
-.navbar .dropdown-menu {
-    padding: 20px 15px;
-    border: 0;
-    top: calc(100% - 10px);
-    left: 15px;
-    border-radius: 5px;
-    background: #fff;
-    transition: .2s ease;
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    -webkit-transform: scale(0.9);
-    transform: scale(0.9);
-}
-
-@media (max-width: 991px) {
-    .navbar .dropdown-menu {
-        display: none;
-        opacity: 1;
-        visibility: visible;
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        text-align: inherit;
-    }
-}
-
-.navbar .dropdown-menu.show {
-    visibility: hidden;
-}
-
-@media (max-width: 991px) {
-    .navbar .dropdown-menu.show {
-        visibility: visible;
-        display: block;
-    }
-}
-
-.navbar .dropdown-item {
-    position: relative;
-    color: #333;
-    transition: .2s ease;
-    font-size: inherit;
-    padding: 8px 10px;
-    border-radius: inherit;
-}
-
-.navbar .dropdown-item:hover {
-    color: #80d0c7 !important;
-    background-color: #F9F9F9;
-}
 
 /* search */
 .search-bar {
@@ -543,57 +434,6 @@ mark {
     stroke: #80d0c7;
 }
 
-.header {
-    background-image: url(../images/backgrounds/header-bg.svg);
-    background-position: bottom center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-    padding: 120px 0 150px;
-}
-
-.header .container {
-    position: relative;
-    z-index: 1;
-}
-
-.header-shape-1 {
-    position: absolute;
-    left: 20%;
-    top: 25%;
-}
-
-.header-shape-1 .path {
-    fill: #80d0c7;
-}
-
-.header-shape-2 {
-    position: absolute;
-    right: 20%;
-    top: 25%;
-}
-
-.header-shape-2 .path {
-    fill: #80d0c7;
-}
-
-.header-shape-3 {
-    position: absolute;
-    right: 25%;
-    bottom: 15%;
-}
-
-.header-shape-3 .path {
-    fill: #80d0c7;
-}
-
-.header-border {
-    position: absolute;
-    bottom: -35px;
-    left: 0;
-    width: 100%;
-    stroke: #80d0c7;
-}
 
 .author {
     position: relative;
@@ -1188,30 +1028,30 @@ mark {
     background-color: #fff;
 }
 
-.code-tabs .nav-tabs {
+.code-tabs {
     margin-bottom: 0;
 }
 
-.code-tabs .nav-tabs .nav-item {
+.code-tabs {
     padding-left: 0;
     border-right: 1px solid #EBEBEB;
 }
 
-.code-tabs .nav-tabs .nav-item .nav-link {
+.code-tabs {
     text-decoration: none;
     font-weight: 500;
     border: 0;
 }
 
-.code-tabs .nav-tabs .nav-item::before {
+.code-tabs {
     display: none;
 }
 
-.code-tabs .nav-tabs .nav-item.active {
+.code-tabs {
     background: #80d0c7;
 }
 
-.code-tabs .nav-tabs .nav-item.active .nav-link {
+.code-tabs  {
     color: #fff;
 }
 
@@ -1662,18 +1502,6 @@ mark {
     border: 0;
 }
 
-.nav-pills-icon .nav-link {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: #333;
-    border: 2px solid transparent;
-}
-
-.nav-pills-icon .nav-link.active {
-    color: #80d0c7;
-    background-color: transparent;
-    border-color: #80d0c7;
-}
 
 .book-cover {
     background-color: #F9F9F9;
