@@ -1,12 +1,14 @@
 package com.forumsystem.models.modeldto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class CommentDto {
     @NotEmpty
     @Size(min = 2, max = 1000, message =
             "Comment length needs to be no less than 2 symbols and no more than 1000 symbols")
+    @Pattern(regexp = "^[^\\d\\W].*", message = "The comment should start with a letter or a punctuation mark.")
     private String content;
 
     public CommentDto() {
