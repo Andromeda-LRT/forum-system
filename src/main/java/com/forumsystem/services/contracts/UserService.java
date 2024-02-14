@@ -33,4 +33,6 @@ public interface UserService {
     public void checkPermissions(User userToUpdate, User loggedUser);
 
     boolean checkIfAdmin(User user);
+
+    boolean checkIfAdminBoolean(User loggedUser);
 }

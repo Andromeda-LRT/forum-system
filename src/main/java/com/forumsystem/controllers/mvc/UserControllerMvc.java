@@ -56,7 +56,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -77,7 +77,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -100,7 +100,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
 
         if (bindingResult.hasErrors()) {
@@ -124,7 +124,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
     }
 
@@ -141,7 +141,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
 
         try {
@@ -155,7 +155,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
     }
 
@@ -200,7 +200,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
     }
 
@@ -225,7 +225,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
     }
 
@@ -251,7 +251,7 @@ public class UserControllerMvc {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "UnauthorizedView";
         }
     }
 }
