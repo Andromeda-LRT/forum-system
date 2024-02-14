@@ -149,16 +149,21 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        model.addAttribute("post", new PostDto());
-        return "post-new";
+        model.addAttribute("newPost", new PostDto());
+        return "CreateNewPostView";
     }
 
 
     @PostMapping("/new")
-    public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
-                             HttpSession session,
+    public String createPost(@ModelAttribute("newPost") @Valid PostDto postDto,
                              BindingResult errors,
+                             HttpSession session,
                              Model model) {
+
+        if (errors.hasErrors()) {
+
+            return "CreateNewPostView";
+        }
 
         User user;
         try {
@@ -167,9 +172,6 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        if (errors.hasErrors()) {
-            return "redirect:/posts/new";
-        }
 
         try {
             Post post = postMapper.fromDto(postDto);

@@ -2,15 +2,15 @@ package com.forumsystem.controllers.mvc;
 
 import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.Post;
-import com.forumsystem.models.modeldto.PostResponseDto;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -38,17 +38,21 @@ public class HomeControllerMvc {
 
         //Top Ten Commented
         List<Post> postList = postService.getTopTenCommentedPosts();
-        List<PostResponseDto> responsePostCommentList = postResponseMapper.convertToDTO(postList);
 
         //Newest Posts
         List<Post> postNewList = postService.getTenNewestPosts();
-        List<PostResponseDto> responsePostNewList = postResponseMapper.convertToDTO(postNewList);
 
         model.addAttribute("postCount", postCount);
         model.addAttribute("userCount", userCount);
-        model.addAttribute("tenNewestPosts", responsePostNewList);
-        model.addAttribute("postCommentList", responsePostCommentList);
+        model.addAttribute("tenNewestPosts", postNewList);
+        model.addAttribute("postCommentList", postList);
 
         return "HomePageView";
     }
+
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
 }
