@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public List<User> getAll(User user, UserModelFilterOptions userFilter) {
-        checkIfAdmin(user);
+        checkIfAdminBoolean(user);
         return repository.getAll(userFilter);
     }
 
