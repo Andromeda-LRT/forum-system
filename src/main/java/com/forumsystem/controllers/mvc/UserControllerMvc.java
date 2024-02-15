@@ -1,9 +1,11 @@
 package com.forumsystem.controllers.mvc;
 
 import com.forumsystem.modelhelpers.AuthenticationHelper;
+import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.modelmappers.UserMapper;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
+import com.forumsystem.models.modeldto.PostResponseDto;
 import com.forumsystem.models.modeldto.UserDto;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
@@ -29,11 +31,14 @@ public class UserControllerMvc {
     private final UserMapper userMapper;
     private final AuthenticationHelper authenticationHelper;
 
+    private final PostResponseMapper postResponseMapper;
+
     @Autowired
-    public UserControllerMvc(UserService userService, UserMapper userMapper, AuthenticationHelper authenticationHelper) {
+    public UserControllerMvc(UserService userService, UserMapper userMapper, AuthenticationHelper authenticationHelper, PostResponseMapper postResponseMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.authenticationHelper = authenticationHelper;
+        this.postResponseMapper = postResponseMapper;
     }
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
@@ -172,7 +177,11 @@ public class UserControllerMvc {
 
         try {
             List<Post> userPosts = userService.getUserPosts(username);
-            model.addAttribute("userPosts", userPosts);
+            List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(userPosts);
+
+            model.addAttribute("username", username);
+            model.addAttribute("userPosts", outputPosts);
+
             return "UserPostsView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

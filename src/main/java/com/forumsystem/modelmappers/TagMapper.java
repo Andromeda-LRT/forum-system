@@ -42,6 +42,19 @@ public class TagMapper {
         return updatedTagSet;
     }
 
+    public Set<Tag> fromDto(String tagList) {
+        Set<Tag> updatedTagSet = new HashSet<>();
+        String[] tags = tagList.split(" ");
+        for (String tagName : tags) {
+            Tag tag = new Tag();
+            tag.setName(tagName);
+            tag.setArchived(false);
+            updatedTagSet.add(tag);
+        }
+        return updatedTagSet;
+    }
+
+
     private void dtoToObj(Tag tag, TagDto tagDto){
         tag.setName(tagDto.getName());
     }

@@ -113,60 +113,30 @@
             <div class="row">
 
                 <div class="col-lg-12 col-12 text-center">
-                    <h2 class="mb-4">All Posts</h2>
+                    <h2 class="mb-4" th:text="|${username}'s posts|">User Posts</h2>
                 </div>
-
-                <div class="post-filter">
-                    <div style="margin-left: 10px;"><label th:text="#{posts.filter.label}" class="form-label">Filter Options:</label></div>
-                    <form action="#" th:action="@{/posts}" method="get" th:object="${postFilterOptions}" class="d-flex flex-row align-items-center gap-2">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Post title" th:field="*{title}">
-                        </div>
-                        <input type="number" class="form-control" min="0" max="1000" placeholder="Likes" th:field="*{likes}">
-                        <input type="number" class="form-control" min="0" max="1000" placeholder="Dislikes" th:field="*{dislikes}">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-tag"></i></span>
-                            <input type="text" class="form-control" placeholder="Post Tag" th:field="*{tagName}">
-                        </div>
-                        <select class="form-select" th:field="*{sortBy}">
-                            <option value="">Sort By</option>
-                            <option value="title">Name</option>
-                            <option value="likes">Likes</option>
-                            <option value="dislikes">Dislikes</option>
-                        </select>
-                        <select class="form-select" th:field="*{sortOrder}">
-                            <option value="desc">Sort Order</option>
-                            <option value="desc">Newest</option>
-                            <option value="asc">Oldest</option>
-                        </select>
-                        <button type="submit" value="Search" style="background-color: #80d0c7; border-color: #80d0c7;" class="btn btn-primary search">Search</button>
-                    </form>
-                </div>
-
-
 
                 <div class="col-lg-8 col-12 mt-3 mx-auto">
                     <div id="postsContainer">
-                        <div class="post" th:each="post : ${posts}">
+                        <div class="post" th:each="post : ${userPosts}">
                             <div class="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
                                 <div class="d-flex">
                                     <!--                            <img src="../static/images/topics/undraw_Remote_design_team_re_urdx.png"-->
                                     <!--                                 class="custom-block-image img-fluid" alt="">-->
                                     <div class="col-12">
                                         <h3 class="h4 mb-3">
-                                            <a class="post-title" href="#" th:href="@{/posts/__${post.postId}__}"
-                                               th:text="${post.title}">
+                                            <a class="post-title" href="#" th:href="@{/posts/{id}(id=${post.postId})}"
+                                               th:text="${post.getTitle()}">
                                                 Post Title
                                             </a>
                                         </h3>
                                         <ul class="card-meta my-3 list-inline d-inline-flex align-items-center">
                                             <li class="list-inline-item">
                                                 <a href="#" th:href="@{/users/{username}/posts(username=${post.createdBy})}" class="card-meta-author">
-                                                    <span th:text="${post.createdBy}">Author Name</span>
+                                                    <span th:text="${post.getCreatedBy()}">Author Name</span>
                                                 </a>
                                             </li>
-                                            <li class="list-inline-item" th:text="${post.createdAt}">
+                                            <li class="list-inline-item" th:text="${post.getCreatedAt()}">
                                                 <div class="tags-container">
                                                     <i class="bi bi-clock"></i>
                                                     <p>Date and time</p>
@@ -175,7 +145,7 @@
                                             <li class="list-inline-item">
                                                 <div class="tags-container">
                                                     <i class="bi bi-chat-dots"></i>
-                                                    <p th:text="${post.comments.size()}">Cnt comments</p>
+                                                    <p th:text="${post.getComments().size()}">Cnt comments</p>
                                                 </div>
                                             </li>
                                             <li class="list-inline-item">
@@ -191,7 +161,6 @@
                                         </ul>
 
                                         <p class="post-content"
-                                           style="text-align: justify;"
                                            th:text="${post.getContent()}">
                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa non officiis
                                             sed

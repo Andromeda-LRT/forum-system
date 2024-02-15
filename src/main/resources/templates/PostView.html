@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Topic Listing Contact Page</title>
+    <title>Post</title>
 
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,22 +24,14 @@
     <link href="../static/css/templatemo-topic-listing.css" th:href="@{/css/templatemo-topic-listing.css}"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/themify-icons/themify-icons.css">
-    <link rel="stylesheet" href="https://getbootstrap.com/plugins/slick/slick.css">
-
-    <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
-    <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
-          rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
 
     <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
           rel="stylesheet">
 
     <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
-
     <!--
 
     TemplateMo 590 topic listing
@@ -48,11 +40,6 @@
 
     -->
     <style>
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
         .btn-edit, .btn-delete {
             margin-left: 8px;
@@ -111,18 +98,11 @@
             color: white;
             background-color: darkred;
         }
-
-        .btn-extra-sm {
-            padding: 0.125rem 0.25rem;
-            font-size: 0.675rem;
-            line-height: 1;
-            border-radius: 0.2rem;
-        }
-
-
     </style>
 </head>
 <body>
+
+
 <div class="py-4"></div>
 <section class="section">
     <div class="container">
@@ -178,7 +158,14 @@
                             <i class="bi bi-hand-thumbs-down"></i>
                             <p th:text="${post.dislikes}"></p>
                         </li>
-                        <li class="list-inline-item" th:each="tag : ${post.getTags()}">
+                        <li class="list-inline-item" th:if="${post.getTags().isEmpty()}">
+                            <ul class="card-meta-tag list-inline">
+                                <i class="bi bi-tags"></i>
+                                <li class="list-inline-item">0</li>
+                            </ul>
+                        </li>
+                        <li class="list-inline-item" th:unless="${post.getTags().isEmpty()}"
+                            th:each="tag : ${post.getTags()}">
                             <ul class="card-meta-tag list-inline">
                                 <i class="bi bi-tags"></i>
                                 <li class="list-inline-item">
@@ -246,7 +233,7 @@
                         <!-- Show comments using paging start-->
                         <div class="media-body">
                             <div id="commentsContainer">
-                                <div th:each="commentInfo : ${postComments}" class="comment" style="display: none;">
+                                <div class="comment" th:each="commentInfo : ${postComments}" style="display: none;">
                                     <div class="d-flex justify-content-between align-items-center w-100">
                                         <a href="#!" class="h4 mb-0" th:text="${commentInfo.createdBy}">
                                             Author of comment
@@ -328,15 +315,45 @@
     function updatePagination(totalPages, currentPage) {
         const paginationContainer = document.getElementById('pagination');
         let paginationHTML = '';
-        for (let i = 1; i <= totalPages; i++) {
+
+        // Add previous button
+        if (currentPage > 1) {
+            paginationHTML += `<a href="#" onclick="paginateComments(${currentPage - 1}); return false;">Previous</a> `;
+        }
+
+        let startPage = 1;
+        let endPage = totalPages;
+
+        if (totalPages > 10) {
+            // More than 10 total pages so calculate start and end pages
+            if (currentPage <= 6) {
+                startPage = 1;
+                endPage = 10;
+                paginationHTML += '... ';
+            } else if (currentPage + 4 >= totalPages) {
+                startPage = totalPages - 9;
+                endPage = totalPages;
+            } else {
+                startPage = currentPage - 5;
+                endPage = currentPage + 4;
+                paginationHTML += '... ';
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
             paginationHTML += `<a href="#" ${currentPage === i ? 'class="current-page"' : ''} onclick="paginateComments(${i}); return false;">${i}</a> `;
         }
+
+        // Add next button
+        if (currentPage < totalPages) {
+            paginationHTML += `<a href="#" onclick="paginateComments(${currentPage + 1}); return false;">Next</a> `;
+        }
+
         paginationContainer.innerHTML = paginationHTML;
     }
 
     // Initial call to paginate comments
     paginateComments(currentPage);
 </script>
-
 </body>
 </html>

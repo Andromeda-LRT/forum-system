@@ -30,6 +30,11 @@
 
     <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet">
 
+    <link href="../static/css/home-page.css" th:href="@{/css/home-page.css}"
+          rel="stylesheet">
+
+    <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
+
 
     <!--
 
@@ -49,7 +54,6 @@
                 <!-- Comment section Start-->
                 <div class="col-lg-9 col-md-12">
                     <div class="mb-5 border-top mt-4 pt-5">
-                        <h3 class="mb-4">Comments</h3>
                         <!-- Leave a Comment section Start-->
                         <div>
                             <h3 class="mb-4" th:text="#{comment.label.leave.comment}">Leave a Comment</h3>
@@ -58,7 +62,8 @@
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                     <textarea class="form-control shadow-none is-invalid"
-                                              style="background-image: none;"
+                                              style="background-image: none;
+                                              height: 400px; font-size: 1.2em;"
                                               id="validationServer03"
                                               aria-describedby="validationServer03Feedback"
                                               name="comment" rows="7"
@@ -78,10 +83,7 @@
                         </div>
                         <!-- Leave a Comment section End-->
                         <div class="divider" style="height: 45px;"></div>
-
-
                     </div>
-
                 </div>
             </div>
             <!-- Comment section End-->
@@ -90,6 +92,9 @@
     </div>
 </section>
 
+<!-- Footer Start -->
+<div class="footer" th:replace="~{fragments/ForumSystemForm :: footer}"></div>
+<!-- Footer End -->
 
 </body>
 </html>

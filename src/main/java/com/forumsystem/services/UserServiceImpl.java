@@ -11,6 +11,7 @@ import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.PERMISSIONS_ERROR;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public List<User> getAll(User user, UserModelFilterOptions userFilter) {
-        checkIfAdmin(user);
+        checkIfAdminBoolean(user);
         return repository.getAll(userFilter);
     }
 
@@ -85,7 +86,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Post> getUserPosts(String username) {
-        return repository.getUserPosts(username);
+        try{
+            return repository.getUserPosts(username);
+        } catch (EntityNotFoundException e){
+            return new ArrayList<>();
+        }
     }
 
     @Override
