@@ -7,6 +7,7 @@ import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.TagService;
+import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
@@ -46,10 +47,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getAll(User user, PostModelFilterOptions postFilter) {
-
-        if (!userRepository.checkIfAdmin(user.getUserId())) {
-            throw new UnauthorizedOperationException(INSUFFICIENT_PERMISSIONS_ERROR_MESSAGE);
-        }
         return postRepository.getAll(postFilter);
     }
 
