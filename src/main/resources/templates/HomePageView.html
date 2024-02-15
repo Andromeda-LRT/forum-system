@@ -14,7 +14,6 @@
 </head>
 
 <body id="top">
-
 <main>
 
     <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
@@ -47,7 +46,7 @@
                     <div class="newest-posts-grid">
                         <!-- Large post -->
                         <div th:if="${tenNewestPosts.size()} > 0" class="post large">
-                            <a th:href="${isAuthenticated} ? @{/post/{id}(id=${tenNewestPosts.get(0).getPostId()})} : @{/auth/login}">
+                            <a th:href="${isAuthenticated} ? @{/posts/{id}(id=${tenNewestPosts.get(0).getPostId()})} : @{/auth/login}">
                                 <h5 th:text="${tenNewestPosts.get(0).title}"></h5>
                                 <p th:text="${tenNewestPosts.get(0).content}"></p>
                             </a>
@@ -55,7 +54,7 @@
 
                         <!-- Remaining posts -->
                         <div th:each="post : ${tenNewestPosts.subList(1, tenNewestPosts.size())}" class="post">
-                            <a th:href="${isAuthenticated} ? @{/post/{id}(id=${post.getPostId()})} : @{/auth/login}">
+                            <a th:href="${isAuthenticated} ? @{/posts/{id}(id=${post.getPostId()})} : @{/auth/login}">
                                 <h5 th:text="${post.title}"></h5>
                                 <p th:text="${post.content}"></p>
                             </a>
@@ -74,14 +73,14 @@
                 <div class="newest-posts-grid">
                     <!-- Large post -->
                     <div th:if="${postCommentList.size()} > 0" class="post large">
-                        <a th:href="${isAuthenticated} ? @{/post/{id}(id=${postCommentList.get(0).getPostId()})} : @{/auth/login}">
+                        <a th:href="${isAuthenticated} ? @{/posts/{id}(id=${postCommentList.get(0).getPostId()})} : @{/auth/login}">
                             <h5 th:text="${postCommentList.get(0).title}"></h5>
                             <p th:text="${postCommentList.get(0).content}"></p>
                         </a>
                     </div>
                     <!-- Remaining posts -->
                     <div th:each="post : ${postCommentList.subList(1, postCommentList.size())}" class="post">
-                        <a th:href="${isAuthenticated} ? @{/post/{id}(id=${post.getPostId()})} : @{/auth/login}">
+                        <a th:href="${isAuthenticated} ? @{/posts/{id}(id=${post.getPostId()})} : @{/auth/login}">
                             <h5 th:text="${post.title}"></h5>
                             <p th:text="${post.content}"></p>
                         </a>
