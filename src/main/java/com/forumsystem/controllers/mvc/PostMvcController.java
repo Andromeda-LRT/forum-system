@@ -403,6 +403,8 @@ public class PostMvcController {
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("commentId", comment_id);
+            model.addAttribute("comment", commentDto);
             model.addAttribute("post", postService.getById(user, post_id));
             return "EditPostCommentView";
         }
