@@ -158,7 +158,14 @@
                             <i class="bi bi-hand-thumbs-down"></i>
                             <p th:text="${post.dislikes}"></p>
                         </li>
-                        <li class="list-inline-item" th:each="tag : ${post.getTags()}">
+                        <li class="list-inline-item" th:if="${post.getTags().isEmpty()}">
+                            <ul class="card-meta-tag list-inline">
+                                <i class="bi bi-tags"></i>
+                                <li class="list-inline-item">0</li>
+                            </ul>
+                        </li>
+                        <li class="list-inline-item" th:unless="${post.getTags().isEmpty()}"
+                            th:each="tag : ${post.getTags()}">
                             <ul class="card-meta-tag list-inline">
                                 <i class="bi bi-tags"></i>
                                 <li class="list-inline-item">
