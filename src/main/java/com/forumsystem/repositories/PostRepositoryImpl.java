@@ -64,7 +64,7 @@ public class PostRepositoryImpl implements PostRepository {
 
 
 
-            StringBuilder queryString = new StringBuilder("from Post p join p.postTags as pt");
+            StringBuilder queryString = new StringBuilder("from Post p left outer join p.postTags as pt");
 
             if (!filters.isEmpty()) {
 
@@ -77,6 +77,10 @@ public class PostRepositoryImpl implements PostRepository {
                 queryString.append(" where p.isArchived = false");
             }
             queryString.append(generateOrderBy(filterOptions));
+
+            if (!filterOptions.getSortOrder().isPresent()) {
+                queryString.append(" order by p.id desc");
+            }
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
@@ -224,10 +228,14 @@ public class PostRepositoryImpl implements PostRepository {
             orderBy = String.format(" order by %s", orderBy);
 
         if (filterOptions.getSortOrder().isPresent() &&
+                filterOptions.getSortOrder().get().equalsIgnoreCase("asc")) {
+            orderBy = String.format("%s asc", orderBy);
+        }
+
+        if (filterOptions.getSortOrder().isPresent() &&
                 filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
             orderBy = String.format("%s desc", orderBy);
         }
-
         return orderBy;
     }
 
