@@ -20,7 +20,7 @@ public class PostDto {
     @Size(min = 32, max = 8192, message = INVALID_CONTENT_LENGTH_ERROR_MESSAGE)
     private String content;
 
-    List<TagDto> tagList;
+    private List<TagDto> tagList;
 
     public PostDto() {
          this.tagList = new ArrayList<>();

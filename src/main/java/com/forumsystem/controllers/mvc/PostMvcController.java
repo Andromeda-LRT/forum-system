@@ -197,14 +197,15 @@ public class PostMvcController {
         }
 
         Post post = postService.getById(user, id);
-        PostResponseDto outputPost = postResponseMapper.convertToDTO(post);
-        model.addAttribute("post", outputPost);
+        PostResponseDtoMvc outputPost = postResponseMapper.convertToDtoUpdate(post);
+        model.addAttribute("postId", id);
+        model.addAttribute("postMvc", outputPost);
         return "PostUpdateView";
     }
 
     @PostMapping("/{id}/update")
     public String updatePost(@PathVariable int id,
-                             @Valid @ModelAttribute("post") PostDto postDto,
+                             @Valid @ModelAttribute("postMvc") PostDtoMvc postDtoMvc,
                              HttpSession session,
                              BindingResult errors,
                              Model model) {
@@ -216,12 +217,12 @@ public class PostMvcController {
         }
 
         if (errors.hasErrors()) {
-            return "redicted:/posts/" + id + "update";
+            return "PostUpdateView";
         }
         try {
-            Post newPost = postMapper.fromDto(postDto, id);
+            Post newPost = postMapper.fromDto(postDtoMvc, id);
             postService.updatePost(user, newPost);
-            return "redirect:/posts";
+            return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
