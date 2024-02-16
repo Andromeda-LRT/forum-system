@@ -73,8 +73,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(User user, Comment comment) {
-        if(!comment.getUser().equals(user) &&
-                !userRepository.checkIfAdmin(user.getUserId())){
+        if(!comment.getUser().equals(user) && !userRepository.checkIfAdmin(user.getUserId())){
             throw new UnauthorizedOperationException(
                     String.format(UNAUTHORIZED_EDIT_ERROR_MESSAGE, COMMENTS));
         }

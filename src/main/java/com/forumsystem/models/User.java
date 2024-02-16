@@ -99,7 +99,9 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(email, user.email) && Objects.equals(username, user.username);
+        return Objects.equals(email, user.email)
+                && Objects.equals(username, user.username)
+                && Objects.equals(userId, user.userId);
     }
 
     @Override
