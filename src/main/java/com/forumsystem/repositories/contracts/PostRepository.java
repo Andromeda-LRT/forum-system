@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface PostRepository {
     List<Post> getAll(PostModelFilterOptions filterOptions);
+    List<Post> getAllForAdmin(PostModelFilterOptions postFilter);
 
     List<Post> getTopTenCommentedPosts();
 

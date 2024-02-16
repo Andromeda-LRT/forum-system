@@ -9,6 +9,7 @@ import static com.forumsystem.modelhelpers.ModelConstantHelper.EMPTY_ERROR_MESSA
 import static com.forumsystem.modelhelpers.ModelConstantHelper.NAME_ERROR_MESSAGE;
 
 public class UserProfileUpdateDto {
+    String username;
     @Schema(name = "firstName", example = "Ivan", required = true)
     @NotEmpty(message = EMPTY_ERROR_MESSAGE)
     @Size(min = 4, max = 32, message = NAME_ERROR_MESSAGE)
@@ -18,22 +19,32 @@ public class UserProfileUpdateDto {
     @Size(min = 4, max = 32, message = NAME_ERROR_MESSAGE)
     private String lastName;
     @Schema(name = "email", example = "email@email.com", required = true)
-    @Email(
-            message = EMPTY_ERROR_MESSAGE,
-            regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
-    )
+//    @Email(
+//            message = EMPTY_ERROR_MESSAGE,
+//            regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
+//    )
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
     public UserProfileUpdateDto() {
     }
 
-    public UserProfileUpdateDto(String firstName,
+    public UserProfileUpdateDto(String username,
+                                String firstName,
                                 String lastName,
                                 String email) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {

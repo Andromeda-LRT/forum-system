@@ -28,10 +28,13 @@ public interface UserRepository {
     void unblockUser(String username);
 
     boolean checkIfAdmin(int id);
+    String getAdminPhoneNumber(int userId);
 
     long getCountUsers();
 
-    boolean isEmailExists(String email);
+    boolean isEmailExists(User user);
 
     void giveUserAdminRights(User user);
+
+    void updatePhoneNumber(String phoneNumber, int userId);
 }

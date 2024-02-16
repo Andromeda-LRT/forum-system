@@ -3,6 +3,8 @@ package com.forumsystem.services;
 import com.forumsystem.modelhelpers.UserModelFilterOptions;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
+import com.forumsystem.models.modeldto.AdminDto;
+import com.forumsystem.models.modeldto.UpdateUserPasswordDto;
 import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.DuplicateEntityException;
@@ -22,12 +24,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository){
+    public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
     }
+
     @Override
     public List<User> getAll(User user, UserModelFilterOptions userFilter) {
-        checkIfAdminBoolean(user);
+        checkIfAdmin(user);
         return repository.getAll(userFilter);
     }
 
@@ -47,21 +50,21 @@ public class UserServiceImpl implements UserService {
         boolean duplicateUserNameExists = true;
         boolean duplicateEmailNameExists = true;
 
-        try{
+        try {
             repository.getUserByUsername(user.getUsername());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             duplicateUserNameExists = false;
         }
-        if (duplicateUserNameExists){
+        if (duplicateUserNameExists) {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
 
-        try{
+        try {
             repository.getUserByEmail(user.getEmail());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             duplicateEmailNameExists = false;
         }
-        if (duplicateEmailNameExists){
+        if (duplicateEmailNameExists) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
         repository.create(user);
@@ -69,9 +72,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User userToUpdate, User loggedUser) {
-        checkUserIsBlocked(loggedUser);
+
         checkPermissions(userToUpdate, loggedUser);
-        if(repository.isEmailExists(loggedUser.getEmail())){
+        if (repository.isEmailExists(userToUpdate)) {
             throw new DuplicateEntityException("User", "email", loggedUser.getEmail());
         }
         return repository.update(userToUpdate);
@@ -94,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(int id,User user) {
+    public void blockUser(int id, User user) {
         User blockUser = repository.get(id);
         checkIfAdmin(user);
         repository.blockUser(blockUser.getUsername());
@@ -108,13 +111,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long getCountUsers(){
+    public long getCountUsers() {
         return repository.getCountUsers();
     }
 
     @Override
     public void giveUserAdminRights(User user, User loggedUser) {
-        if(user.isBlocked()){
+        if (user.isBlocked()) {
             repository.unblockUser(user.getUsername());
         }
         repository.giveUserAdminRights(user);
@@ -126,6 +129,18 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
+    public boolean confirmIfPasswordsMatch(int id, UpdateUserPasswordDto passwordDto) {
+        User userWhosePasswordMayBeChanged = repository.get(id);
+        return passwordDto.getCurrentPassword()
+                .equals(userWhosePasswordMayBeChanged.getPassword());
+    }
+
+    @Override
+    public void updatePhoneNumber(AdminDto adminDto, User user) {
+        repository.updatePhoneNumber(adminDto.getPhoneNumber(), user.getUserId());
+    }
+
+    @Override
     public boolean checkIfAdmin(User loggedUser) {
         if (!repository.checkIfAdmin(loggedUser.getUserId())) {
             throw new UnauthorizedOperationException(PERMISSIONS_ERROR);
@@ -134,18 +149,29 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean checkIfAdmin(int id) {
+        return repository.checkIfAdmin(id);
+    }
+
+    @Override
+    public String getAdminPhoneNumber(User user){
+        return repository.getAdminPhoneNumber(user.getUserId());
+    }
+
+
     private void checkUserIsBlocked(User loggedUser) {
         if (loggedUser.isBlocked()) {
             throw new UnauthorizedOperationException(PERMISSIONS_ERROR);
         }
     }
 
-    @Override
-    public boolean checkIfAdminBoolean(User loggedUser) {
-        if (repository.checkIfAdmin(loggedUser.getUserId())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    @Override
+//    public boolean checkIfAdminBoolean(User loggedUser) {
+//        if (repository.checkIfAdmin(loggedUser.getUserId())) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 }

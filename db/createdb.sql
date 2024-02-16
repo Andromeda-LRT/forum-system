@@ -8,13 +8,14 @@ create table users
     last_name   varchar(50)          not null,
     email       varchar(50)          not null,
     is_blocked  tinyint(1) default 0 not null,
-    is_archived tinyint(1) default 0 not null
+    is_archived tinyint(1) default 0 not null,
+    profile_picture varchar(45) null
 );
 
 create table admins
 (
     user_id      int not null,
-    phone_number int null,
+    phone_number varchar(15) null,
     constraint admins_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );

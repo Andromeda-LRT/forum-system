@@ -3,6 +3,7 @@ package com.forumsystem.services;
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.models.Comment;
 import com.forumsystem.models.Post;
+import com.forumsystem.models.Tag;
 import com.forumsystem.models.User;
 import com.forumsystem.repositories.contracts.PostRepository;
 import com.forumsystem.repositories.contracts.UserRepository;
@@ -18,7 +19,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.forumsystem.Helpers.createMockFilterOptions;
 import static org.mockito.ArgumentMatchers.*;
@@ -38,25 +41,11 @@ public class PostServiceTests {
     private PostServiceImpl postService;
 
     @Test
-    void getAll_Should_ThrowUnauthorizedOperationException_IfUserNotAdmin() {
-        // Arrange
-        User user = new User();
-        user.setUserId(1);
-        PostModelFilterOptions postFilter = createMockFilterOptions();
-        Mockito.when(userRepository.checkIfAdmin(user.getUserId())).thenReturn(false);
-
-        // Act & Assert
-        Assertions.assertThrows(UnauthorizedOperationException.class, () -> postService.getAll(user, postFilter));
-        Mockito.verify(userRepository, Mockito.times(1)).checkIfAdmin(user.getUserId());
-    }
-
-    @Test
     void getAll_Should_ReturnPosts_IfUserIsAdmin() {
         // Arrange
         User user = new User();
         user.setUserId(1);
         PostModelFilterOptions postFilter = createMockFilterOptions();
-        Mockito.when(userRepository.checkIfAdmin(user.getUserId())).thenReturn(true);
         Mockito.when(postRepository.getAll(postFilter)).thenReturn(Arrays.asList(new Post(), new Post()));
 
         // Act
@@ -200,6 +189,30 @@ public class PostServiceTests {
     }
 
     @Test
+    void updatePost_Should_Succeed_ForAuthorizedUser() {
+        // Arrange
+        User user = new User();
+        user.setUserId(1);
+        user.setBlocked(false);
+
+        Post postToBeUpdated = new Post();
+        postToBeUpdated.setCreatedBy(user);
+
+        Set<Tag> tags = new HashSet<>();
+        postToBeUpdated.setPostTags(tags);
+
+        Mockito.when(postRepository.update(postToBeUpdated)).thenReturn(postToBeUpdated);
+
+        // Act
+        Post updatedPost = postService.updatePost(user, postToBeUpdated);
+
+        // Assert
+        Mockito.verify(tagService).create(tags);
+        Mockito.verify(postRepository).update(postToBeUpdated);
+        Assertions.assertEquals(postToBeUpdated, updatedPost);
+    }
+
+    @Test
     void delete_Should_DeletePost_IfUserIsOwnerOrAdmin() {
         // Arrange
         User user = new User();
@@ -245,5 +258,22 @@ public class PostServiceTests {
 
         // Assert
         Mockito.verify(postRepository, Mockito.times(1)).likePost(post.getPostId(), user.getUserId());
+    }
+
+    @Test
+    void deleteComment_Should_SuccessfullyDeleteComment() {
+        // Arrange
+        int postId = 1;
+        int commentId = 1;
+        User user = new User();
+        Comment comment = new Comment();
+        Mockito.when(commentService.getById(commentId)).thenReturn(comment);
+
+        // Act
+        postService.deleteComment(user, postId, commentId);
+
+        // Assert
+        Mockito.verify(commentService).getById(commentId);
+        Mockito.verify(commentService).delete(user, comment);
     }
 }

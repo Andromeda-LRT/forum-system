@@ -241,7 +241,8 @@ public class PostMvcController {
         }
         try {
             postService.delete(user, id);
-            if (userService.checkIfAdmin(user)) {
+
+            if (userService.checkIfAdmin(user.getUserId())) {
                 return "redirect:/admin/posts";
             }
             return "redirect:/posts";

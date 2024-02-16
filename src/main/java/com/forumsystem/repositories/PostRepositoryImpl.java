@@ -37,34 +37,9 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
-
-            filterOptions.getTitle().ifPresent(value -> {
-                if (!value.isBlank()) {
-                    filters.add("title like :title");
-                    params.put("title", String.format("%%%s%%", value));
-                }
-            });
-
-            filterOptions.getLikes().ifPresent(value -> {
-                filters.add("likes >= :likes");
-                params.put("likes", value);
-            });
-
-            filterOptions.getDislikes().ifPresent(value -> {
-                filters.add("dislikes >= :dislikes");
-                params.put("dislikes", value);
-            });
-
-            filterOptions.getTagName().ifPresent(value -> {
-                if (!value.isBlank()) {
-                    filters.add("name like :tagName");
-                    params.put("tagName",  String.format("%%%s%%", value));
-                }
-            });
-
-
-
             StringBuilder queryString = new StringBuilder("from Post p left outer join p.postTags as pt");
+
+            populateFiltersAndParams(filters, params, filterOptions, queryString);
 
             if (!filters.isEmpty()) {
 
@@ -76,6 +51,7 @@ public class PostRepositoryImpl implements PostRepository {
             } else {
                 queryString.append(" where p.isArchived = false");
             }
+
             queryString.append(generateOrderBy(filterOptions));
 
             if (!filterOptions.getSortOrder().isPresent()) {
@@ -87,8 +63,37 @@ public class PostRepositoryImpl implements PostRepository {
             return query.list();
         }
     }
-    //todo to make another method for posts one for admin.
-    // main difference to be with is archived to be false for users and for admin to be both true and false.
+
+    @Override
+    public List<Post> getAllForAdmin(PostModelFilterOptions filterOptions) {
+        try (Session session = sessionFactory.openSession()) {
+
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+            StringBuilder queryString = new StringBuilder("from Post p left outer join p.postTags as pt");
+
+            populateFiltersAndParams(filters, params, filterOptions, queryString);
+
+            if (!filters.isEmpty()) {
+
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+
+            queryString.append(generateOrderBy(filterOptions));
+
+//            if (!filterOptions.getSortOrder().isPresent()) {
+//                queryString.append(" order by p.id desc");
+//            }
+
+            Query<Post> query = session.createQuery(queryString.toString(), Post.class);
+            query.setProperties(params);
+            return query.list();
+
+        }
+    }
+
     @Override
     public List<Post> getTopTenCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
@@ -205,6 +210,35 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    private void populateFiltersAndParams(List<String> filters,
+                                          Map<String, Object> params,
+                                          PostModelFilterOptions filterOptions,
+                                          StringBuilder queryString) {
+        filterOptions.getTitle().ifPresent(value -> {
+            if (!value.isBlank()) {
+                filters.add("title like :title");
+                params.put("title", String.format("%%%s%%", value));
+            }
+        });
+
+        filterOptions.getLikes().ifPresent(value -> {
+            filters.add("likes >= :likes");
+            params.put("likes", value);
+        });
+
+        filterOptions.getDislikes().ifPresent(value -> {
+            filters.add("dislikes >= :dislikes");
+            params.put("dislikes", value);
+        });
+
+        filterOptions.getTagName().ifPresent(value -> {
+            if (!value.isBlank()) {
+                filters.add("name like :tagName");
+                params.put("tagName",  String.format("%%%s%%", value));
+            }
+        });
+    }
+
     private String generateOrderBy(PostModelFilterOptions filterOptions) {
 
         if (filterOptions.getSortBy().isEmpty()) {
@@ -225,7 +259,7 @@ public class PostRepositoryImpl implements PostRepository {
             default:
                 orderBy = "p.id";
         }
-            orderBy = String.format(" order by %s", orderBy);
+        orderBy = String.format(" order by %s", orderBy);
 
         if (filterOptions.getSortOrder().isPresent() &&
                 filterOptions.getSortOrder().get().equalsIgnoreCase("asc")) {
@@ -238,5 +272,4 @@ public class PostRepositoryImpl implements PostRepository {
         }
         return orderBy;
     }
-
 }
