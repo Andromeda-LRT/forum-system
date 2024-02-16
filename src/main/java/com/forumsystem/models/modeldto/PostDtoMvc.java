@@ -1,6 +1,7 @@
 package com.forumsystem.models.modeldto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.*;
@@ -15,6 +16,7 @@ public class PostDtoMvc {
     @Size(min = 32, max = 8192, message = INVALID_CONTENT_LENGTH_ERROR_MESSAGE)
     private String content;
 
+    @Pattern(regexp = "^$|^(#[a-z]+)(\\s+#[a-z]+)*$", message = "Each tag must start with a '#' followed by a lowercase letters and be separated by spaces.")
     private String tags;
 
     public PostDtoMvc() {
