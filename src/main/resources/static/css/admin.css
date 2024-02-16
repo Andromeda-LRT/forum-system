@@ -2,55 +2,55 @@
     color: red;
 }
 
-.search {
-    /*css property, which by itself does nothing, but can be used in multiple places.
-     It can be replaced using (var) and in column the specified padding value.*/
-    --padding: 14px;
+/*.search {*/
+/*    !*css property, which by itself does nothing, but can be used in multiple places.*/
+/*     It can be replaced using (var) and in column the specified padding value.*!*/
+/*    --padding: 14px;*/
 
-    display: flex;
-    align-items: center;
-    padding: var(--padding);
-    border-radius: 28px;
-    background: #f6f6f6;
-    transition: box-shadow 0.25s;
-}
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    padding: var(--padding);*/
+/*    border-radius: 28px;*/
+/*    background: #f6f6f6;*/
+/*    transition: box-shadow 0.25s;*/
+/*}*/
 
-.search:focus-within {
-    box-shadow: 0 0 2px rgb(0, 0, 0, 0.75);
-}
+/*.search:focus-within {*/
+/*    box-shadow: 0 0 2px rgb(0, 0, 0, 0.75);*/
+/*}*/
 
-.search-input {
-    margin-left: var(--padding);
-    outline: none;
-    border: none;
-    background: white;
-    width: 300px;
-}
-/*optionals*/
-.dropdown {
-    padding: 8px 12px;
-    color: #333333;
-    background-color: #eeeeee;
-    border: 1px solid #dddddd;
-    cursor: pointer;
-    border-radius: 5px;
-}
+/*.search-input {*/
+/*    margin-left: var(--padding);*/
+/*    outline: none;*/
+/*    border: none;*/
+/*    background: white;*/
+/*    width: 300px;*/
+/*}*/
+/*!*optionals*!*/
+/*.dropdown {*/
+/*    padding: 8px 12px;*/
+/*    color: #333333;*/
+/*    background-color: #eeeeee;*/
+/*    border: 1px solid #dddddd;*/
+/*    cursor: pointer;*/
+/*    border-radius: 5px;*/
+/*}*/
 
-.dropdown:focus,
-.dropdown:hover {
-    /*outline none removes the default blue background color that the browser has for the user*/
-    outline: none;
-    border: 1px solid#bbbbbb;
-}
+/*.dropdown:focus,*/
+/*.dropdown:hover {*/
+/*    !*outline none removes the default blue background color that the browser has for the user*!*/
+/*    outline: none;*/
+/*    border: 1px solid#bbbbbb;*/
+/*}*/
 
-.dropdown option {
-    background: #ffffff;
-}
+/*.dropdown option {*/
+/*    background: #ffffff;*/
+/*}*/
 
 
-.dropdown:hover .arrow {
-    color: lightblue;
-}
+/*.dropdown:hover .arrow {*/
+/*    color: lightblue;*/
+/*}*/
 
 
 body {
@@ -109,14 +109,14 @@ table {
     border-top: solid black;
 }
 
-.User-Filter {
-    width: 50%;
-    margin: auto;
-}
-.Post-Filter {
-    width: 50%;
-    margin: auto;
-}
+/*.User-Filter {*/
+/*    width: 50%;*/
+/*    margin: auto;*/
+/*}*/
+/*.Post-Filter {*/
+/*    width: 50%;*/
+/*    margin: auto;*/
+/*}*/
 
 .icon{
     text-align: center;

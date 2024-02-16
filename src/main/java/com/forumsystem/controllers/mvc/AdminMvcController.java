@@ -82,7 +82,6 @@ public class AdminMvcController {
             return "redirect:/auth/login";
         }
 
-        //User user = userService.getUserByUsername("john_doe");
         PostModelFilterOptions postFilter = new PostModelFilterOptions(
                 postFilterDto.getTitle(),
                 postFilterDto.getLikes(),
@@ -92,9 +91,7 @@ public class AdminMvcController {
                 postFilterDto.getSortOrder());
 
         try {
-            userService.checkIfAdmin(user);
-            List<Post> posts = postService.getAll(user, postFilter);
-            //List<PostResponseDto> outputPosts = postResponseMapper.convertToDTO(posts);
+            List<Post> posts = postService.getAllForAdmin(user, postFilter);
             model.addAttribute("postFilterOptions", postFilterDto);
             model.addAttribute("posts", posts);
             return "AdminPostsView";
