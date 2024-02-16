@@ -107,7 +107,7 @@ public class UserControllerMvc {
             model.addAttribute("loggedUser", userToUpdateDto);
             model.addAttribute("password", new UpdateUserPasswordDto());
             model.addAttribute("profilePicture", pictureDto);
-            model.addAttribute("admin", userService.checkIfAdmin(currentUser.getUserId()));
+            model.addAttribute("admin", userService.checkIfAdmin(userToUpdate.getUserId()));
             model.addAttribute("adminPhone", new AdminDto(userService.getAdminPhoneNumber(userToUpdate)));
             return "UserProfileView";
         } catch (AuthenticationFailureException e) {
@@ -271,6 +271,10 @@ public class UserControllerMvc {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "UnauthorizedView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "NotFoundView";
         }
 
         try {
@@ -347,8 +351,12 @@ public class UserControllerMvc {
             authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "NotFoundView";
         }
-        //User loggedUser = userService.getUserByUsername("john_doe");
+
         try {
             userService.blockUser(id, loggedUser);
             return "redirect:/admin/users";
@@ -373,6 +381,10 @@ public class UserControllerMvc {
             authenticationHelper.verifyUserAccess(id, loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "NotFoundView";
         }
         // User loggedUser = userService.getUserByUsername("john_doe");
         try {
@@ -394,7 +406,8 @@ public class UserControllerMvc {
                                        HttpSession session,
                                        @ModelAttribute(name = "profilePicture") ProfilePictureDto pictureDto,
                                        BindingResult bindingResult,
-                                       @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+                                       @RequestParam("fileImage") MultipartFile multipartFile,
+                                       Model model) throws IOException {
         User loggedUser;
         try {
             loggedUser = authenticationHelper.tryGetUser(session);
@@ -423,8 +436,13 @@ public class UserControllerMvc {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            //figure something out with bindingResult
-            throw new IOException("Image could not be uploaded:" + fileName);
+            model.addAttribute("profilePicture", pictureDto);
+            model.addAttribute("userId", id);
+            model.addAttribute("loggedUser", userWithSaveProfilePic);
+            model.addAttribute("password", new UpdateUserPasswordDto());
+            model.addAttribute("profilePicture", pictureDto);
+            model.addAttribute("admin", userService.checkIfAdmin(loggedUser.getUserId()));
+            model.addAttribute("adminPhone", new AdminDto(userService.getAdminPhoneNumber(userWithSaveProfilePic)));
         }
 
         return returnUserToRespectiveUserProfileView(loggedUser, id);
