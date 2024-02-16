@@ -7,6 +7,8 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>
+    <div th:replace="~{fragments/ForumSystemForm :: links}"></div>
+    <div th:replace="~{fragments/ForumSystemForm :: navbar}"></div>
     <title>All Users</title>
 </head>
 <body>
@@ -47,10 +49,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body" th:if="${users.isEmpty()}">
-                    <h2 class="card-title text-uppercase mb-0" th:text="#{users.title.empty}">No Users To Manage</h2>
+                    <h2 class="card-title text-uppercase mb-0" th:text="#{users.title.empty}"
+                        style="color: #13547a">No Users To Manage</h2>
                 </div>
                 <div class="card-body" th:unless="${users.isEmpty()}">
-                    <h2 class="card-title text-uppercase mb-0" th:text="#{users.title}">Manage Users</h2>
+                    <h2 class="card-title text-uppercase mb-0" th:text="#{users.title}"
+                        style="color: #13547a">Manage Users</h2>
                 </div>
                 <div class="table-responsive" th:each="user : ${users}">
                     <table class="table no-wrap user-table mb-0">
@@ -109,17 +113,9 @@
                                 <span class="text-muted" th:unless="${user.isArchived()}"
                                       th:text="#{user.label.is-not-deactivated}">Active</span>
                             </td>
-                            <!--                            <td>-->
-                            <!--                                <select class="form-control category-select" id="exampleFormControlSelect1">-->
-                            <!--                                    <option>Modulator</option>-->
-                            <!--                                    <option>Admin</option>-->
-                            <!--                                    <option>User</option>-->
-                            <!--                                    <option>Subscriber</option>-->
-                            <!--                                </select>-->
-                            <!--                            </td>-->
                             <td>
                                 <form style="display: inline" action="#"
-                                      th:action="@{/users/{id}/(id=${user.getUserId()})}"
+                                      th:action="@{/users/{id}(id=${user.getUserId()})}"
                                       th:object="${user}" th:method="get">
                                     <button type="submit" class="btn btn-outline-info btn-circle btn-lg btn-circle">
                                         <i class="fa fa-pencil"></i>
@@ -161,68 +157,7 @@
         </div>
     </div>
 </div>
-
-
-<!--old version to be removed-->
-
-<div th:if="${users.isEmpty()}">
-    <h2 th:text="#{users.title.empty}">No Users</h2>
-</div>
-<div th:unless="${users.isEmpty()}">
-    <h2 th:text="#{users.title}">All Users</h2>
-    <div class="table">
-        <div class="cell" th:text="#{user.label.username}">Username</div>
-        <div class="cell" th:text="#{user.label.first-name}">First Name</div>
-        <div class="cell" th:text="#{user.label.last-name}">Last Name</div>
-        <div class="cell" th:text="#{user.label.email}">Email</div>
-        <div class="cell" th:text="#{user.label.is-blocked}">Blocked</div>
-        <div class="cell" th:text="#{user.label.is-deactivated}">Deactivated</div>
-    </div>
-    <div class="user-row" th:each="user : ${users}">
-        <div class="user-text">
-            <div th:text="${user.username}">Username</div>
-            <div th:text="${user.firstName}">First Name</div>
-            <div th:text="${user.lastName}">Last Name</div>
-            <div th:text="${user.email}">Email</div>
-            <div th:text="${user.isBlocked}">Blocked</div>
-            <div th:text="${user.isArchived}">Deactivated</div>
-            <div>
-                <a href="#" th:href="@{/users/{id}/(id=${user.getUserId()})}"
-                   th:text="#{user.label.update-profile}"
-                ></a>
-            </div>
-            <form action="#" th:action="@{/users/__${user.userId}__/admin-rights}"
-                  th:object="${user}" th:method="post">
-                <button type="submit" value="block" th:text="#{user.label.make-admin}">
-
-                </button>
-            </form>
-
-            <!--        (id=${user.getUserId())}-->
-            <!--        follow bellow model for these options-->
-            <form action="#" th:action="@{/users/__${user.userId}__/block}"
-                  th:object="${user}" th:method="post">
-                <button type="submit" value="block" th:text="#{user.label.block-user}">
-
-                </button>
-            </form>
-
-            <form action="#" th:action="@{/users/__${user.userId}__/unblock}"
-                  th:object="${user}" th:method="post">
-                <button type="submit" value="block" th:text="#{user.label.unblock-user}">
-                </button>
-            </form>
-
-            <form action="#" th:action="@{/users/__${user.userId}__/delete}"
-                  th:object="${user}" th:method="get">
-                <button type="submit" value="block" th:text="#{user.label.delete-user}">
-
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
+<div th:replace="~{fragments/ForumSystemForm :: footer}"></div>
 </body>
 </html>
 
