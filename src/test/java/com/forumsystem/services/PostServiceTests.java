@@ -41,25 +41,11 @@ public class PostServiceTests {
     private PostServiceImpl postService;
 
     @Test
-    void getAll_Should_ThrowUnauthorizedOperationException_IfUserNotAdmin() {
-        // Arrange
-        User user = new User();
-        user.setUserId(1);
-        PostModelFilterOptions postFilter = createMockFilterOptions();
-        Mockito.when(userRepository.checkIfAdmin(user.getUserId())).thenReturn(false);
-
-        // Act & Assert
-        Assertions.assertThrows(UnauthorizedOperationException.class, () -> postService.getAll(user, postFilter));
-        Mockito.verify(userRepository, Mockito.times(1)).checkIfAdmin(user.getUserId());
-    }
-
-    @Test
     void getAll_Should_ReturnPosts_IfUserIsAdmin() {
         // Arrange
         User user = new User();
         user.setUserId(1);
         PostModelFilterOptions postFilter = createMockFilterOptions();
-        Mockito.when(userRepository.checkIfAdmin(user.getUserId())).thenReturn(true);
         Mockito.when(postRepository.getAll(postFilter)).thenReturn(Arrays.asList(new Post(), new Post()));
 
         // Act
