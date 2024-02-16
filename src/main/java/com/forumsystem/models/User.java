@@ -26,6 +26,8 @@ public class User {
     private boolean isBlocked;
     @Column(name = "is_archived")
     private boolean isArchived;
+    @Column(name = "profile_picture")
+    private String profilePicture;
 
     public User() {
 
@@ -94,6 +96,15 @@ public class User {
     public void setArchived(boolean archived) {
         isArchived = archived;
     }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
 
     @Override
     public boolean equals(Object o) {
