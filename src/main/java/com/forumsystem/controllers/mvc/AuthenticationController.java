@@ -8,6 +8,7 @@ import com.forumsystem.models.modeldto.RegisterDto;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.DuplicateEntityException;
+import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class AuthenticationController {
         try {
             User user = authenticationHelper.verifyAuthentication(dto.getUsername(), dto.getPassword());
             session.setAttribute("currentUser", dto.getUsername());
-            session.setAttribute("isAdmin", userService.checkIfAdminBoolean(user));
+            session.setAttribute("isAdmin", userService.checkIfAdmin(user.getUserId()));
             return "redirect:/home";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
