@@ -943,7 +943,7 @@ blockquote {
 .site-footer {
   border-bottom: 10px solid var(--secondary-color);
   position: relative;
-  height: 50%; /* Set the height to 50% of its original size */
+  height: 50%;
   padding: 20px;
   font-size: 2px;
   font-weight: var(--font-weight-normal);
@@ -952,8 +952,8 @@ blockquote {
 }
 
 .site-footer {
-  background-color: #57c1b7; /* Set your desired background color */
-  color: #fff; /* Set your desired text color */
+  background-color: #57c1b7;
+  color: #fff;
   padding: 20px;
   text-align: center;
 }
@@ -980,19 +980,17 @@ blockquote {
   font-size: var(--copyright-font-size);
 }
 
-/*////////////////////////////////////////////// #60c4bb   #80d0c9 */
-
 
 .site-footer a {
-  color: #fff; /* Set the link color */
+  color: #fff;
 }
 
 .site-footer a:hover {
-  text-decoration: underline; /* Add underline on hover for links */
+  text-decoration: underline;
 }
 
 .site-footer p {
-  margin: 5px 0; /* Adjust the spacing between paragraphs */
+  margin: 5px 0;
 }
 
 /*---------------------------------------
