@@ -195,6 +195,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public String getAdminPhoneNumber(int userId){
+        try (Session session = sessionFactory.openSession()){
+            String sql = "Select phone_number from admins where user_id = :userId";
+            String result = (String) session.createNativeQuery(sql)
+                    .setParameter("userId", userId)
+                    .uniqueResult();
+            return result;
+        }
+    }
+
+    @Override
     public long getCountUsers() {
         try (Session session = sessionFactory.openSession()) {
             String hql = "select count(u) from User u";
@@ -204,13 +215,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean isEmailExists(String email) {
+    public boolean isEmailExists(User userEmail) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM User u WHERE u.email = :email";
-            List<User> results = session.createQuery(hql)
-                    .setParameter("email", email)
-                    .list();
-            return !results.isEmpty();
+            String hql = "select count(u) FROM User u WHERE u.email = :email and u.id != :userId";
+            Query query = session.createQuery(hql);
+            query.setParameter("email", userEmail.getEmail());
+            query.setParameter("userId", userEmail.getUserId());
+            Long results = (Long) query.uniqueResult();
+
+            return results > 0;
         }
     }
 
@@ -223,6 +236,21 @@ public class UserRepositoryImpl implements UserRepository {
             int result = session.createNativeQuery(sql)
                     .setParameter("userId", user.getUserId())
                     .setParameter("phoneNumber", 0)
+                    .executeUpdate();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void updatePhoneNumber(String phoneNumber, int userId) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            String sql = "update admins set phone_number = :phoneNumber where user_id = :userid";
+            int result = session.createNativeQuery(sql)
+                    .setParameter("userid", userId)
+                    .setParameter("phoneNumber", phoneNumber)
                     .executeUpdate();
 
             session.getTransaction().commit();
@@ -247,13 +275,13 @@ public class UserRepositoryImpl implements UserRepository {
                 orderBy = "firstName";
                 break;
             default:
-                return "";
+                orderBy = "userId";
         }
         orderBy = String.format(" order by %s", orderBy);
 
         if (userFilter.getSortOrder().isPresent() &&
                 userFilter.getSortOrder().get().equalsIgnoreCase("desc")) {
-             orderBy = String.format("%s desc", orderBy);
+            orderBy = String.format("%s desc", orderBy);
         }
 
         return orderBy;
