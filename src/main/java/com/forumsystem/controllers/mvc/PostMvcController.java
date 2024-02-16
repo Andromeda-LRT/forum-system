@@ -206,8 +206,8 @@ public class PostMvcController {
     @PostMapping("/{id}/update")
     public String updatePost(@PathVariable int id,
                              @Valid @ModelAttribute("postMvc") PostDtoMvc postDtoMvc,
-                             HttpSession session,
                              BindingResult errors,
+                             HttpSession session,
                              Model model) {
         User user;
         try {
@@ -217,6 +217,8 @@ public class PostMvcController {
         }
 
         if (errors.hasErrors()) {
+            model.addAttribute("postId", id);
+            model.addAttribute("postMvc", postDtoMvc);
             return "PostUpdateView";
         }
         try {

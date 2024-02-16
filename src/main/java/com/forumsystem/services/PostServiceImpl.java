@@ -8,6 +8,7 @@ import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.TagService;
 import com.forumsystem.services.contracts.UserService;
+import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
@@ -83,8 +84,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(User user, int id) {
-
-        return postRepository.getById(id);
+       Post post = postRepository.getById(id);
+       if (post.isArchived() && !userService.checkIfAdmin(user.getUserId())){
+           throw new EntityNotFoundException("post", "id", String.valueOf(post.getPostId()));
+       }
+       return post;
     }
 
     @Override
