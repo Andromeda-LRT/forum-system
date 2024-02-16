@@ -12,6 +12,8 @@ public interface PostService {
    // List<PostResponseDto> getAll(User user);
     List<Post> getAll(User user, PostModelFilterOptions postFilter);
 
+    List<Post> getAllForAdmin(User user, PostModelFilterOptions postFilter);
+
     List<Post> getTopTenCommentedPosts();
 
     List<Post> getTenNewestPosts();

@@ -25,29 +25,33 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final CommentService commentService;
     private final TagService tagService;
+    private final UserService userService;
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository,
                            UserRepository userRepository,
                            CommentService commentService,
-                           TagService tagService
+                           TagService tagService,
+                           UserService userService
     ) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentService = commentService;
         this.tagService = tagService;
+        this.userService = userService;
     }
 
-//    @Override
-//    public List<Post> getAllPosts(User user, PostModelFilterOptions postFilter) {
-//
-//
-//        return postRepository.getAllPosts(user, postFilter);
-//    }
 
     @Override
     public List<Post> getAll(User user, PostModelFilterOptions postFilter) {
+
         return postRepository.getAll(postFilter);
+    }
+
+    @Override
+    public List<Post> getAllForAdmin(User user, PostModelFilterOptions postFilter) {
+        userService.checkIfAdmin(user);
+        return postRepository.getAllForAdmin(postFilter);
     }
 
     @Override
