@@ -29,6 +29,8 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
+
+
     </div>
 </head>
 <body>
@@ -92,7 +94,7 @@
                         <div class="dropdown-menu" aria-labelledby="iconDropdown">
 
                             <li th:if="${isAuthenticated}" class="nav-item">
-                                <a class="dropdown-item" href="#">Profile</a></li>
+                                <a class="dropdown-item" href="#" th:href="@{/users/userProfile}">Profile</a></li>
 
                             <li th:if="${isAuthenticated}" class="nav-item">
                                 <a th:href="@{/auth/logout}" class="dropdown-item" href="#">Logout</a></li>
