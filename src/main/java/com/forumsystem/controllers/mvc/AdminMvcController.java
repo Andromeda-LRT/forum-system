@@ -12,8 +12,10 @@ import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
+import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -133,6 +135,11 @@ public class AdminMvcController {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", UNAUTHORIZED);
             return "UnauthorizedView";
+        }
+        catch (EntityNotFoundException e){
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "NotFoundView";
         }
     }
 }

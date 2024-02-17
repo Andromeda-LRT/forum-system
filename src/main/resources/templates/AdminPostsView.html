@@ -136,7 +136,7 @@
 
                             <td>
                                 <form style="display: inline" action="#"
-                                      th:action="@{/posts/{id}/(id=${post.getPostId()})}"
+                                      th:action="@{/posts/{id}(id=${post.getPostId()})}"
                                       th:object="${post}" th:method="get">
                                     <button type="submit" class="btn btn-outline-info btn-circle btn-lg btn-circle">
                                         <i class="fa fa-eye"></i>
