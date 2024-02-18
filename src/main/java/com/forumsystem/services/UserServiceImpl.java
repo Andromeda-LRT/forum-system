@@ -117,6 +117,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void giveUserAdminRights(User user, User loggedUser) {
+        checkIfAdmin(loggedUser);
+
         if (user.isBlocked()) {
             repository.unblockUser(user.getUsername());
         }
@@ -156,7 +158,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getAdminPhoneNumber(User user){
-        return repository.getAdminPhoneNumber(user.getUserId());
+        try {
+            return repository.getAdminPhoneNumber(user.getUserId());
+        } catch (EntityNotFoundException e){
+            return "0";
+        }
     }
 
 
@@ -166,12 +172,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-//    public boolean checkIfAdminBoolean(User loggedUser) {
-//        if (repository.checkIfAdmin(loggedUser.getUserId())) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 }
