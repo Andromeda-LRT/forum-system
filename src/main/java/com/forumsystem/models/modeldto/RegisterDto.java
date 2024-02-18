@@ -33,7 +33,7 @@ public class RegisterDto {
     @NotEmpty(message = "Last name can't be empty.")
     private String lastName;
     @Email(
-            message = EMPTY_ERROR_MESSAGE,
+            message = INVALID_EMAIL_ERROR_MESSAGE,
             regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
     )
     @NotEmpty(message = "Email can't be empty.")
