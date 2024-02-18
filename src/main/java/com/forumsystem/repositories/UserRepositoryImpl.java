@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -201,6 +200,10 @@ public class UserRepositoryImpl implements UserRepository {
             String result = (String) session.createNativeQuery(sql)
                     .setParameter("userId", userId)
                     .uniqueResult();
+
+            if (result == null){
+                throw new EntityNotFoundException("Admin", "id", String.valueOf(userId));
+            }
             return result;
         }
     }
