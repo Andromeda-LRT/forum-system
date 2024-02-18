@@ -542,7 +542,24 @@ public class UserServiceTests {
         //Assert
         Mockito.verify(userRepository, Mockito.times(1))
                 .getAdminPhoneNumber(user.getUserId());
-        Assertions.assertEquals(phoneNumber, userService.getAdminPhoneNumber(user));
+        Assertions.assertEquals("0898445555", userService.getAdminPhoneNumber(user));
+    }
+
+    @Test
+    void getAdminPhone_Should_ReturnZero_When_AdminDoesNotExist(){
+        //Arrange
+        User user = createMockUser();
+
+        Mockito.when(userRepository.getAdminPhoneNumber(user.getUserId()))
+                .thenThrow(new EntityNotFoundException("admin", "id", String.valueOf(user.getUserId())));
+
+        //Act
+        String phoneNumber = userService.getAdminPhoneNumber(user);
+
+        //Assert
+        Mockito.verify(userRepository, Mockito.times(1))
+                .getAdminPhoneNumber(user.getUserId());
+        Assertions.assertEquals("0", userService.getAdminPhoneNumber(user));
     }
 
 }
