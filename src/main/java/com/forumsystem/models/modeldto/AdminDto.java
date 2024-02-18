@@ -1,6 +1,9 @@
 package com.forumsystem.models.modeldto;
 
+import jakarta.validation.constraints.Pattern;
+
 public class AdminDto {
+    @Pattern(regexp = "^[0-9]+$")
     private String phoneNumber;
 
     public AdminDto() {
