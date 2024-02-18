@@ -85,7 +85,7 @@
                                         <div class="form-floating mb-3">
                                             <input type="text" th:field="*{username}" class="form-control"
                                                    name="username" id="username"
-                                                   placeholder="Username" required>
+                                                   placeholder="Username">
                                             <!-- in case neither input works, place a closing tag for it-->
                                             <label for="username" class="form-label">Username</label>
                                         </div>
@@ -96,7 +96,7 @@
                                         <div class="form-floating mb-3">
                                             <input type="text" th:field="*{firstName}" class="form-control"
                                                    name="firstName" id="firstName"
-                                                   placeholder="First Name" required>
+                                                   placeholder="First Name">
                                             <label for="firstName" class="form-label">First Name</label>
                                         </div>
                                         <label class="error" th:errors="*{firstName}">First name error
@@ -106,7 +106,7 @@
                                         <div class="form-floating mb-3">
                                             <input type="text" th:field="*{lastName}" class="form-control"
                                                    name="lastName" id="lastName"
-                                                   placeholder="First Name" required>
+                                                   placeholder="First Name">
                                             <label for="lastName" class="form-label">Last Name</label>
                                         </div>
                                         <label class="error" th:errors="*{lastName}">Last name error
@@ -114,9 +114,9 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-floating mb-3">
-                                            <input type="email" th:field="*{email}" class="form-control" name="email"
+                                            <input type="text" th:field="*{email}" class="form-control" name="email"
                                                    id="email"
-                                                   placeholder="name@example.com" required>
+                                                   placeholder="name@example.com">
                                             <label for="email" class="form-label">Email</label>
                                         </div>
                                         <label class="error" th:errors="*{email}">Email error placeholder</label>
@@ -125,7 +125,7 @@
                                         <div class="form-floating mb-3">
                                             <input type="password" th:field="*{password}" class="form-control"
                                                    name="password" id="password"
-                                                   value="" placeholder="Password" required>
+                                                   value="" placeholder="Password">
                                             <label for="password" class="form-label">Password</label>
                                         </div>
                                         <label class="error" th:errors="*{password}">Password error placeholder</label>
@@ -134,7 +134,7 @@
                                         <div class="form-floating mb-3">
                                             <input type="password" th:field="*{passwordConfirm}" class="form-control"
                                                    name="confirm password" id="PasswordConfirm"
-                                                   placeholder="Confirm Password" required>
+                                                   placeholder="Confirm Password">
                                             <label for="PasswordConfirm" class="form-label">Confirm Password</label>
                                         </div>
                                         <div>
