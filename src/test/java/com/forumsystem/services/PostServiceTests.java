@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.forumsystem.Helpers.createMockFilterOptions;
+import static com.forumsystem.Helpers.createMockPostFilterOptions;
 import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +45,7 @@ public class PostServiceTests {
         // Arrange
         User user = new User();
         user.setUserId(1);
-        PostModelFilterOptions postFilter = createMockFilterOptions();
+        PostModelFilterOptions postFilter = createMockPostFilterOptions();
         Mockito.when(postRepository.getAll(postFilter)).thenReturn(Arrays.asList(new Post(), new Post()));
 
         // Act
