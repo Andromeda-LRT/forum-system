@@ -33,6 +33,25 @@ public class User {
 
     }
 
+    public User(int userId,
+                String firstName,
+                String lastName,
+                String email,
+                String username,
+                String password,
+                boolean isBlocked,
+                boolean isArchived) {
+
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.isBlocked = isBlocked;
+        this.isArchived = isArchived;
+    }
+
     public int getUserId() {
         return this.userId;
     }
