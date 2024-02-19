@@ -451,7 +451,7 @@ public class UserControllerMvc {
     @PostMapping("/{id}/phoneNumber")
     public String updatePhoneNumber(@PathVariable int id,
                                     HttpSession session,
-                                    @ModelAttribute("adminNumber") AdminDto adminDto,
+                                    @Valid @ModelAttribute("adminPhone") AdminDto adminDto,
                                     BindingResult bindingResult,
                                     Model model) {
 
