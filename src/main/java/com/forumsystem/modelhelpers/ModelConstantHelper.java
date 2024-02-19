@@ -46,4 +46,6 @@ public class ModelConstantHelper {
     public static final String USERNAME_ERROR_MESSAGE = "Username must be of 6 to 16 length with no special characters";
     public static final String PASSWORD_ERROR_MESSAGE = "Password must be min 4 and max 12 length, " +
             "containing at least 1 uppercase, 1 lowercase, 1 special character and 1 digit ";
+
+    public static final String INVALID_EMAIL_ERROR_MESSAGE = "Please enter a valid email address";
 }
