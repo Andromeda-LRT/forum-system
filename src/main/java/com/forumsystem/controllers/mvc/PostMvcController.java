@@ -126,6 +126,7 @@ public class PostMvcController {
             model.addAttribute("postComments", postComments);
             model.addAttribute("userPosts", userService.getUserPosts(user.getUsername()));
             model.addAttribute("user", user);
+            session.setAttribute("isAdmin", userService.checkIfAdmin(user.getUserId()));
 
             return "PostView";
         } catch (EntityNotFoundException e) {
