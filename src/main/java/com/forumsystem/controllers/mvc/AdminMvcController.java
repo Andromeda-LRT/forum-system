@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED;
@@ -117,7 +118,6 @@ public class AdminMvcController {
             return "redirect:/auth/login";
         }
 
-        // User user = userService.getUserByUsername("john_doe");
         UserModelFilterOptions userFilter = new UserModelFilterOptions(
                 userFilterDto.getUsername(),
                 userFilterDto.getEmail(),
@@ -135,8 +135,7 @@ public class AdminMvcController {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", UNAUTHORIZED);
             return "UnauthorizedView";
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
