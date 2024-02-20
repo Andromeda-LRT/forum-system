@@ -105,7 +105,5 @@ Documented using Swagger.
 
 ## GitHub Repository
 
-- [Link to GitHub Repository]
-- [Link to Swagger Documentation]
-- [Link to Hosted Project (if applicable)]
-- Instructions on how to set up and run the project locally
+- [https://github.com/Andromeda-LRT/forum-system.git]
+- [http://localhost:8080/swagger-ui/index.html#/]
