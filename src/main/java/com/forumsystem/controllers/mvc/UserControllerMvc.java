@@ -389,11 +389,10 @@ public class UserControllerMvc {
         }
     }
 
-    @PostMapping("/{id}/uploadPicture")
+    @PostMapping("/{id}/profilePicture")
     public String uploadProfilePicture(@PathVariable int id,
                                        HttpSession session,
                                        @ModelAttribute(name = "profilePicture") ProfilePictureDto pictureDto,
-                                       BindingResult bindingResult,
                                        @RequestParam("fileImage") MultipartFile multipartFile,
                                        Model model) throws IOException {
         User loggedUser;
