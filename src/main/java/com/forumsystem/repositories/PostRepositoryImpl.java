@@ -83,10 +83,6 @@ public class PostRepositoryImpl implements PostRepository {
 
             queryString.append(generateOrderBy(filterOptions));
 
-//            if (!filterOptions.getSortOrder().isPresent()) {
-//                queryString.append(" order by p.id desc");
-//            }
-
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
             return query.list();

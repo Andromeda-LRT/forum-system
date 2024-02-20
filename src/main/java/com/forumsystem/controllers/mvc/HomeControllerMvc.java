@@ -30,16 +30,16 @@ public class HomeControllerMvc {
 
     @GetMapping
     public String showHomePage(Model model) {
-        // Get post count
+
         long postCount = postService.getPostCount();
 
-        // Get user count
+
         long userCount = userService.getCountUsers();
 
-        //Top Ten Commented
+
         List<Post> postList = postService.getTopTenCommentedPosts();
 
-        //Newest Posts
+
         List<Post> postNewList = postService.getTenNewestPosts();
 
         model.addAttribute("postCount", postCount);

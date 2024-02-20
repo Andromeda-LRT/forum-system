@@ -62,8 +62,6 @@ public class PostResponseMapper {
         return result;
     }
 
-    // Mvc part
-
     public PostResponseDtoMvc convertToDtoUpdate(Post post) {
         PostResponseDtoMvc dto = new PostResponseDtoMvc();
 

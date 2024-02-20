@@ -1,7 +1,6 @@
 package com.forumsystem.repositories;
 
 import com.forumsystem.models.Comment;
-import com.forumsystem.models.Tag;
 import com.forumsystem.repositories.contracts.CommentRepository;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import org.hibernate.Session;

@@ -1,6 +1,5 @@
 package com.forumsystem.services.contracts;
 
-import com.forumsystem.models.Post;
 import com.forumsystem.models.Tag;
 import com.forumsystem.models.User;
 

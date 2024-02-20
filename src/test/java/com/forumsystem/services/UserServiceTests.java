@@ -6,7 +6,6 @@ import com.forumsystem.models.User;
 import com.forumsystem.models.modeldto.AdminDto;
 import com.forumsystem.models.modeldto.UpdateUserPasswordDto;
 import com.forumsystem.repositories.contracts.UserRepository;
-import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.DuplicateEntityException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
@@ -17,9 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -187,8 +184,6 @@ public class UserServiceTests {
                 false, false);
 
         Mockito.when(userRepository.checkIfAdmin(user.getUserId())).thenReturn(true);
-//        Mockito.when(userRepository.isEmailExists(userToUpdate)).
-//                thenThrow(new DuplicateEntityException("User", "email", user.getEmail()));
         Mockito.when(userRepository.isEmailExists(userToUpdate)).thenReturn(false);
 
         //Act & Assert

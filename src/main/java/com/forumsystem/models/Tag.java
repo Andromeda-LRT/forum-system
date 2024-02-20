@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
-import static com.forumsystem.modelhelpers.ModelConstantHelper.HASHTAG;
-
 @Entity
 @Table(name = "tags")
 public class Tag {

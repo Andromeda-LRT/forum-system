@@ -1,6 +1,5 @@
 package com.forumsystem.services;
 
-import com.forumsystem.models.Post;
 import com.forumsystem.models.Tag;
 import com.forumsystem.models.User;
 import com.forumsystem.repositories.contracts.TagRepository;
@@ -29,7 +28,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getAll(User user) {
-        // todo current feature to be exclusive to Admins?
+
         if (!userRepository.checkIfAdmin(user.getUserId())){
             throw new UnauthorizedOperationException(INSUFFICIENT_PERMISSIONS_ERROR_MESSAGE);
         }
@@ -57,11 +56,6 @@ public class TagServiceImpl implements TagService {
             postTag.setId(tagRepository.getByName(postTag.getName()).getId());
         }
     }
-
-//    @Override
-//    public void update(User user, Post post) {
-//
-//    }
 
     @Override
     public void delete(User user, int tagId) {

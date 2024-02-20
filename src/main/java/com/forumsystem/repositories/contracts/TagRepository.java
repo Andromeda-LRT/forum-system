@@ -1,8 +1,6 @@
 package com.forumsystem.repositories.contracts;
 
-import com.forumsystem.models.Post;
 import com.forumsystem.models.Tag;
-import com.forumsystem.models.User;
 
 import java.util.List;
 

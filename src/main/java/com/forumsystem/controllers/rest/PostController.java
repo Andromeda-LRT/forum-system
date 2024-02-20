@@ -74,29 +74,10 @@ public class PostController {
     }
 
     @GetMapping("/mostCommented")
-    public List<PostResponseDto> getTopTenCommentedPosts(@RequestHeader HttpHeaders headers){
+    public List<PostResponseDto> getTopTenCommentedPosts(){
         List<Post> postList = postService.getTopTenCommentedPosts();
         return postResponseMapper.convertToDTO(postList);
     }
-
-//    public List<PostResponseDto> getAllPosts(@RequestHeader HttpHeaders headers) {
-//        User user = authHelper.tryGetUser(headers);
-//        return postService.getAll(user);
-//    }
-
-//    @GetMapping("/browse")
-//    public List<Post> getAll(
-//            @RequestHeader HttpHeaders headers,
-//            @RequestParam(required = false) String title,
-//            @RequestParam(required = false) Integer likes,
-//            @RequestParam(required = false) Integer dislikes,
-//            @RequestParam(required = false) String sortBy,
-//            @RequestParam(required = false) String sortOrder) {
-//        PostModelFilterOptions postFilter = new PostModelFilterOptions(
-//                title, likes, dislikes, sortBy, sortOrder);
-//        User user = authHelper.tryGetUser(headers);
-//        return postService.getAll(user, postFilter);
-//    }
 
     @Operation(summary = GET_POST_BY_ID_SUMMARY, description = GET_POST_BY_ID_DESCRIPTION +
             ONLY_BY_LOGGED_USERS)

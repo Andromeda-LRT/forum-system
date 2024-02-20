@@ -37,9 +37,10 @@ public class AuthenticationHelper {
         }
         try {
             String authorizationHeader = headers.getFirst(AUTHORIZATION_HEADER_NAME);
-            if(authorizationHeader.contains("Basic ") && Base64.isBase64(authorizationHeader.substring("Basic ".length()))){
-                authorizationHeader = new String(Base64.decodeBase64(authorizationHeader.substring("Basic ".length())), "UTF-8")
-                                            .replace(":", " ");
+            if(authorizationHeader.contains("Basic ") &&
+                    Base64.isBase64(authorizationHeader.substring("Basic ".length()))){
+                authorizationHeader = new String(Base64.decodeBase64(authorizationHeader
+                        .substring("Basic ".length())), "UTF-8").replace(":", " ");
             }
             String username = getUsername(authorizationHeader);
             String password = getPassword(authorizationHeader);

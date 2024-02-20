@@ -1,7 +1,6 @@
 package com.forumsystem.repositories.contracts;
 
 import com.forumsystem.models.Comment;
-import com.forumsystem.models.Post;
 
 import java.util.List;
 
