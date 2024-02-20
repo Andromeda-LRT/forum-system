@@ -1,6 +1,5 @@
 package com.forumsystem.models.modeldto;
 
-import com.forumsystem.models.Comment;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

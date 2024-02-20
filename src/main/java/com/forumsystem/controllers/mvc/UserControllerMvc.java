@@ -207,12 +207,6 @@ public class UserControllerMvc {
                 fillModelAttributesForPassword(model, passwordDto, userProfileUpdate,
                         id, pictureDto, userToUpdate, loggedUser);
 
-//                model.addAttribute("password", passwordDto);
-//                model.addAttribute("loggedUser", userProfileUpdate);
-//                model.addAttribute("userId", id);
-//                model.addAttribute("adminPhone", new AdminDto(userService.getAdminPhoneNumber(userToUpdate)));
-//                model.addAttribute("profilePicture", pictureDto);
-//                model.addAttribute("admin", userService.checkIfAdmin(loggedUser.getUserId()));
                 return "UserProfileView";
             }
 
@@ -222,9 +216,6 @@ public class UserControllerMvc {
 
                 fillModelAttributesForPassword(model, passwordDto, userProfileUpdate,
                         id, pictureDto, userToUpdate, loggedUser);
-//                model.addAttribute("password", passwordDto);
-//                model.addAttribute("loggedUser", userProfileUpdate);
-//                model.addAttribute("userId", id);
                 return "UserProfileView";
             }
             if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmNewPassword())) {
@@ -233,9 +224,6 @@ public class UserControllerMvc {
 
                 fillModelAttributesForPassword(model, passwordDto, userProfileUpdate,
                         id, pictureDto, userToUpdate, loggedUser);
-//                model.addAttribute("password", passwordDto);
-//                model.addAttribute("loggedUser", userProfileUpdate);
-//                model.addAttribute("userId", id);
                 return "UserProfileView";
             }
 
@@ -386,7 +374,7 @@ public class UserControllerMvc {
             model.addAttribute("error", e.getMessage());
             return "NotFoundView";
         }
-        // User loggedUser = userService.getUserByUsername("john_doe");
+
         try {
             userService.unblockUser(id, loggedUser);
             return "redirect:/admin/users";
@@ -415,7 +403,7 @@ public class UserControllerMvc {
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-        // using cleanPath to clean unnecessary information of the fileName
+
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         pictureDto.setPictureName(fileName);
         User userWithSaveProfilePic = userMapper.fromDto(pictureDto, id, loggedUser);
@@ -430,7 +418,6 @@ public class UserControllerMvc {
             Files.createDirectories(uploadPath);
         }
 
-        //using InputStream to store the image on File System
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
@@ -459,7 +446,6 @@ public class UserControllerMvc {
 
         try {
             loggedUser = authenticationHelper.tryGetUser(session);
-//            authenticationHelper.verifyUserAccess(id, loggedUser);
             userService.checkIfAdmin(loggedUser);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";

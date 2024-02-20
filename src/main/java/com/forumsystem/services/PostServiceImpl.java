@@ -70,18 +70,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.getPostCount();
     }
 
-//    public List<PostResponseDto> getAll(User user) {
-////        List<Post> posts = postRepository.getAll();
-////
-////        List<PostResponseDto> dtoList = new ArrayList<>();
-////        for (Post post : posts) {
-////            dtoList.add(postResponseMapper.convertToDTO(post));
-////        }
-////        return dtoList;
-//        throw new UnsupportedOperationException();
-//
-//    }
-
     @Override
     public Post getById(User user, int id) {
        Post post = postRepository.getById(id);
@@ -164,7 +152,6 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(postToBeDeleted);
     }
 
-    //todo to consider removing post id
     @Override
     public void deleteComment(User user, int postId, int commentId) {
         Comment comment = commentService.getById(commentId);

@@ -7,20 +7,20 @@ import static com.forumsystem.modelhelpers.ModelConstantHelper.PASSWORD_ERROR_ME
 
 
 public class UpdateUserPasswordDto {
-    //todo remove comments once ready for testing
+
     @Schema(name = "password", example = "Pass1234!", required = true)
-//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
-//            message = PASSWORD_ERROR_MESSAGE)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
+            message = PASSWORD_ERROR_MESSAGE)
     private String currentPassword;
-    //todo remove comments once ready for testing
+
     @Schema(name = "password", example = "Pass1234!", required = true)
-//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
-//            message = PASSWORD_ERROR_MESSAGE)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
+            message = PASSWORD_ERROR_MESSAGE)
     private String newPassword;
-    //todo remove comments once ready for testing
+
     @Schema(name = "password", example = "Pass1234!", required = true)
-//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
-//            message = PASSWORD_ERROR_MESSAGE)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$",
+            message = PASSWORD_ERROR_MESSAGE)
     private String confirmNewPassword;
 
     public UpdateUserPasswordDto() {

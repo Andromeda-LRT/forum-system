@@ -1,6 +1,5 @@
 package com.forumsystem.models.modeldto;
 
-import java.util.Optional;
 
 public class PostModelFilterDto {
     private String title;

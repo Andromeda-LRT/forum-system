@@ -1,9 +1,5 @@
 package com.forumsystem.models.modeldto;
 
-import com.forumsystem.models.Post;
-import com.forumsystem.models.User;
-import jakarta.persistence.*;
-
 public class CommentResponseDto {
 
     private int id;

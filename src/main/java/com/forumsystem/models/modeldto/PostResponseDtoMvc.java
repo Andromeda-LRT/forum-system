@@ -30,7 +30,14 @@ public class PostResponseDtoMvc {
         this.comments = new ArrayList<>();
     }
 
-    public PostResponseDtoMvc(String createdBy, String title, String content, int likes, int dislikes, String createdAt, List<CommentResponseDto> comments, List<TagDto> tags) {
+    public PostResponseDtoMvc(String createdBy,
+                              String title,
+                              String content,
+                              int likes,
+                              int dislikes,
+                              String createdAt,
+                              List<CommentResponseDto> comments,
+                              List<TagDto> tags) {
         this.createdBy = createdBy;
         this.title = title;
         this.content = content;

@@ -9,10 +9,10 @@ import java.nio.file.Paths;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    //using addResourceHandlers to expose directory to client
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //WebMvcConfigurer.super.addResourceHandlers(registry);
+
         Path userUploadedProfilePictureDir = Paths.get("./user-profilePictures");
         String userProfilePicturePath = userUploadedProfilePictureDir.toFile().getAbsolutePath();
 

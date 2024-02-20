@@ -1,10 +1,7 @@
 package com.forumsystem.models.modeldto;
 
-import com.forumsystem.models.Tag;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.ArrayList;
 import java.util.List;

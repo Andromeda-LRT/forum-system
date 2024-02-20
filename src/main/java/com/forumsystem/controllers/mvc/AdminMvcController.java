@@ -3,19 +3,16 @@ package com.forumsystem.controllers.mvc;
 import com.forumsystem.modelhelpers.AuthenticationHelper;
 import com.forumsystem.modelhelpers.PostModelFilterOptions;
 import com.forumsystem.modelhelpers.UserModelFilterOptions;
-import com.forumsystem.modelmappers.PostResponseMapper;
 import com.forumsystem.models.Post;
 import com.forumsystem.models.User;
 import com.forumsystem.models.modeldto.PostModelFilterDto;
 import com.forumsystem.models.modeldto.UserModelFilterDto;
-import com.forumsystem.repositories.contracts.UserRepository;
 import com.forumsystem.services.contracts.PostService;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
 import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.forumsystem.modelhelpers.ModelConstantHelper.UNAUTHORIZED;
@@ -60,15 +56,14 @@ public class AdminMvcController {
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-        //User user = userService.getUserByUsername("john_doe");
 
         try {
             userService.checkIfAdmin(user);
-            return "AdminPanelView"; // to return a view for access denied.
+            return "AdminPanelView";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", UNAUTHORIZED);
-            return "UnauthorizedView"; // to redirect user to login view
+            return "UnauthorizedView";
         }
     }
 

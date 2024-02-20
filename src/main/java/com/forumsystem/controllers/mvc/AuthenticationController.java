@@ -8,7 +8,6 @@ import com.forumsystem.models.modeldto.RegisterDto;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.DuplicateEntityException;
-import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class AuthenticationController {
     private final AuthenticationHelper authenticationHelper;
 
     private final UserMapper userMapper;
-
     @Autowired
     public AuthenticationController(UserService userService,
                                     AuthenticationHelper authenticationHelper,

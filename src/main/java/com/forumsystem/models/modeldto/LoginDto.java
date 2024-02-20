@@ -1,10 +1,6 @@
 package com.forumsystem.models.modeldto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-
-import static com.forumsystem.modelhelpers.ModelConstantHelper.PASSWORD_ERROR_MESSAGE;
-import static com.forumsystem.modelhelpers.ModelConstantHelper.USERNAME_ERROR_MESSAGE;
 
 public class LoginDto {
     @NotEmpty(message = "Username can't be empty.")

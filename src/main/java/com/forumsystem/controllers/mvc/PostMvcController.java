@@ -9,7 +9,6 @@ import com.forumsystem.models.*;
 import com.forumsystem.models.modeldto.*;
 import com.forumsystem.services.contracts.CommentService;
 import com.forumsystem.services.contracts.PostService;
-import com.forumsystem.services.contracts.TagService;
 import com.forumsystem.services.contracts.UserService;
 import com.forumsystem.еxceptions.AuthenticationFailureException;
 import com.forumsystem.еxceptions.EntityNotFoundException;
@@ -17,7 +16,6 @@ import com.forumsystem.еxceptions.UnauthorizedOperationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.hibernate.engine.jdbc.mutation.spi.BindingGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,7 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,7 +35,6 @@ public class PostMvcController {
     private final PostResponseMapper postResponseMapper;
     private final CommentService commentService;
     private final UserService userService;
-    private final TagService tagService;
 
     @Autowired
     public PostMvcController(PostService postService,
@@ -47,7 +43,6 @@ public class PostMvcController {
                              CommentMapper commentMapper,
                              AuthenticationHelper authHelper,
                              PostResponseMapper postResponseMapper,
-                             TagService tagService,
                              UserService userService) {
         this.postService = postService;
         this.postMapper = postMapper;
@@ -55,15 +50,8 @@ public class PostMvcController {
         this.commentMapper = commentMapper;
         this.authHelper = authHelper;
         this.postResponseMapper = postResponseMapper;
-        this.tagService = tagService;
         this.userService = userService;
     }
-
-//
-//    @ModelAttribute("tags")
-//    public List<Tag> populateTags() {
-//        return tagService.getAll();
-//    }
 
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
@@ -306,9 +294,6 @@ public class PostMvcController {
     public String showCreateCommentPage(@PathVariable int post_id,
                                         Model model,
                                         HttpSession session) {
-//        model.addAttribute("comment", new CommentDto());
-        //todo the below view to re-use everything from show a single post with the addition
-        // of a field that will be used for the comment of the post.
 
         User user;
         try {
@@ -350,10 +335,8 @@ public class PostMvcController {
         try {
             Comment comment = commentMapper.fromDto(commentDto);
             postService.createComment(user, comment, post_id);
-            // after successful comment creation user to be returned on page where the post
-            // for which he created a comment is.
             return "redirect:/posts/" + post_id;
-            // todo// return redirect://{post_id}
+
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
